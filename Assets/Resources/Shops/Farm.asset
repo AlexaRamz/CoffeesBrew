@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cd80a91af86e4847b7ac2f624fb709d, type: 3}
+  m_Name: Farm
+  m_EditorClassIdentifier: 
+  items:
+  - {fileID: 11400000, guid: 585a2cd8e82adee4ea104e52bf11f271, type: 2}
+  - {fileID: 11400000, guid: 815ba2076a9997643847e95b3d742cd7, type: 2}
+  - {fileID: 11400000, guid: a6e29eb673740184c929216cec6bd41d, type: 2}
+  - {fileID: 11400000, guid: acbfcfeeffd0c2642b28504ca0148317, type: 2}
+  - {fileID: 11400000, guid: a2c849276a983d342af0e9675d766cb9, type: 2}
+  - {fileID: 11400000, guid: 609bac16dc6fb414fb5b90e6859b2bff, type: 2}
+  - {fileID: 11400000, guid: 4a4a565c57f645e4e8ddc2c187ae00a3, type: 2}
+  dialogues: []

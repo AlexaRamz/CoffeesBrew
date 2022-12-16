@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24500d01ccfeaf5408a12099d3b75d6f, type: 3}
+  m_Name: Gallabab_Example
+  m_EditorClassIdentifier: 
+  icons:
+  - icons:
+    - {fileID: -8999218297760069264, guid: 1cc4e8e66455ef541bd32c83512e60b3, type: 3}
+  - icons:
+    - {fileID: -8999218297760069264, guid: 1cc4e8e66455ef541bd32c83512e60b3, type: 3}
+    - {fileID: 1730802148990744994, guid: 1cc4e8e66455ef541bd32c83512e60b3, type: 3}
+  sentences:
+  - 'If you ask me...
+
+    this place could use a jukebox.'
+  - 'It''s about time I show you my excellent singing skills!
+
+    Maybe I''ll even
+    sing you a love song or two.'
+  responses: []

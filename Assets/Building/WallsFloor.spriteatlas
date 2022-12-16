@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: WallsFloor
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 0
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 0
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+    totalSpriteSurfaceArea: 5376
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: -7366180687131401920, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  - {fileID: -14520863135872570, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  - {fileID: 2420863537438956345, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  - {fileID: 7317334631700292629, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  - {fileID: 8296322472478124191, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  - {fileID: -5675400335168754034, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  - {fileID: 2551541108661590903, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  - {fileID: -3218248262026354849, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  - {fileID: 5198676504368207085, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  - {fileID: 6511404109149442792, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  - {fileID: -5057847913604664284, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  - {fileID: -6662830832694087935, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  - {fileID: -5130587114860513547, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  - {fileID: 5543624403135206190, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  - {fileID: -4308146535040859911, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  - {fileID: -6070888740825547048, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  - {fileID: 7395272119062106114, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  - {fileID: 2701988108291960151, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  - {fileID: -8504653284088915959, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  - {fileID: 6483640522714763778, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  - {fileID: 6604079355047751301, guid: ba61d7a494a57ba48a4a2483be61a3e2, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Walls_7
+  - Walls_6
+  - Walls_5
+  - Walls_4
+  - Walls_3
+  - Walls_2
+  - Walls_1
+  - Walls_0
+  - Walls_9
+  - Walls_8
+  - Walls_12
+  - Walls_13
+  - Walls_10
+  - Walls_11
+  - Walls_16
+  - Walls_17
+  - Walls_14
+  - Walls_15
+  - Walls_18
+  - Walls_19
+  - Walls_20
+  m_RenderDataMap: {}
+  m_Tag: WallsFloor
+  m_IsVariant: 0

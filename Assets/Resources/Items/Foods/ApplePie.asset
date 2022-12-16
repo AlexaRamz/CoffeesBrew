@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2e4ff28462d84641973199c255839e0, type: 3}
+  m_Name: ApplePie
+  m_EditorClassIdentifier: 
+  name: Apple Pie
+  itemType: 5
+  asset: {fileID: 21300000, guid: cb840aeb31c7bb3448583857caf514b7, type: 3}
+  stackMax: 99
+  materials: []
+  price: 50
+  description: 

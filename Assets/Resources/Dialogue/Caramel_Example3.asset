@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24500d01ccfeaf5408a12099d3b75d6f, type: 3}
+  m_Name: Caramel_Example3
+  m_EditorClassIdentifier: 
+  icons:
+  - icons:
+    - {fileID: -5002853125219375647, guid: 5d9f7962ce78b0144a57228a862accf1, type: 3}
+    - {fileID: -6196445788699118843, guid: 5d9f7962ce78b0144a57228a862accf1, type: 3}
+  - icons:
+    - {fileID: -6196445788699118843, guid: 5d9f7962ce78b0144a57228a862accf1, type: 3}
+  sentences:
+  - 'Really?
+
+    You and I must think a lot alike then.'
+  - It actually wouldn't be a bad way to attract more customers don't you think?
+  responses: []

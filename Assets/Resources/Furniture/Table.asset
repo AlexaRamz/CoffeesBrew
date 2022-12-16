@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 205a32b3a2784a742b9dadf3d2f8d30b, type: 3}
+  m_Name: Table
+  m_EditorClassIdentifier: 
+  rotations:
+  - sprite: {fileID: 21300000, guid: 482bc51b58bece14eac1ed56fa1772e3, type: 3}
+    Object: {fileID: 0}
+    flipped: 0
+    size: {x: 2, y: 1}
+    placements:
+    - {x: 0, y: 0.75}
+    - {x: 1, y: 0.75}
+  - sprite: {fileID: 21300000, guid: 2c5a45a489fc11c44b6f4ef8fb5e5c3e, type: 3}
+    Object: {fileID: 0}
+    flipped: 0
+    size: {x: 1, y: 2}
+    placements:
+    - {x: 0, y: 0.75}
+    - {x: 1, y: 0.75}
+  Type: 0
+  canDecorate: 1

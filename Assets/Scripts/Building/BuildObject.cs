@@ -14,6 +14,5 @@ public class BuildObject : MonoBehaviour
     public void ChooseObject()
     {
         buildSys.ChangeObject(build);
-        Debug.Log("changing");
     }
 }

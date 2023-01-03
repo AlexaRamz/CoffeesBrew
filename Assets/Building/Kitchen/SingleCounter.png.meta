@@ -1,0 +1,888 @@
+fileFormatVersion: 2
+guid: 09166dd5941f6e742b207c5933d288ba
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1607942543942007299
+    second: SingleCounter_0
+  - first:
+      213: 3334573412063134213
+    second: SingleCounter_1
+  - first:
+      213: -8680429093838494949
+    second: SingleCounter_2
+  - first:
+      213: 3990325847778661587
+    second: SingleCounter_3
+  - first:
+      213: 93684702887128606
+    second: SingleCounter_4
+  - first:
+      213: -1170532360325605500
+    second: SingleCounter_5
+  - first:
+      213: -3704647555635275679
+    second: SingleCounter_6
+  - first:
+      213: -7359690685540087315
+    second: SingleCounter_7
+  - first:
+      213: 4298327817672080628
+    second: SingleCounter_8
+  - first:
+      213: -6229332785664134386
+    second: SingleCounter_9
+  - first:
+      213: -6951572131546349401
+    second: SingleCounter_10
+  - first:
+      213: 2227117088626713062
+    second: SingleCounter_11
+  - first:
+      213: 4173800235352844900
+    second: SingleCounter_12
+  - first:
+      213: 6757373886860391236
+    second: SingleCounter_13
+  - first:
+      213: -2029230279241257433
+    second: SingleCounter_14
+  - first:
+      213: -5959816606163626744
+    second: SingleCounter_15
+  - first:
+      213: -1744814789099702220
+    second: SingleCounter_16
+  - first:
+      213: -9057759578862370563
+    second: SingleCounter_17
+  - first:
+      213: -6956311197538812774
+    second: SingleCounter_18
+  - first:
+      213: 6909240096735921668
+    second: SingleCounter_19
+  - first:
+      213: -3451430507213106086
+    second: SingleCounter_20
+  - first:
+      213: -7867378720502011557
+    second: SingleCounter_21
+  - first:
+      213: -614395410629736406
+    second: SingleCounter_22
+  - first:
+      213: 2476445006944672720
+    second: SingleCounter_23
+  - first:
+      213: 8639983112983721545
+    second: SingleCounter_24
+  - first:
+      213: -1109631470404538038
+    second: SingleCounter_25
+  - first:
+      213: 9109209132607401412
+    second: SingleCounter_26
+  - first:
+      213: 3806738314519840405
+    second: SingleCounter_27
+  - first:
+      213: -823818804261074102
+    second: SingleCounter_28
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: SingleCounter_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 54
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: -13.5}
+        - {x: -8, y: 2.5}
+        - {x: 8, y: 2.5}
+        - {x: 8, y: -13.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: df5491986c07fa9e0800000000000000
+      internalID: -1607942543942007299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_1
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 54
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: -13.5}
+        - {x: -8, y: 2.5}
+        - {x: 8, y: 2.5}
+        - {x: 8, y: -13.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5024c77d9d8c64e20800000000000000
+      internalID: 3334573412063134213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_2
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 54
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: -13.5}
+        - {x: -8, y: 2.5}
+        - {x: 8, y: 2.5}
+        - {x: 8, y: -13.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: b136ac3eabbe88780800000000000000
+      internalID: -8680429093838494949
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_3
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 54
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: -13.5}
+        - {x: -8, y: 2.5}
+        - {x: 8, y: 2.5}
+        - {x: 8, y: -13.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d418e6873c706730800000000000000
+      internalID: 3990325847778661587
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 27
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: -13.5}
+        - {x: -8, y: 2.5}
+        - {x: 8, y: 2.5}
+        - {x: 8, y: -13.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1ea97cadb5dc4100800000000000000
+      internalID: 93684702887128606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_5
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 27
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: -13.5}
+        - {x: -8, y: 2.5}
+        - {x: 8, y: 2.5}
+        - {x: 8, y: -13.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48751b0250f61cfe0800000000000000
+      internalID: -1170532360325605500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_6
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 27
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: -13.5}
+        - {x: -8, y: 2.5}
+        - {x: 8, y: 2.5}
+        - {x: 8, y: -13.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 168175c1da2769cc0800000000000000
+      internalID: -3704647555635275679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_7
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 27
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: -13.5}
+        - {x: -8, y: 2.5}
+        - {x: 8, y: 2.5}
+        - {x: 8, y: -13.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: de9c1a790502dd990800000000000000
+      internalID: -7359690685540087315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: -13.5}
+        - {x: -8, y: 2.5}
+        - {x: 8, y: 2.5}
+        - {x: 8, y: -13.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4fc368c606ab6ab30800000000000000
+      internalID: 4298327817672080628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_9
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 0
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: -13.5}
+        - {x: -8, y: 2.5}
+        - {x: 8, y: 2.5}
+        - {x: 8, y: -13.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: e037bcaf5d6fc89a0800000000000000
+      internalID: -6229332785664134386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_10
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: -13.5}
+        - {x: -8, y: 2.5}
+        - {x: 8, y: 2.5}
+        - {x: 8, y: -13.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a0cca43afd078f90800000000000000
+      internalID: -6951572131546349401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_11
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: -13.5}
+        - {x: -8, y: 2.5}
+        - {x: 8, y: 2.5}
+        - {x: 8, y: -13.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e12ccc313f48ee10800000000000000
+      internalID: 2227117088626713062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 81
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: -13.5}
+        - {x: -8, y: 2.5}
+        - {x: 8, y: 2.5}
+        - {x: 8, y: -13.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46ae5a743315ce930800000000000000
+      internalID: 4173800235352844900
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_13
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 81
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: -13.5}
+        - {x: -8, y: 2.5}
+        - {x: 8, y: 2.5}
+        - {x: 8, y: -13.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44370dc7fb307cd50800000000000000
+      internalID: 6757373886860391236
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_14
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 81
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: -13.5}
+        - {x: -8, y: 2.5}
+        - {x: 8, y: 2.5}
+        - {x: 8, y: -13.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72eab56ffc9b6d3e0800000000000000
+      internalID: -2029230279241257433
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 108
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80594278f5a7a4da0800000000000000
+      internalID: -5959816606163626744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_16
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 108
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4383dd8913c29c7e0800000000000000
+      internalID: -1744814789099702220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_17
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 108
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df0440137af5c4280800000000000000
+      internalID: -9057759578862370563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_18
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 108
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9c70ab62d7367f90800000000000000
+      internalID: -6956311197538812774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_19
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 135
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40684d1e24d82ef50800000000000000
+      internalID: 6909240096735921668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_20
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 135
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a54dd9a7d3e0a10d0800000000000000
+      internalID: -3451430507213106086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_21
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 135
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b59a203acb471d290800000000000000
+      internalID: -7867378720502011557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_22
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 162
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a28c8c511aa3977f0800000000000000
+      internalID: -614395410629736406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_23
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 162
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0db1ab0fc991e5220800000000000000
+      internalID: 2476445006944672720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_24
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 162
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 946b4ca5dd267e770800000000000000
+      internalID: 8639983112983721545
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_25
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 162
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a4171f68e0cc990f0800000000000000
+      internalID: -1109631470404538038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_26
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 189
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4cdeec581796a6e70800000000000000
+      internalID: 9109209132607401412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_27
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 189
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59603ddf35044d430800000000000000
+      internalID: 3806738314519840405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SingleCounter_28
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 189
+        width: 16
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2962963}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a4b4bbc89253194f0800000000000000
+      internalID: -823818804261074102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

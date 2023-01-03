@@ -13,13 +13,452 @@ MonoBehaviour:
   m_Name: Counter
   m_EditorClassIdentifier: 
   rotations:
-  - sprite: {fileID: 4952043566522609014, guid: 1a31d95fa52451f468e48b93d0fad80d,
+  - sprite: {fileID: -1607942543942007299, guid: 09166dd5941f6e742b207c5933d288ba,
       type: 3}
     Object: {fileID: 0}
     flipped: 0
-    size: {x: 2, y: 1}
+    size: {x: 1, y: 1}
     placements:
-    - {x: 0, y: 0.75}
-    - {x: 1, y: 0.75}
+    - offset: {x: 0, y: 0.75}
+      position: {x: 0, y: 0}
+    ruleBuilds:
+    - sprite: {fileID: -1607942543942007299, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000030000000300000003000000
+      cornerBuilds: 
+    - sprite: {fileID: 3334573412063134213, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000000000000300000003000000
+      cornerBuilds: 
+    - sprite: {fileID: -8680429093838494949, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000030000000300000000000000
+      cornerBuilds: 
+    - sprite: {fileID: 3990325847778661587, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000000000000300000000000000
+      cornerBuilds: 
+    - sprite: {fileID: 93684702887128606, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000030000000300000003000000
+      cornerBuilds: 
+    - sprite: {fileID: -1170532360325605500, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000030000000000000003000000
+      cornerBuilds: 
+    - sprite: {fileID: -3704647555635275679, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000030000000000000003000000
+      cornerBuilds: 
+    - sprite: {fileID: -7359690685540087315, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000000000000000000
+      cornerBuilds: 02000000020000000000000000000000
+    - sprite: {fileID: -6229332785664134386, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000000000000000000003000000
+      cornerBuilds: 02000000020000000000000002000000
+    - sprite: {fileID: -6229332785664134386, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 03000000030000000000000000000000
+      cornerBuilds: 02000000020000000200000000000000
+    - sprite: {fileID: -6951572131546349401, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000300000003000000
+      cornerBuilds: 02000000000000000200000002000000
+    - sprite: {fileID: 2227117088626713062, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000030000000300000000000000
+      cornerBuilds: 00000000020000000200000002000000
+    - sprite: {fileID: 4173800235352844900, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000000000000000000003000000
+      cornerBuilds: 02000000020000000300000002000000
+    - sprite: {fileID: 4173800235352844900, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 03000000030000000000000000000000
+      cornerBuilds: 02000000020000000200000003000000
+    - sprite: {fileID: 6757373886860391236, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000300000003000000
+      cornerBuilds: 02000000030000000200000002000000
+    - sprite: {fileID: -2029230279241257433, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000030000000300000000000000
+      cornerBuilds: 03000000020000000200000002000000
+    - sprite: {fileID: -5959816606163626744, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000000000000000000000000000
+      cornerBuilds: 02000000020000000000000000000000
+    - sprite: {fileID: -1744814789099702220, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000300000000000000
+      cornerBuilds: 
+    - sprite: {fileID: 4298327817672080628, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000000000003000000
+      cornerBuilds: 02000000020000000000000002000000
+    - sprite: {fileID: 4298327817672080628, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 00000000030000000000000000000000
+      cornerBuilds: 02000000020000000200000000000000
+    - sprite: {fileID: -6956311197538812774, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000000000000000000
+      cornerBuilds: 02000000020000000300000000000000
+    - sprite: {fileID: -6956311197538812774, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 00000000000000000000000000000000
+      cornerBuilds: 02000000020000000000000003000000
+    - sprite: {fileID: 6909240096735921668, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000000000000000000
+      cornerBuilds: 02000000020000000300000003000000
+    - sprite: {fileID: -3451430507213106086, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000000000000000000000000000
+      cornerBuilds: 02000000020000000300000000000000
+    - sprite: {fileID: -3451430507213106086, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 03000000000000000000000000000000
+      cornerBuilds: 02000000020000000000000003000000
+    - sprite: {fileID: -7867378720502011557, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000000000000000000000000000
+      cornerBuilds: 02000000020000000300000003000000
+    - sprite: {fileID: -9057759578862370563, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000000000003000000
+      cornerBuilds: 02000000020000000300000002000000
+    - sprite: {fileID: -9057759578862370563, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 00000000030000000000000000000000
+      cornerBuilds: 02000000020000000200000003000000
+  - sprite: {fileID: -1607942543942007299, guid: 09166dd5941f6e742b207c5933d288ba,
+      type: 3}
+    Object: {fileID: 0}
+    flipped: 1
+    size: {x: 1, y: 1}
+    placements:
+    - offset: {x: 0, y: 0.75}
+      position: {x: 0, y: 0}
+    ruleBuilds:
+    - sprite: {fileID: -1607942543942007299, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 03000000030000000300000003000000
+      cornerBuilds: 
+    - sprite: {fileID: -8680429093838494949, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 03000000000000000300000003000000
+      cornerBuilds: 
+    - sprite: {fileID: 3334573412063134213, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 03000000030000000300000000000000
+      cornerBuilds: 
+    - sprite: {fileID: 3990325847778661587, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 03000000000000000300000000000000
+      cornerBuilds: 
+    - sprite: {fileID: 93684702887128606, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 00000000030000000300000003000000
+      cornerBuilds: 
+    - sprite: {fileID: -1170532360325605500, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000030000000000000003000000
+      cornerBuilds: 
+    - sprite: {fileID: -3704647555635275679, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000030000000000000003000000
+      cornerBuilds: 
+    - sprite: {fileID: -7359690685540087315, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000000000000000000
+      cornerBuilds: 02000000020000000000000000000000
+    - sprite: {fileID: -6229332785664134386, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000000000000000000003000000
+      cornerBuilds: 02000000020000000000000002000000
+    - sprite: {fileID: -6229332785664134386, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 03000000030000000000000000000000
+      cornerBuilds: 02000000020000000200000000000000
+    - sprite: {fileID: 2227117088626713062, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 00000000000000000300000003000000
+      cornerBuilds: 02000000000000000200000002000000
+    - sprite: {fileID: -6951572131546349401, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 00000000030000000300000000000000
+      cornerBuilds: 00000000020000000200000002000000
+    - sprite: {fileID: 4173800235352844900, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000000000000000000003000000
+      cornerBuilds: 02000000020000000300000002000000
+    - sprite: {fileID: 4173800235352844900, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 03000000030000000000000000000000
+      cornerBuilds: 02000000020000000200000003000000
+    - sprite: {fileID: -2029230279241257433, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 00000000000000000300000003000000
+      cornerBuilds: 02000000030000000200000002000000
+    - sprite: {fileID: 6757373886860391236, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 00000000030000000300000000000000
+      cornerBuilds: 03000000020000000200000002000000
+    - sprite: {fileID: -5959816606163626744, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000000000000000000000000000
+      cornerBuilds: 02000000020000000000000000000000
+    - sprite: {fileID: -1744814789099702220, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 00000000000000000300000000000000
+      cornerBuilds: 
+    - sprite: {fileID: 4298327817672080628, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000000000003000000
+      cornerBuilds: 02000000020000000000000002000000
+    - sprite: {fileID: 4298327817672080628, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 00000000030000000000000000000000
+      cornerBuilds: 02000000020000000200000000000000
+    - sprite: {fileID: -6956311197538812774, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000000000000000000
+      cornerBuilds: 02000000020000000300000000000000
+    - sprite: {fileID: -6956311197538812774, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 00000000000000000000000000000000
+      cornerBuilds: 02000000020000000000000003000000
+    - sprite: {fileID: 6909240096735921668, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000000000000000000
+      cornerBuilds: 02000000020000000300000003000000
+    - sprite: {fileID: -3451430507213106086, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000000000000000000000000000
+      cornerBuilds: 02000000020000000300000000000000
+    - sprite: {fileID: -3451430507213106086, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 03000000000000000000000000000000
+      cornerBuilds: 02000000020000000000000003000000
+    - sprite: {fileID: -7867378720502011557, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000000000000000000000000000
+      cornerBuilds: 02000000020000000300000003000000
+    - sprite: {fileID: -9057759578862370563, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000000000003000000
+      cornerBuilds: 02000000020000000300000002000000
+    - sprite: {fileID: -9057759578862370563, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 00000000030000000000000000000000
+      cornerBuilds: 02000000020000000200000003000000
+  - sprite: {fileID: -614395410629736406, guid: 09166dd5941f6e742b207c5933d288ba,
+      type: 3}
+    Object: {fileID: 0}
+    flipped: 0
+    size: {x: 1, y: 1}
+    placements:
+    - offset: {x: 0, y: 0.75}
+      position: {x: 0, y: 0}
+    ruleBuilds:
+    - sprite: {fileID: -614395410629736406, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000030000000300000003000000
+      cornerBuilds: 
+    - sprite: {fileID: 2476445006944672720, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000000000000300000003000000
+      cornerBuilds: 
+    - sprite: {fileID: 2476445006944672720, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 03000000030000000300000000000000
+      cornerBuilds: 
+    - sprite: {fileID: 8639983112983721545, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000000000000300000000000000
+      cornerBuilds: 
+    - sprite: {fileID: -1109631470404538038, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000030000000300000003000000
+      cornerBuilds: 
+    - sprite: {fileID: -1170532360325605500, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000030000000000000003000000
+      cornerBuilds: 
+    - sprite: {fileID: -3704647555635275679, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000030000000000000003000000
+      cornerBuilds: 
+    - sprite: {fileID: -7359690685540087315, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000000000000000000
+      cornerBuilds: 02000000020000000000000000000000
+    - sprite: {fileID: -6229332785664134386, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000000000000000000003000000
+      cornerBuilds: 02000000020000000000000002000000
+    - sprite: {fileID: -6229332785664134386, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 03000000030000000000000000000000
+      cornerBuilds: 02000000020000000200000000000000
+    - sprite: {fileID: 3806738314519840405, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000300000003000000
+      cornerBuilds: 02000000000000000200000002000000
+    - sprite: {fileID: 3806738314519840405, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 00000000030000000300000000000000
+      cornerBuilds: 00000000020000000200000002000000
+    - sprite: {fileID: 4173800235352844900, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000000000000000000003000000
+      cornerBuilds: 02000000020000000300000002000000
+    - sprite: {fileID: 4173800235352844900, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 03000000030000000000000000000000
+      cornerBuilds: 02000000020000000200000003000000
+    - sprite: {fileID: 9109209132607401412, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000300000003000000
+      cornerBuilds: 02000000030000000200000002000000
+    - sprite: {fileID: 9109209132607401412, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 00000000030000000300000000000000
+      cornerBuilds: 03000000020000000200000002000000
+    - sprite: {fileID: -5959816606163626744, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000000000000000000000000000
+      cornerBuilds: 02000000020000000000000000000000
+    - sprite: {fileID: -823818804261074102, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000300000000000000
+      cornerBuilds: 
+    - sprite: {fileID: 4298327817672080628, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000000000003000000
+      cornerBuilds: 02000000020000000000000002000000
+    - sprite: {fileID: 4298327817672080628, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 00000000030000000000000000000000
+      cornerBuilds: 02000000020000000200000000000000
+    - sprite: {fileID: -6956311197538812774, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000000000000000000
+      cornerBuilds: 02000000020000000300000000000000
+    - sprite: {fileID: -6956311197538812774, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 00000000000000000000000000000000
+      cornerBuilds: 02000000020000000000000003000000
+    - sprite: {fileID: 6909240096735921668, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000000000000000000
+      cornerBuilds: 02000000020000000300000003000000
+    - sprite: {fileID: -3451430507213106086, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000000000000000000000000000
+      cornerBuilds: 02000000020000000300000000000000
+    - sprite: {fileID: -3451430507213106086, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 03000000000000000000000000000000
+      cornerBuilds: 02000000020000000000000003000000
+    - sprite: {fileID: -7867378720502011557, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 03000000000000000000000000000000
+      cornerBuilds: 02000000020000000300000003000000
+    - sprite: {fileID: -9057759578862370563, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 00000000000000000000000003000000
+      cornerBuilds: 02000000020000000300000002000000
+    - sprite: {fileID: -9057759578862370563, guid: 09166dd5941f6e742b207c5933d288ba,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 00000000030000000000000000000000
+      cornerBuilds: 02000000020000000200000003000000
   Type: 0
   canDecorate: 1

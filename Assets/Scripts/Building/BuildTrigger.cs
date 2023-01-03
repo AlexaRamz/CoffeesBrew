@@ -9,17 +9,24 @@ public class BuildTrigger : MonoBehaviour
     public BuildInfo info;
     Inventory plrInv;
     public GameObject[] decor;
-    GameObject plr;
+    Movement2D plr;
     BuildingSystem buildSys;
 
+    void Start()
+    {
+        plr = FindObjectOfType<Movement2D>();
+        plrInv = FindObjectOfType<Inventory>();
+    }
     public void SetObject(Build build, int rot, int x, int y)
     {
         buildSys = FindObjectOfType<BuildingSystem>();
         info.build = build;
         info.rot = rot;
         info.gridPos = new Vector2Int(x, y);
+        gameObject.name = build.name;
         SpriteRenderer render = GetComponent<SpriteRenderer>();
         render.sprite = info.GetRotation().sprite;
+        UpdateSprite();
         render.flipX = info.GetRotation().flipped;
         SetTrigger();
         if (build.Type == Build.ObjectType.Furniture)
@@ -32,9 +39,54 @@ public class BuildTrigger : MonoBehaviour
         }
         if (build.canDecorate)
         {
-            gameObject.AddComponent<SortingGroup>();
+            if (!gameObject.GetComponent<SortingGroup>())
+            {
+                gameObject.AddComponent<SortingGroup>();
+            }
             SetPlacements();
         }
+    }
+    public bool UpdateSprite()
+    {
+        buildSys = FindObjectOfType<BuildingSystem>();
+        if (info.GetRotation().ruleBuilds.Length > 0)
+        {
+            GameObject[] adjacentObjects = buildSys.GetAdjacentObjects(info.gridPos);
+            GameObject[] cornerObjects = buildSys.GetCornerObjects(info.gridPos);
+            foreach (RuleBuild ruleBuild in info.GetRotation().ruleBuilds)
+            {
+                bool CheckRule(GameObject[] objects, RuleBuild.BuildType[] rules)
+                {
+                    int i = 0;
+                    foreach (RuleBuild.BuildType rule in rules)
+                    {
+                        GameObject obj = objects[i];
+                        if (rule == RuleBuild.BuildType.Self && (obj == null || (obj.GetComponent<BuildTrigger>() && obj.GetComponent<BuildTrigger>().info.build != info.build)) || (rule == RuleBuild.BuildType.Empty && obj != null) || (rule == RuleBuild.BuildType.Other && obj != null && obj.GetComponent<BuildTrigger>() && obj.GetComponent<BuildTrigger>().info.build == info.build))
+                        {
+                            return false;
+                        }
+                        i++;
+                    }
+
+                    return true;
+                }
+                if (CheckRule(adjacentObjects, ruleBuild.adjacentBuilds) && CheckRule(cornerObjects, ruleBuild.cornerBuilds))
+                {
+                    GetComponent<SpriteRenderer>().sprite = ruleBuild.sprite;
+                    GetComponent<SpriteRenderer>().flipX = ruleBuild.flipped;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public Vector2Int GetPos()
+    {
+        return info.gridPos;
+    }
+    public void SetPos(Vector2Int pos)
+    {
+        info.gridPos = pos;
     }
     void SetCollider()
     {
@@ -55,56 +107,60 @@ public class BuildTrigger : MonoBehaviour
     }
     void SetPlacements()
     {
-        decor = new GameObject[info.GetPlacementAmount()];
-        info.SetPlacementArray();
-    }
-    bool inRange;
-    void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Player")
+        if (decor.Length == 0)
         {
-            inRange = true;
-            plr = collision.gameObject;
-            plrInv = collision.gameObject.GetComponent<Inventory>();
+            decor = new GameObject[info.GetPlacementAmount()];
+            info.SetPlacementArray();
         }
     }
-    void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Player")
-        {
-            inRange = false;
-            plr = null;
-            plrInv = null;
-        }
-    }
-    void ClearPlacement(int place)
+    public void ClearPlacement(int place)
     {
         info.decor[place] = null;
         Destroy(decor[place]);
     }
+    void PlaceDecor(Item item, Placement thisPlacement, int place)
+    {
+        GameObject obj = new GameObject("Decor");
+        obj.transform.parent = transform;
+        obj.transform.position = transform.position + (Vector3Int)thisPlacement.position + (Vector3)thisPlacement.offset;
+        BoxCollider2D collider = obj.AddComponent<BoxCollider2D>();
+        collider.isTrigger = true;
+        SpriteRenderer render = obj.AddComponent<SpriteRenderer>();
+        render.sortingOrder = 1;
+        render.sprite = item.asset;
+        info.decor[place] = item;
+        decor[place] = obj;
+    }
+    public int GetDecorPlacement(GameObject thisObj)
+    {
+        int i = 0;
+        foreach (GameObject obj in decor)
+        {
+            if (thisObj == obj)
+            {
+                return i;
+            }
+            i++;
+        }
+        return -1;
+    }
     void Update()
     {
-        if (inRange && plrInv != null && info.build.canDecorate)
+        if (plrInv != null && info.build && info.build.canDecorate)
         {
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (Input.GetKeyDown(KeyCode.Return) && plr.isInteractingWithObject(gameObject))
             {
-                Vector2[] placements = info.GetPlacements();
-                Vector2 nearestPlacement = Vector2.zero;
-                float nearestDistance = float.MaxValue;
                 int place = 0;
+                Placement[] placements = info.GetPlacements();
                 for (int i = 0; i < placements.Length; i++)
                 {
-                    Vector2 placement = placements[i];
-                    Vector3 pos = new Vector3(transform.position.x + placement.x, transform.position.y + placement.y, transform.position.z);
-                    float distance = (pos - plr.transform.position).sqrMagnitude;
-                    if (distance < nearestDistance)
+                    if (plr.GetInteractArrayPos() == info.gridPos + placements[i].position)
                     {
-                        nearestDistance = distance;
-                        nearestPlacement = pos;
                         place = i;
-                        Debug.Log(distance);
+                        break;
                     }
                 }
+
                 Item current = info.decor[place];
                 if (current != null)
                 {
@@ -119,14 +175,7 @@ public class BuildTrigger : MonoBehaviour
                     if (item != null)
                     {
                         plrInv.DepleteCurrentItem();
-                        GameObject obj = new GameObject("Decor");
-                        obj.transform.parent = transform;
-                        obj.transform.position = nearestPlacement;
-                        SpriteRenderer render = obj.AddComponent<SpriteRenderer>();
-                        render.sortingOrder = 1;
-                        render.sprite = item.asset;
-                        info.decor[place] = item;
-                        decor[place] = obj;
+                        PlaceDecor(item, info.GetPlacement(place), place);
                     }
                 }
             }

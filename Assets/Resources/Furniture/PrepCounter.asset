@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 205a32b3a2784a742b9dadf3d2f8d30b, type: 3}
+  m_Name: PrepCounter
+  m_EditorClassIdentifier: 
+  rotations:
+  - sprite: {fileID: 21300000, guid: 093a2235027b18347aa2e7748664a0a0, type: 3}
+    Object: {fileID: 3542549148598886479, guid: 55b1457118f895645a32e58cc5982fa5,
+      type: 3}
+    flipped: 0
+    size: {x: 2, y: 1}
+    placements: []
+    ruleBuilds: []
+  Type: 0
+  canDecorate: 0

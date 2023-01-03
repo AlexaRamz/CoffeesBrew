@@ -19,7 +19,7 @@ public class StorageTrigger : MonoBehaviour
     {
         if (manager != null)
         {
-            if (Input.GetKeyDown(KeyCode.Return) && plr.isInteractingWith(gameObject))
+            if (Input.GetKeyDown(KeyCode.Return) && plr.isInteractingWith(transform.position))
             {
                 if (open)
                 {

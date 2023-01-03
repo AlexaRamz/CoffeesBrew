@@ -314,8 +314,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
+      - m_Target: {fileID: 156458381578399217}
+        m_TargetAssemblyTypeName: BuildingSystem, Assembly-CSharp
         m_MethodName: ChangeCategory
         m_Mode: 5
         m_Arguments:
@@ -724,8 +724,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
+      - m_Target: {fileID: 156458381578399217}
+        m_TargetAssemblyTypeName: BuildingSystem, Assembly-CSharp
         m_MethodName: ChangeCategory
         m_Mode: 5
         m_Arguments:
@@ -1078,25 +1078,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef7f42a20357a2b4bad2ae47b01fa206, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gr: {fileID: 156458382058271780}
   buildObjects: {fileID: 0}
   buildTemplate: {fileID: 125030792355823732, guid: b800c52953e437f48aa67aa39cda7f9c,
     type: 3}
   template: {fileID: 156458381162434997}
-  canBuild: 1
+  canBuild: 0
   canPlace: 0
   tilemap: {fileID: 0}
   walls: {fileID: 0}
-  currentTilemap: {fileID: 0}
   furnitureList:
   - {fileID: 11400000, guid: 7c8c2fa31389b0a4b81cc65def660f49, type: 2}
   - {fileID: 11400000, guid: 590550775a993dc4cb8bad9043820828, type: 2}
+  - {fileID: 11400000, guid: 3fcb943d10796bb4280f31152d00ee01, type: 2}
+  - {fileID: 11400000, guid: bb564aed23e551d4c876004927238579, type: 2}
+  - {fileID: 11400000, guid: c74db96fd88388d46a3fd405924915a8, type: 2}
   - {fileID: 11400000, guid: 4f09a152df9a065459d73a08701117e6, type: 2}
   - {fileID: 11400000, guid: 194a9f179a8338342b0e737b200eab66, type: 2}
   - {fileID: 11400000, guid: 25cbf6915f679c448b453a6e07134b94, type: 2}
   - {fileID: 11400000, guid: c3aa8c8158a23c94a886ef6c763a2a8e, type: 2}
   - {fileID: 11400000, guid: 57fa1a41f312b6e4ca292257508153c0, type: 2}
-  wallDecList: []
+  wallDecList:
+  - {fileID: 11400000, guid: 9d83174d23584ec459f2e341719abc8d, type: 2}
+  - {fileID: 11400000, guid: d1fc7f794eae3404baa079ef1b1ca506, type: 2}
   OptionUI: {fileID: 156458381655289286}
 --- !u!1 &156458381655289286
 GameObject:
@@ -2078,7 +2081,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -961.6016, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &156458382658200204

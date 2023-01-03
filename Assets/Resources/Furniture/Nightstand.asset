@@ -19,27 +19,35 @@ MonoBehaviour:
     flipped: 0
     size: {x: 1, y: 1}
     placements:
-    - {x: 0, y: 0.75}
+    - offset: {x: 0, y: 0.875}
+      position: {x: 0, y: 0}
+    ruleBuilds: []
   - sprite: {fileID: -7494768001850402529, guid: 1c17931060dcaec4cab59ed1d0fe664d,
       type: 3}
     Object: {fileID: 0}
     flipped: 0
     size: {x: 1, y: 1}
     placements:
-    - {x: 0, y: 0.75}
+    - offset: {x: 0, y: 0.875}
+      position: {x: 0, y: 0}
+    ruleBuilds: []
   - sprite: {fileID: -6183566690343910049, guid: 1c17931060dcaec4cab59ed1d0fe664d,
       type: 3}
     Object: {fileID: 0}
     flipped: 0
     size: {x: 1, y: 1}
     placements:
-    - {x: 0, y: 0.75}
+    - offset: {x: 0, y: 0.875}
+      position: {x: 0, y: 0}
+    ruleBuilds: []
   - sprite: {fileID: -7494768001850402529, guid: 1c17931060dcaec4cab59ed1d0fe664d,
       type: 3}
     Object: {fileID: 0}
     flipped: 1
     size: {x: 1, y: 1}
     placements:
-    - {x: 0, y: 0.75}
+    - offset: {x: 0, y: 0.875}
+      position: {x: 0, y: 0}
+    ruleBuilds: []
   Type: 0
   canDecorate: 1

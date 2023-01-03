@@ -9,25 +9,23 @@ using System.Linq;
 public class BuildingSystem : MonoBehaviour
 {
     Inventory plrInv;
-    public GraphicRaycaster gr;
+    GraphicRaycaster gr;
     public Transform buildObjects;
     public GameObject buildTemplate;
     public GameObject template;
     Build thisBuild;
-    Rotation thisRotation;
     int rot;
     public bool canBuild = true;
     public bool canPlace = false;
     public Tilemap tilemap;
     public Tilemap walls;
-    public Tilemap currentTilemap;
+    Tilemap currentTilemap;
 
     GameObject[,] gridArray;
     GameObject[,] wallArray;
     int width = 20;
     int height = 20;
-    int gridOriginX = -10;
-    int gridOriginY = -10;
+    Vector2Int gridOrigin;
     GameObject[,] currentArray;
 
     UI_Building objectUI;
@@ -44,12 +42,13 @@ public class BuildingSystem : MonoBehaviour
         plrInv = FindObjectOfType<Inventory>();
 
         Transform UI = transform.Find("BuildingMenu");
+        gr = UI.GetComponent<GraphicRaycaster>();
         objectUI = UI.GetComponent<UI_Building>();
         doneButton = UI.Find("DoneButton").Find("Button").gameObject;
 
-        //Chair, Table, TallPlant, Nightstand, Plant1, Carpet1
-        //Painting1, Painting2, Shelf
-
+        gridOrigin = (Vector2Int)tilemap.origin;
+        width = tilemap.size.x;
+        height = tilemap.size.y;
         gridArray = new GameObject[width, height];
         wallArray = new GameObject[width, height];
         currentArray = gridArray;
@@ -59,13 +58,12 @@ public class BuildingSystem : MonoBehaviour
         //Add existing
         foreach (Transform buildObj in buildObjects)
         {
-            if (buildObj.GetComponent<BuildTrigger>())
+            BuildTrigger buildTrigger = buildObj.GetComponent<BuildTrigger>();
+            if (buildTrigger && buildTrigger.info.build)
             {
-                BuildInfo info = buildObj.GetComponent<BuildTrigger>().info;
-                Vector2Int size = info.build.rotations[info.rot].size;
                 Vector2Int arrayPos = WorldToArray(buildObj.transform.position);
-                SetValue(arrayPos.x, arrayPos.y, buildObj.gameObject, size);
-                info.gridPos = arrayPos;
+                buildTrigger.SetObject(buildTrigger.info.build, buildTrigger.info.rot, arrayPos.x, arrayPos.y);
+                SetValue(arrayPos.x, arrayPos.y, buildObj.gameObject, buildTrigger.info.GetRotation().size);
             }
             else
             {
@@ -76,7 +74,7 @@ public class BuildingSystem : MonoBehaviour
     }
     public void RotateObject()
     {
-        if (canPlace == false && selected != null)
+        if (canPlace == false && selected != null && selected.GetComponent<BuildTrigger>())
         {
             BuildInfo info = selected.GetComponent<BuildTrigger>().info;
             Build build = info.build;
@@ -92,21 +90,19 @@ public class BuildingSystem : MonoBehaviour
                     ro = 0;
                 }
                 Vector2Int gridPos = info.gridPos;
-                Vector2Int size = build.rotations[ro].size;
-                SetValue(gridPos.x, gridPos.y, null, thisRotation.size);
+                Vector2Int size = build.GetRotation(ro).size;
+                SetValue(gridPos.x, gridPos.y, null, info.GetRotation().size);
                 if (CheckOverlap(gridPos.x, gridPos.y, size) == false)
                 {
                     thisBuild = build;
-                    thisRotation = build.rotations[ro];
                     rot = ro;
                     Vector3 newPos = selected.transform.position;
                     Destroy(selected);
                     selected = PlaceItem(newPos, gridPos.x, gridPos.y);
-                    Debug.Log("place");
                 }
                 else
                 {
-                    SetValue(gridPos.x, gridPos.y, selected, thisRotation.size);
+                    SetValue(gridPos.x, gridPos.y, selected, thisBuild.GetRotation(rot).size);
                 }
             }
         }
@@ -115,7 +111,21 @@ public class BuildingSystem : MonoBehaviour
     {
         if (canPlace == false && selected != null)
         {
-            Destroy(selected);
+            if (selected.GetComponent<BuildTrigger>())
+            {
+                BuildInfo info = selected.GetComponent<BuildTrigger>().info;
+                SetValue(info.gridPos.x, info.gridPos.y, null, info.build.GetRotation(rot).size);
+                Destroy(selected);
+            }
+            else if (selected.transform.parent.GetComponent<BuildTrigger>())
+            {
+                BuildTrigger trigger = selected.transform.parent.GetComponent<BuildTrigger>();
+                int place = trigger.GetDecorPlacement(selected);
+                if (place != -1)
+                {
+                    trigger.ClearPlacement(place);
+                }
+            }
         }
     }
     bool CheckArrayPos(int x, int y)
@@ -139,7 +149,7 @@ public class BuildingSystem : MonoBehaviour
             {
                 int x = originX + i;
                 int y = originY + j;
-                if (x >= width || y >= height || GetValue(x, y) != null || currentTilemap.GetTile(new Vector3Int(x + gridOriginX, y + gridOriginY, 0)) == null)
+                if (x >= width || y >= height || GetValue(x, y) != null || currentTilemap.GetTile(new Vector3Int(x + gridOrigin.x, y + gridOrigin.y, 0)) == null)
                 {
                     return true;
                 }
@@ -149,8 +159,8 @@ public class BuildingSystem : MonoBehaviour
     }
     void SetTemplate()
     {
-        template.GetComponent<SpriteRenderer>().sprite = thisRotation.sprite;
-        template.GetComponent<SpriteRenderer>().flipX = thisRotation.flipped;
+        template.GetComponent<SpriteRenderer>().sprite = thisBuild.GetRotation(rot).sprite;
+        template.GetComponent<SpriteRenderer>().flipX = thisBuild.GetRotation(rot).flipped;
     }
     public void ResetOptions()
     {
@@ -189,7 +199,6 @@ public class BuildingSystem : MonoBehaviour
         doneButton.GetComponent<Button>().enabled = true;
         ResetOptions();
         thisBuild = build;
-        thisRotation = build.rotations[0];
         rot = 0;
         SetTemplate();
         previousTile = new Vector3Int(0, 0, 0);
@@ -227,22 +236,89 @@ public class BuildingSystem : MonoBehaviour
         {
             rot = 0;
         }
-        thisRotation = thisBuild.rotations[rot];
         SetTemplate();
         previousTile = new Vector3Int(0, 0, 0);
     }
-    void SetValue(int x, int y, GameObject value, Vector2Int size) // work for 2x2 and so on
+
+    public GameObject[] GetAdjacentObjects(Vector2Int originPos)
+    {
+        GameObject[] adjacentBuilds = new GameObject[4];
+        adjacentBuilds[0] = GetValue(originPos.x, originPos.y + 1);
+        adjacentBuilds[1] = GetValue(originPos.x + 1, originPos.y);
+        adjacentBuilds[2] = GetValue(originPos.x, originPos.y - 1);
+        adjacentBuilds[3] = GetValue(originPos.x - 1, originPos.y);
+
+        return adjacentBuilds;
+    }
+    public GameObject[] GetCornerObjects(Vector2Int originPos)
+    {
+        GameObject[] cornerBuilds = new GameObject[4];
+        cornerBuilds[0] = GetValue(originPos.x - 1, originPos.y + 1);
+        cornerBuilds[1] = GetValue(originPos.x + 1, originPos.y + 1);
+        cornerBuilds[2] = GetValue(originPos.x + 1, originPos.y - 1);
+        cornerBuilds[3] = GetValue(originPos.x - 1, originPos.y - 1);
+
+        return cornerBuilds;
+    }
+    public GameObject[] GetSurroundingObjects(Vector2Int originPos, Vector2Int size)
+    {
+        int arraySize = 2 * size.x + 2 * size.y + 4;
+        GameObject[] adjacentBuilds = new GameObject[arraySize];
+        int i = 0;
+        adjacentBuilds[0] = GetValue(originPos.x - 1, originPos.y + size.y);
+        i++;
+        for (int j = 0; j < size.x; j++)
+        {
+            adjacentBuilds[i] = GetValue(originPos.x + j, originPos.y + size.y);
+            i++;
+        }
+        adjacentBuilds[i] = GetValue(originPos.x + size.x, originPos.y + size.y);
+        i++;
+        for (int j = size.y - 1; j >= 0; j--)
+        {
+            adjacentBuilds[i] = GetValue(originPos.x + size.x, originPos.y + j);
+            i++;
+        }
+        adjacentBuilds[i] = GetValue(originPos.x + size.x, originPos.y - 1);
+        i++;
+        for (int j = size.x - 1; j >= 0; j--)
+        {
+            adjacentBuilds[i] = GetValue(originPos.x + j, originPos.y - 1);
+            i++;
+        }
+        adjacentBuilds[i] = GetValue(originPos.x - 1, originPos.y - 1);
+        i++;
+        for (int j = 0; j < size.y; j++)
+        {
+            adjacentBuilds[i] = GetValue(originPos.x - 1, originPos.y + j);
+            i++;
+        }
+
+        return adjacentBuilds;
+    }
+
+    void SetValue(int x, int y, GameObject value, Vector2Int size)
     {
         if (CheckArrayPos(x, y))
         {
             currentArray[x, y] = value;
-            if (size.x > 1)
+            for (int i = 0; i < size.x; i++)
             {
-                currentArray[x + (size.x - 1), y] = value;
+                for (int j = 0; j < size.y; j++)
+                {
+                    currentArray[x + i, y + j] = value;
+                }
             }
-            if (size.y > 1)
+            if (value != null && value.GetComponent<BuildTrigger>())
             {
-                currentArray[x, y + (size.y - 1)] = value;
+                value.GetComponent<BuildTrigger>().UpdateSprite();
+            } 
+            foreach (GameObject obj in GetSurroundingObjects(new Vector2Int(x, y), size))
+            {
+                if (obj != null && obj.GetComponent<BuildTrigger>())
+                {
+                    obj.GetComponent<BuildTrigger>().UpdateSprite();
+                }
             }
         }
     }
@@ -253,7 +329,20 @@ public class BuildingSystem : MonoBehaviour
     }
     GameObject PlaceItem(Vector3 gridPos, int x, int y)
     {
-        GameObject Object = Instantiate(buildTemplate, gridPos, Quaternion.identity);
+        GameObject Object;
+        Rotation thisRotation = thisBuild.GetRotation(rot);
+        if (thisRotation.Object)
+        {
+            Object = Instantiate(thisRotation.Object, gridPos, Quaternion.identity);
+            if (!Object.GetComponent<BuildTrigger>())
+            {
+                Object.AddComponent<BuildTrigger>();
+            }
+        }
+        else
+        {
+            Object = Instantiate(buildTemplate, gridPos, Quaternion.identity);
+        }
         Object.transform.SetParent(buildObjects);
         Object.GetComponent<BuildTrigger>().SetObject(thisBuild, rot, x, y);
         SetValue(x, y, Object, thisRotation.size);
@@ -263,28 +352,25 @@ public class BuildingSystem : MonoBehaviour
     }
     public Vector2Int WorldToArray(Vector3 pos)
     {
-        return (Vector2Int)currentTilemap.WorldToCell(pos) - new Vector2Int(gridOriginX, gridOriginY);
+        return (Vector2Int)currentTilemap.WorldToCell(pos) - gridOrigin;
     }
-    Vector3Int previousTile;
+
+    const int unreachableInt = -100;
+    Vector3Int previousTile = new Vector3Int(unreachableInt, unreachableInt, 0);
     void Update()
     {
         if (canBuild)
         {
             Vector3 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
+            // Check on UI
             bool onUI = false;
             PointerEventData ped = new PointerEventData(null);
             ped.position = Input.mousePosition;
             List<RaycastResult> results = new List<RaycastResult>();
             gr.Raycast(ped, results);
-            if (results.Count == 0)
-            {
-                onUI = false;
-            }
-            else
-            {
-                onUI = true;
-            }
+            onUI = results.Count != 0;
+
             if (canPlace)
             {
                 Vector3Int selectedTile = currentTilemap.WorldToCell(point);
@@ -292,10 +378,8 @@ public class BuildingSystem : MonoBehaviour
                 int x = arrayPos.x;
                 int y = arrayPos.y;
 
-                Vector3 tilePos = currentTilemap.CellToWorld(selectedTile);
-                Vector3 gridPos = new Vector3(tilePos.x + 0.5f, tilePos.y + 0.5f, 0f);
+                Vector3 gridPos = currentTilemap.CellToWorld(selectedTile) + new Vector3(0.5f, 0.5f, 0f);
                 template.transform.position = gridPos;
-                bool available = false;
 
                 bool onPrevious = false;
                 if (selectedTile == previousTile)
@@ -306,12 +390,12 @@ public class BuildingSystem : MonoBehaviour
                 else
                 {
                     onPrevious = false;
-                    previousTile = new Vector3Int(0, 0, 0);
+                    previousTile = new Vector3Int(unreachableInt, unreachableInt, 0);
                     template.GetComponent<SpriteRenderer>().enabled = true;
                 }
 
-                Vector2Int rotSize = thisRotation.size;
-                if (x >= 0 && y >= 0 && x < width && y < height && CheckOverlap(x, y, rotSize) == false && currentTilemap.GetTile(selectedTile) != null)
+                bool available = false;
+                if (CheckArrayPos(x, y) && !CheckOverlap(x, y, thisBuild.GetRotation(rot).size) && currentTilemap.GetTile(selectedTile) != null)
                 {
                     available = true;
                     template.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 135);
@@ -344,7 +428,7 @@ public class BuildingSystem : MonoBehaviour
                     List<GameObject> Objects = new List<GameObject>();
                     for (int i = 0; i < hits.Length; i++)
                     {
-                        if (hits[i].collider != null && hits[i].collider.gameObject.GetComponent<BuildTrigger>())
+                        if (hits[i].collider != null && (hits[i].collider.gameObject.GetComponent<BuildTrigger>() || hits[i].collider.transform.parent.GetComponent<BuildTrigger>()))
                         {
                             Objects.Add(hits[i].collider.gameObject);
                         }
@@ -357,7 +441,6 @@ public class BuildingSystem : MonoBehaviour
                     }
                     if (hit != null)
                     {
-                        Debug.Log("selected");
                         SelectObject(hit);
                     }
                     else
@@ -373,6 +456,8 @@ public class BuildingSystem : MonoBehaviour
         selected = thisObject;
         thisObject.transform.localScale = new Vector3(0.95f, 0.95f, 0.95f);
         StartCoroutine(Pop(thisObject));
+
+        //PlaceDecor(item, trigger.GetNearestPlacement(pos)
     }
     private void LateUpdate()
     {

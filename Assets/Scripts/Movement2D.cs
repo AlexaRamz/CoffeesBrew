@@ -23,11 +23,20 @@ public class Movement2D : MonoBehaviour
         anim = gameObject.GetComponent<Animator>();
         buildSys = FindObjectOfType<BuildingSystem>();
     }
-    public bool isInteractingWith(GameObject obj)
+    public bool isInteractingWith(Vector3 pos)
     {
-        Vector2Int interactArea = buildSys.WorldToArray(GetInteractArea());
-        GameObject targetedObj = buildSys.GetValue(interactArea.x, interactArea.y);
-        return targetedObj != null && targetedObj == obj;
+        Vector3Int targetedPos = buildSys.tilemap.WorldToCell(GetInteractArea());
+        return targetedPos == buildSys.tilemap.WorldToCell(pos);
+    }
+    public bool isInteractingWithObject(GameObject obj)
+    {
+        Vector2Int arrayPos = GetInteractArrayPos();
+        GameObject targetedObj = buildSys.GetValue(arrayPos.x, arrayPos.y);
+        return targetedObj == obj;
+    }
+    public Vector2Int GetInteractArrayPos()
+    {
+        return buildSys.WorldToArray(GetInteractArea());
     }
     Vector3 GetInteractArea()
     {

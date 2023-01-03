@@ -17,7 +17,7 @@ public class CraftTrigger : MonoBehaviour
     {
         if (craftSys != null && thisCrafting != null)
         {
-            if (Input.GetKeyDown(KeyCode.Return) && plr.isInteractingWith(gameObject))
+            if (Input.GetKeyDown(KeyCode.Return) && plr.isInteractingWith(transform.position))
             {
                 craftSys.ToggleMenu(thisCrafting);
             }

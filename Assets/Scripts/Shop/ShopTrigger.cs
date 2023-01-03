@@ -4,34 +4,20 @@ using UnityEngine;
 
 public class ShopTrigger : MonoBehaviour
 {
-    bool inRange = false;
     ShopSystem shopSys;
     public Shop thisShop;
+    Movement2D plr;
 
     void Start()
     {
         shopSys = FindObjectOfType<ShopSystem>();
-    }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Player")
-        {
-            inRange = true;
-        }
-    }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Player")
-        {
-            inRange = false;
-            shopSys.CloseMenu();
-        }
+        plr = FindObjectOfType<Movement2D>();
     }
     void Update()
     { 
-        if (inRange && shopSys != null && thisShop != null)
+        if (shopSys != null && thisShop != null)
         {
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (Input.GetKeyDown(KeyCode.Return) && plr.isInteractingWith(transform.position))
             {
                 shopSys.ToggleMenu(thisShop);
             }

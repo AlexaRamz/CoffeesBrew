@@ -17,16 +17,18 @@ public class BuildTrigger : MonoBehaviour
         plr = FindObjectOfType<Movement2D>();
         plrInv = FindObjectOfType<Inventory>();
     }
-    public void SetObject(Build build, int rot, int x, int y)
+    public void SetObject(BuildInfo thisInfo, Vector2Int gridPos)
     {
         buildSys = FindObjectOfType<BuildingSystem>();
-        info.build = build;
-        info.rot = rot;
-        info.gridPos = new Vector2Int(x, y);
+        info.SetInfo(thisInfo.build, thisInfo.rot);
+        info.gridPos = gridPos;
+        //decor
+ 
+        Build build = info.build;
         gameObject.name = build.name;
         SpriteRenderer render = GetComponent<SpriteRenderer>();
         render.sprite = info.GetRotation().sprite;
-        UpdateSprite();
+        //UpdateSprite();
         render.flipX = info.GetRotation().flipped;
         SetTrigger();
         if (build.Type == Build.ObjectType.Furniture)
@@ -46,10 +48,18 @@ public class BuildTrigger : MonoBehaviour
             SetPlacements();
         }
     }
+    public void SetColor(Color32 color)
+    {
+        GetComponent<SpriteRenderer>().color = color;
+    }
+    public bool HasRuleBuilds()
+    {
+        return info.GetRotation().ruleBuilds.Length > 0;
+    }
     public bool UpdateSprite()
     {
         buildSys = FindObjectOfType<BuildingSystem>();
-        if (info.GetRotation().ruleBuilds.Length > 0)
+        if (HasRuleBuilds())
         {
             GameObject[] adjacentObjects = buildSys.GetAdjacentObjects(info.gridPos);
             GameObject[] cornerObjects = buildSys.GetCornerObjects(info.gridPos);

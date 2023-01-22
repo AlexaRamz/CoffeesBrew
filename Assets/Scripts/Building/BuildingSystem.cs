@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
-using System.Linq;
 
 public class BuildingSystem : MonoBehaviour
 {
@@ -13,8 +12,9 @@ public class BuildingSystem : MonoBehaviour
     public Transform buildObjects;
     public GameObject buildTemplate;
     public GameObject template;
-    Build thisBuild;
-    int rot;
+
+    BuildInfo currentInfo;
+
     public bool canBuild = true;
     public bool canPlace = false;
     public Tilemap tilemap;
@@ -29,11 +29,10 @@ public class BuildingSystem : MonoBehaviour
     GameObject[,] currentArray;
 
     UI_Building objectUI;
-    GameObject doneButton;
 
     public List<Build> furnitureList = new List<Build>();
     public List<Build> wallDecList = new List<Build>();
-    GameObject selected = null;
+    public List<GameObject> selectedObjects = new List<GameObject>();
 
     public GameObject OptionUI;
 
@@ -44,7 +43,6 @@ public class BuildingSystem : MonoBehaviour
         Transform UI = transform.Find("BuildingMenu");
         gr = UI.GetComponent<GraphicRaycaster>();
         objectUI = UI.GetComponent<UI_Building>();
-        doneButton = UI.Find("DoneButton").Find("Button").gameObject;
 
         gridOrigin = (Vector2Int)tilemap.origin;
         width = tilemap.size.x;
@@ -55,6 +53,8 @@ public class BuildingSystem : MonoBehaviour
 
         currentTilemap = tilemap;
 
+        currentInfo = new BuildInfo();
+
         //Add existing
         foreach (Transform buildObj in buildObjects)
         {
@@ -62,71 +62,67 @@ public class BuildingSystem : MonoBehaviour
             if (buildTrigger && buildTrigger.info.build)
             {
                 Vector2Int arrayPos = WorldToArray(buildObj.transform.position);
-                buildTrigger.SetObject(buildTrigger.info.build, buildTrigger.info.rot, arrayPos.x, arrayPos.y);
-                SetValue(arrayPos.x, arrayPos.y, buildObj.gameObject, buildTrigger.info.GetRotation().size);
+                buildTrigger.SetObject(buildTrigger.info, arrayPos);
+                SetValue(arrayPos, buildObj.gameObject, buildTrigger.info.GetRotation().size);
             }
             else
             {
                 Vector2Int arrayPos = WorldToArray(buildObj.transform.position);
-                SetValue(arrayPos.x, arrayPos.y, buildObj.gameObject, new Vector2Int(1, 1));
+                SetValue(arrayPos, buildObj.gameObject, new Vector2Int(1, 1));
             }
         }
     }
     public void RotateObject()
     {
-        if (canPlace == false && selected != null && selected.GetComponent<BuildTrigger>())
+        if (canPlace == false)
         {
-            BuildInfo info = selected.GetComponent<BuildTrigger>().info;
-            Build build = info.build;
-            if (build.rotations.Length > 1)
+            List<GameObject> newObjects = new List<GameObject>();
+            foreach (GameObject obj in selectedObjects)
             {
-                int ro = info.rot;
-                if (ro < (build.rotations.Length - 1))
+                if (obj.GetComponent<BuildTrigger>())
                 {
-                    ro += 1;
-                }
-                else
-                {
-                    ro = 0;
-                }
-                Vector2Int gridPos = info.gridPos;
-                Vector2Int size = build.GetRotation(ro).size;
-                SetValue(gridPos.x, gridPos.y, null, info.GetRotation().size);
-                if (CheckOverlap(gridPos.x, gridPos.y, size) == false)
-                {
-                    thisBuild = build;
-                    rot = ro;
-                    Vector3 newPos = selected.transform.position;
-                    Destroy(selected);
-                    selected = PlaceItem(newPos, gridPos.x, gridPos.y);
-                }
-                else
-                {
-                    SetValue(gridPos.x, gridPos.y, selected, thisBuild.GetRotation(rot).size);
+                    BuildInfo info = obj.GetComponent<BuildTrigger>().info;
+                    Vector2Int gridPos = info.gridPos;
+                    if (info.CanRotate() && !CheckOverlap(gridPos, info.GetNextRotation().size, obj))
+                    {
+                        SetValue(gridPos, null, info.GetRotation().size);
+                        info.AdvanceRotation();
+                        currentInfo.SetInfo(info.build, info.rot);
+                        newObjects.Add(PlaceItem(obj.transform.position));
+                        Destroy(obj);
+                    }
                 }
             }
+            selectedObjects = newObjects;
         }
     }
     public void StoreBuild()
     {
-        if (canPlace == false && selected != null)
+        if (canPlace == false)
         {
-            if (selected.GetComponent<BuildTrigger>())
+            while (selectedObjects.Count != 0)
             {
-                BuildInfo info = selected.GetComponent<BuildTrigger>().info;
-                SetValue(info.gridPos.x, info.gridPos.y, null, info.build.GetRotation(rot).size);
-                Destroy(selected);
-            }
-            else if (selected.transform.parent.GetComponent<BuildTrigger>())
-            {
-                BuildTrigger trigger = selected.transform.parent.GetComponent<BuildTrigger>();
-                int place = trigger.GetDecorPlacement(selected);
-                if (place != -1)
+                GameObject obj = selectedObjects[selectedObjects.Count - 1];
+                if (obj && obj.GetComponent<BuildTrigger>())
                 {
-                    trigger.ClearPlacement(place);
+                    BuildInfo info = obj.GetComponent<BuildTrigger>().info;
+                    SetValue(info.gridPos, null, info.GetRotation().size);
+                    selectedObjects.RemoveAt(selectedObjects.Count - 1);
+                    Destroy(obj);
+                }
+                else if (obj.transform.parent.GetComponent<BuildTrigger>())
+                {
+                    BuildTrigger trigger = obj.transform.parent.GetComponent<BuildTrigger>();
+                    int place = trigger.GetDecorPlacement(obj);
+                    if (place != -1)
+                    {
+                        trigger.ClearPlacement(place);
+                    }
                 }
             }
         }
+        selectedObjects = new List<GameObject>();
+        ResetOptions();
     }
     bool CheckArrayPos(int x, int y)
     {
@@ -141,15 +137,16 @@ public class BuildingSystem : MonoBehaviour
         }
         return value;
     }
-    private bool CheckOverlap(int originX, int originY, Vector2Int size)
+    private bool CheckOverlap(Vector2Int origin, Vector2Int size, GameObject ignoreObj = null)
     {
         for (int i = 0; i < size.x; i++)
         {
             for (int j = 0; j < size.y; j++)
             {
-                int x = originX + i;
-                int y = originY + j;
-                if (x >= width || y >= height || GetValue(x, y) != null || currentTilemap.GetTile(new Vector3Int(x + gridOrigin.x, y + gridOrigin.y, 0)) == null)
+                int x = origin.x + i;
+                int y = origin.y + j;
+                GameObject obj = GetValue(x, y);
+                if (x >= width || y >= height || (obj != null && obj != ignoreObj) || currentTilemap.GetTile(new Vector3Int(x + gridOrigin.x, y + gridOrigin.y, 0)) == null)
                 {
                     return true;
                 }
@@ -159,14 +156,14 @@ public class BuildingSystem : MonoBehaviour
     }
     void SetTemplate()
     {
-        template.GetComponent<SpriteRenderer>().sprite = thisBuild.GetRotation(rot).sprite;
-        template.GetComponent<SpriteRenderer>().flipX = thisBuild.GetRotation(rot).flipped;
+        template.GetComponent<SpriteRenderer>().sprite = currentInfo.GetRotation().sprite;
+        template.GetComponent<SpriteRenderer>().flipX = currentInfo.GetRotation().flipped;
     }
     public void ResetOptions()
     {
         OptionUI.GetComponent<RectTransform>().position = new Vector3(-10, -10, 0);
         OptionUI.GetComponent<Image>().enabled = false;
-        selected = null;
+        ClearSelected();
     }
     public void OpenBuilding()
     {
@@ -188,18 +185,15 @@ public class BuildingSystem : MonoBehaviour
     {
         canPlace = false;
         template.GetComponent<SpriteRenderer>().enabled = false;
-        doneButton.GetComponent<Image>().enabled = false;
-        doneButton.GetComponent<Button>().enabled = false;
+        ClearTemplates();
     }
     public void ChangeObject(Build build)
     {
         canPlace = true;
         template.GetComponent<SpriteRenderer>().enabled = true;
-        doneButton.GetComponent<Image>().enabled = true;
-        doneButton.GetComponent<Button>().enabled = true;
         ResetOptions();
-        thisBuild = build;
-        rot = 0;
+        currentInfo.ResetInfo();
+        currentInfo.build = build;
         SetTemplate();
         previousTile = new Vector3Int(0, 0, 0);
     }
@@ -228,14 +222,7 @@ public class BuildingSystem : MonoBehaviour
     }
     void RotateBuild()
     {
-        if (rot < (thisBuild.rotations.Length - 1))
-        {
-            rot += 1;
-        }
-        else
-        {
-            rot = 0;
-        }
+        currentInfo.AdvanceRotation();
         SetTemplate();
         previousTile = new Vector3Int(0, 0, 0);
     }
@@ -297,8 +284,10 @@ public class BuildingSystem : MonoBehaviour
         return adjacentBuilds;
     }
 
-    void SetValue(int x, int y, GameObject value, Vector2Int size)
+    void SetValue(Vector2Int arrayPos, GameObject value, Vector2Int size)
     {
+        int x = arrayPos.x;
+        int y = arrayPos.y;
         if (CheckArrayPos(x, y))
         {
             currentArray[x, y] = value;
@@ -324,16 +313,19 @@ public class BuildingSystem : MonoBehaviour
     }
     IEnumerator Pop(GameObject Object)
     {
+        Object.transform.localScale = new Vector3(0.95f, 0.95f, 0.95f);
         yield return new WaitForSeconds(0.1f);
         Object.transform.localScale = new Vector3(1f, 1f, 1f);
     }
-    GameObject PlaceItem(Vector3 gridPos, int x, int y)
+
+    GameObject PlaceItem(Vector3 worldPos)
     {
+        Vector2Int arrayPos = WorldToArray(worldPos);
         GameObject Object;
-        Rotation thisRotation = thisBuild.GetRotation(rot);
+        Rotation thisRotation = currentInfo.GetRotation();
         if (thisRotation.Object)
         {
-            Object = Instantiate(thisRotation.Object, gridPos, Quaternion.identity);
+            Object = Instantiate(currentInfo.GetRotation().Object, worldPos, Quaternion.identity);
             if (!Object.GetComponent<BuildTrigger>())
             {
                 Object.AddComponent<BuildTrigger>();
@@ -341,15 +333,146 @@ public class BuildingSystem : MonoBehaviour
         }
         else
         {
-            Object = Instantiate(buildTemplate, gridPos, Quaternion.identity);
+            Object = Instantiate(buildTemplate, worldPos, Quaternion.identity);
         }
         Object.transform.SetParent(buildObjects);
-        Object.GetComponent<BuildTrigger>().SetObject(thisBuild, rot, x, y);
-        SetValue(x, y, Object, thisRotation.size);
-        Object.transform.localScale = new Vector3(0.95f, 0.95f, 0.95f);
+        BuildTrigger trigger = Object.GetComponent<BuildTrigger>();
+        trigger.SetObject(currentInfo, arrayPos);
+        SetValue(arrayPos, Object, thisRotation.size);
         StartCoroutine(Pop(Object));
+
         return Object;
     }
+    bool CheckAll(Vector2 startPos, Vector2 endPos)
+    {
+        float startX;
+        float endX;
+        float startY;
+        float endY;
+
+        if (startPos.x > endPos.x)
+        {
+            startX = endPos.x;
+            endX = startPos.x;
+        }
+        else
+        {
+            startX = startPos.x;
+            endX = endPos.x;
+        }
+        if (startPos.y > endPos.y)
+        {
+            startY = endPos.y;
+            endY = startPos.y;
+        }
+        else
+        {
+            startY = startPos.y;
+            endY = endPos.y;
+        }
+        for (float i = startX; i <= endX; i++)
+        {
+            for (float j = startY; j <= endY; j++)
+            {
+                Vector2Int arrayPos = WorldToArray(new Vector3(i, j, 0));
+                if (!CheckArrayPos(arrayPos.x, arrayPos.y) || CheckOverlap(arrayPos, currentInfo.GetRotation().size) || currentTilemap.GetTile(currentTilemap.WorldToCell(new Vector3(i, j, 0))) == null)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    void PlaceAll(Vector2 startPos, Vector2 endPos)
+    {
+        float startX;
+        float endX;
+        float startY;
+        float endY;
+
+        if (startPos.x > endPos.x)
+        {
+            startX = endPos.x;
+            endX = startPos.x;
+        }
+        else
+        {
+            startX = startPos.x;
+            endX = endPos.x;
+        }
+        if (startPos.y > endPos.y)
+        {
+            startY = endPos.y;
+            endY = startPos.y;
+        }
+        else
+        {
+            startY = startPos.y;
+            endY = endPos.y;
+        }
+        for (float i = startX; i <= endX; i++)
+        {
+            for (float j = startY; j <= endY; j++)
+            {
+                PlaceItem(new Vector3(i, j, 0));
+            }
+        }
+    }
+
+    //Manage templates while placing
+    public List<GameObject> templates = new List<GameObject>();
+    void ClearTemplates()
+    {
+        foreach (GameObject template in templates)
+        {
+            Destroy(template);
+        }
+    }
+    void UpdateTemplates(Vector2 startPos, Vector2 endPos, Color32 color)
+    {
+        ClearTemplates();
+        float startX;
+        float endX;
+        float startY;
+        float endY;
+
+        if (startPos.x > endPos.x)
+        {
+            startX = endPos.x;
+            endX = startPos.x;
+        }
+        else
+        {
+            startX = startPos.x;
+            endX = endPos.x;
+        }
+        if (startPos.y > endPos.y)
+        {
+            startY = endPos.y;
+            endY = startPos.y;
+        }
+        else
+        {
+            startY = startPos.y;
+            endY = endPos.y;
+        }
+        for (float i = startX; i <= endX; i++)
+        {
+            for (float j = startY; j <= endY; j++)
+            {
+                GameObject Object = new GameObject();
+                Object.transform.position = new Vector3(i, j, 0);
+                SpriteRenderer render = Object.AddComponent<SpriteRenderer>();
+                render.spriteSortPoint = SpriteSortPoint.Pivot;
+                Rotation thisRotation = currentInfo.GetRotation();
+                render.color = color;
+                render.flipX = thisRotation.flipped;
+                render.sprite = thisRotation.sprite;
+                templates.Add(Object);
+            }
+        }
+    }
+
     public Vector2Int WorldToArray(Vector3 pos)
     {
         return (Vector2Int)currentTilemap.WorldToCell(pos) - gridOrigin;
@@ -357,6 +480,12 @@ public class BuildingSystem : MonoBehaviour
 
     const int unreachableInt = -100;
     Vector3Int previousTile = new Vector3Int(unreachableInt, unreachableInt, 0);
+    Vector2 startPos;
+    bool placing;
+    bool selecting;
+    bool available;
+    bool clickingUI;
+
     void Update()
     {
         if (canBuild)
@@ -371,49 +500,77 @@ public class BuildingSystem : MonoBehaviour
             gr.Raycast(ped, results);
             onUI = results.Count != 0;
 
+            //calculate world and array coordinates of mouse
+            Vector3Int selectedTile = currentTilemap.WorldToCell(point);
+            Vector2Int arrayPos = WorldToArray(point);
+            int x = arrayPos.x;
+            int y = arrayPos.y;
+
+            Vector3 gridPos = currentTilemap.CellToWorld(selectedTile) + new Vector3(0.5f, 0.5f, 0f);
+
+            //determine whether on tile in previous update
+            bool onPrevious = false;
+            if (selectedTile == previousTile)
+            {
+                onPrevious = true;
+            }
+            else
+            {
+                onPrevious = false;
+                previousTile = selectedTile;
+            }
+
             if (canPlace)
             {
-                Vector3Int selectedTile = currentTilemap.WorldToCell(point);
-                Vector2Int arrayPos = WorldToArray(point);
-                int x = arrayPos.x;
-                int y = arrayPos.y;
-
-                Vector3 gridPos = currentTilemap.CellToWorld(selectedTile) + new Vector3(0.5f, 0.5f, 0f);
-                template.transform.position = gridPos;
-
-                bool onPrevious = false;
-                if (selectedTile == previousTile)
+                //update the template tiles and check available only each time the tile changes
+                if (!onPrevious)
                 {
-                    onPrevious = true;
-                    template.GetComponent<SpriteRenderer>().enabled = false;
-                }
-                else
-                {
-                    onPrevious = false;
-                    previousTile = new Vector3Int(unreachableInt, unreachableInt, 0);
-                    template.GetComponent<SpriteRenderer>().enabled = true;
-                }
-
-                bool available = false;
-                if (CheckArrayPos(x, y) && !CheckOverlap(x, y, thisBuild.GetRotation(rot).size) && currentTilemap.GetTile(selectedTile) != null)
-                {
-                    available = true;
-                    template.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 135);
-                }
-                else
-                {
-                    available = false;
-                    if (onPrevious == false)
+                    template.transform.position = gridPos;
+                    if (placing)
                     {
-                        template.GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 135);
+                        template.GetComponent<SpriteRenderer>().enabled = false;
+                        if (CheckAll(startPos, (Vector2)gridPos))
+                        {
+                            available = true;
+                            UpdateTemplates(startPos, (Vector2)gridPos, new Color32(255, 255, 255, 135));
+                        }
+                        else
+                        {
+                            available = false;
+                            UpdateTemplates(startPos, (Vector2)gridPos, new Color32(255, 0, 0, 135));
+                        }
+                    }
+                    else
+                    {
+                        template.GetComponent<SpriteRenderer>().enabled = true;
+                        if (CheckAll((Vector2)gridPos, (Vector2)gridPos))
+                        {
+                            available = true;
+                            template.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 135);
+                        }
+                        else
+                        {
+                            available = false;
+                            template.GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 135);
+                        }
                     }
                 }
-
-                if (Input.GetMouseButtonDown(0) && available == true && onUI == false)
+                
+                //If mouse down, start placing. If mouse up place objects
+                if (Input.GetMouseButtonDown(0) && available && !onUI)
                 {
-                    PlaceItem(gridPos, x, y);
-                    previousTile = selectedTile;
-                    onPrevious = true;
+                    startPos = (Vector2)gridPos;
+                    placing = true;
+                }
+                else if (Input.GetMouseButtonUp(0))
+                {
+                    placing = false;
+                    ClearTemplates();
+                    if (available && !onUI)
+                    {
+                        PlaceAll(startPos, (Vector2)gridPos);
+                        template.GetComponent<SpriteRenderer>().enabled = false;
+                    }
                 }
                 if (Input.GetKeyUp("r"))
                 {
@@ -422,57 +579,104 @@ public class BuildingSystem : MonoBehaviour
             }
             else
             {
-                if (Input.GetMouseButtonDown(0) && onUI == false)
+                if (Input.GetMouseButtonDown(0))
                 {
-                    RaycastHit2D[] hits = Physics2D.RaycastAll(point, Vector2.zero);
-                    List<GameObject> Objects = new List<GameObject>();
-                    for (int i = 0; i < hits.Length; i++)
+                    if (!onUI)
                     {
-                        if (hits[i].collider != null && (hits[i].collider.gameObject.GetComponent<BuildTrigger>() || hits[i].collider.transform.parent.GetComponent<BuildTrigger>()))
-                        {
-                            Objects.Add(hits[i].collider.gameObject);
-                        }
-                    }
-                    Objects = Objects.OrderBy(e => e.transform.position.y).ToList();
-                    GameObject hit = null;
-                    if (Objects.Count > 0)
-                    {
-                        hit = Objects[0];
-                    }
-                    if (hit != null)
-                    {
-                        SelectObject(hit);
+                        clickingUI = false;
+                        startPos = (Vector2)gridPos;
+                        previousTile = new Vector3Int(unreachableInt, unreachableInt, 0);
+                        selecting = true;
+                        ResetOptions();
                     }
                     else
                     {
-                        selected = null;
+                        clickingUI = true;
+                    }
+                }
+                else if (Input.GetMouseButtonUp(0) && !onUI && !clickingUI)
+                {
+                    selecting = false;
+                    if (GetValue(x, y) == null)
+                    {
+                        ResetOptions();
+                    }
+                    else
+                    {
+                        OptionUI.GetComponent<RectTransform>().position = Camera.main.WorldToScreenPoint(new Vector3(point.x + 1f, point.y + 1.5f, 0));
+                        OptionUI.GetComponent<Image>().enabled = true;
+                    }
+                }
+                if (!onPrevious)
+                {
+                    if (selecting)
+                    {
+                        SelectAll(startPos, (Vector2)gridPos);
+                        UpdateSelected(new Color32(140, 255, 140, 255));
                     }
                 }
             }
         }
     }
-    public void SelectObject(GameObject thisObject)
-    {
-        selected = thisObject;
-        thisObject.transform.localScale = new Vector3(0.95f, 0.95f, 0.95f);
-        StartCoroutine(Pop(thisObject));
+    //public void SelectObject(GameObject thisObject)
+    //    StartCoroutine(Pop(thisObject));
 
         //PlaceDecor(item, trigger.GetNearestPlacement(pos)
-    }
-    private void LateUpdate()
+    void SelectAll(Vector2 start, Vector2 end)
     {
-        if (canBuild && canPlace == false)
+        ClearSelected();
+        int startX;
+        int endX;
+        int startY;
+        int endY;
+
+        Vector2Int startPos = WorldToArray(start);
+        Vector2Int endPos = WorldToArray(end);
+
+        if (startPos.x > endPos.x)
         {
-            if (selected != null)
+            startX = endPos.x;
+            endX = startPos.x;
+        }
+        else
+        {
+            startX = startPos.x;
+            endX = endPos.x;
+        }
+        if (startPos.y > endPos.y)
+        {
+            startY = endPos.y;
+            endY = startPos.y;
+        }
+        else
+        {
+            startY = startPos.y;
+            endY = endPos.y;
+        }
+        for (int i = startX; i <= endX; i++)
+        {
+            for (int j = startY; j <= endY; j++)
             {
-                Vector3 pos = selected.transform.position;
-                Vector3 screenPos = new Vector3(pos.x + 1, pos.y + 1.5f, 0);
-                OptionUI.GetComponent<RectTransform>().position = Camera.main.WorldToScreenPoint(screenPos);
-                OptionUI.GetComponent<Image>().enabled = true;
+                GameObject obj = GetValue(i, j);
+                if (obj)
+                {
+                    selectedObjects.Add(obj);
+                }
             }
-            else
+        }
+    }
+    void ClearSelected()
+    {
+        UpdateSelected(new Color32(255, 255, 255, 255));
+        selectedObjects = new List<GameObject>();
+    }
+    void UpdateSelected(Color32 color)
+    {
+        foreach (GameObject obj in selectedObjects)
+        {
+            if (obj && obj.GetComponent<BuildTrigger>())
             {
-                ResetOptions();
+                obj.GetComponent<BuildTrigger>().SetColor(color);
             }
         }
     }

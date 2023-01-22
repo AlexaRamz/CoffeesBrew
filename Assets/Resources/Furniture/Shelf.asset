@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 205a32b3a2784a742b9dadf3d2f8d30b, type: 3}
+  m_Name: Shelf
+  m_EditorClassIdentifier: 
+  rotations:
+  - sprite: {fileID: -8847511328382704733, guid: d2f8f2da118431c4a9f771896acd99f9,
+      type: 3}
+    Object: {fileID: 0}
+    flipped: 0
+    size: {x: 1, y: 1}
+    placements:
+    - offset: {x: 0, y: 0.5}
+      position: {x: 0, y: 0}
+    ruleBuilds:
+    - sprite: {fileID: -8847511328382704733, guid: d2f8f2da118431c4a9f771896acd99f9,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 02000000030000000200000003000000
+      cornerBuilds: 
+    - sprite: {fileID: 8090683895115659924, guid: d2f8f2da118431c4a9f771896acd99f9,
+        type: 3}
+      flipped: 0
+      adjacentBuilds: 02000000000000000200000003000000
+      cornerBuilds: 
+    - sprite: {fileID: 8090683895115659924, guid: d2f8f2da118431c4a9f771896acd99f9,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 02000000030000000200000000000000
+      cornerBuilds: 
+    - sprite: {fileID: 3379541039902798709, guid: d2f8f2da118431c4a9f771896acd99f9,
+        type: 3}
+      flipped: 1
+      adjacentBuilds: 02000000000000000200000000000000
+      cornerBuilds: 
+  Type: 1
+  canDecorate: 1

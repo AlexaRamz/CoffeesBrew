@@ -5,14 +5,38 @@ using UnityEngine.UI;
 
 public class UI_Building : MonoBehaviour
 {
+    BuildingSystem buildSys;
     public GameObject slotTemplate;
-    public GameObject empty;
     public Transform container;
     public ArrowScrolling scroll;
+    public Image doneButton;
+
     void Start()
     {
-
+        buildSys = FindObjectOfType<BuildingSystem>();
     }
+    BuildObject currentSelection;
+    void ClearSelection()
+    {
+        if (currentSelection)
+        {
+            currentSelection.DeselectObject();
+        }
+    }
+    public void CancelPlace()
+    {
+        ClearSelection();
+        buildSys.CancelPlace();
+        doneButton.enabled = false;
+    }
+    public void SelectObject(BuildObject selection, Build thisBuild)
+    {
+        ClearSelection();
+        currentSelection = selection;
+        doneButton.enabled = true;
+        buildSys.ChangeObject(thisBuild);
+    }
+
     void ClearObjects()
     {
         foreach (Transform child in container)
@@ -27,15 +51,8 @@ public class UI_Building : MonoBehaviour
         int count = 0;
         foreach (Build build in objectList)
         {
-            Rotation rotation = build.rotations[0];
-            RectTransform itemSlot = Instantiate(slotTemplate, container).GetComponent<RectTransform>();
-            itemSlot.Find("Image").GetComponent<Image>().sprite = rotation.sprite;
-            itemSlot.GetComponent<BuildObject>().build = build;
+            Instantiate(slotTemplate, container).GetComponent<BuildObject>().SetObject(build);
             count += 1;
-        }
-        for (int i = 0; i < (int)Mathf.Ceil(count / 5f) * 5 - count; i++)
-        {
-            RectTransform itemSlot = Instantiate(empty, container).GetComponent<RectTransform>();
         }
     }
 }

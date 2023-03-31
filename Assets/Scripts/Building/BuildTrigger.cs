@@ -128,11 +128,15 @@ public class BuildTrigger : MonoBehaviour
         info.decor[place] = null;
         Destroy(decor[place]);
     }
-    void PlaceDecor(Item item, Placement thisPlacement, int place)
+    public bool CanDecorate()
+    {
+        return info.build && info.build.canDecorate;
+    }
+    public void PlaceDecor(Item item, int place)
     {
         GameObject obj = new GameObject("Decor");
         obj.transform.parent = transform;
-        obj.transform.position = transform.position + (Vector3Int)thisPlacement.position + (Vector3)thisPlacement.offset;
+        obj.transform.position = GetPlacePos(place); 
         BoxCollider2D collider = obj.AddComponent<BoxCollider2D>();
         collider.isTrigger = true;
         SpriteRenderer render = obj.AddComponent<SpriteRenderer>();
@@ -154,9 +158,34 @@ public class BuildTrigger : MonoBehaviour
         }
         return -1;
     }
+    public Vector3 GetPlacePos(int place)
+    {
+        Placement thisPlacement = info.GetPlacement(place);
+        return transform.position + (Vector3Int)thisPlacement.position + (Vector3)thisPlacement.offset;
+    }
+    public int GetNearestPlace(Vector3 worldPos)
+    {
+        float min = 0;
+        int place = 0;
+        Placement[] placements = info.GetPlacements();
+        for (int i = 0; i < placements.Length; i++)
+        {
+            float distance = Vector3.Distance(transform.position + (Vector3Int)placements[i].position, worldPos);
+            if (distance < min)
+            {
+                place = i;
+                min = distance;
+            }
+        }
+        return place;
+    }
+    public bool PlaceEmpty(int place)
+    {
+        return info.decor[place] == null;
+    }
     void Update()
     {
-        if (plrInv != null && info.build && info.build.canDecorate)
+        if (plrInv != null && CanDecorate())
         {
             if (Input.GetKeyDown(KeyCode.Return) && plr.isInteractingWithObject(gameObject))
             {
@@ -185,7 +214,7 @@ public class BuildTrigger : MonoBehaviour
                     if (item != null)
                     {
                         plrInv.DepleteCurrentItem();
-                        PlaceDecor(item, info.GetPlacement(place), place);
+                        PlaceDecor(item, place);
                     }
                 }
             }

@@ -9,7 +9,7 @@ public class UI_Building : MonoBehaviour
     public GameObject slotTemplate;
     public Transform container;
     public ArrowScrolling scroll;
-    public Image doneButton;
+    [SerializeField] private Image doneButton;
 
     void Start()
     {
@@ -22,6 +22,17 @@ public class UI_Building : MonoBehaviour
         {
             currentSelection.DeselectObject();
         }
+    }
+    public void OpenBuilding() // Called by building system
+    {
+        CancelPlace();
+        GetComponent<Canvas>().enabled = true;
+    }
+    public void CloseBuilding() // Called by close button
+    {
+        CancelPlace();
+        GetComponent<Canvas>().enabled = false;
+        buildSys.CloseBuilding();
     }
     public void CancelPlace()
     {
@@ -36,6 +47,13 @@ public class UI_Building : MonoBehaviour
         doneButton.enabled = true;
         buildSys.ChangeObject(thisBuild);
     }
+    public void SelectItem(BuildObject selection, Item thisItem)
+    {
+        ClearSelection();
+        currentSelection = selection;
+        doneButton.enabled = true;
+        buildSys.ChangeItem(thisItem);
+    }
 
     void ClearObjects()
     {
@@ -48,11 +66,18 @@ public class UI_Building : MonoBehaviour
     {
         ClearObjects();
         scroll.UpdateScroll();
-        int count = 0;
         foreach (Build build in objectList)
         {
             Instantiate(slotTemplate, container).GetComponent<BuildObject>().SetObject(build);
-            count += 1;
+        }
+    }
+    public void SetItems(List<Item> itemList)
+    {
+        ClearObjects();
+        scroll.UpdateScroll();
+        foreach (Item item in itemList)
+        {
+            Instantiate(slotTemplate, container).GetComponent<BuildObject>().SetItem(item);
         }
     }
 }

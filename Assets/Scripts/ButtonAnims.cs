@@ -1,23 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ButtonAnims : MonoBehaviour
 {
     public bool isOn = true;
     public float expandScale = 1.05f;
     public float shrinkScale = 0.95f;
+
+    Sprite buttonSprite;
+    void Start()
+    {
+        buttonSprite = GetComponent<Image>().sprite;
+    }
     public void ExpandOn()
     {
-        gameObject.GetComponent<RectTransform>().localScale = new Vector3(expandScale, expandScale, 1.0f);
+        GetComponent<RectTransform>().localScale = new Vector3(expandScale, expandScale, 1.0f);
     }
     public void ShrinkOn()
     {
-        gameObject.GetComponent<RectTransform>().localScale = new Vector3(shrinkScale, shrinkScale, 1.0f);
+        GetComponent<RectTransform>().localScale = new Vector3(shrinkScale, shrinkScale, 1.0f);
     }
     public void SizeOff()
     {
-        gameObject.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+        GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
     }
     IEnumerator PopOff()
     {
@@ -31,11 +38,19 @@ public class ButtonAnims : MonoBehaviour
     }
     public void RotateOn()
     {
-        gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(new Vector3(0, 0, -7));
+        GetComponent<RectTransform>().rotation = Quaternion.Euler(new Vector3(0, 0, -7));
     }
     public void RotateOff()
     {
-        gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+        GetComponent<RectTransform>().rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+    }
+    public void PressedSprite(Sprite pressedSprite)
+    {
+        GetComponent<Image>().sprite = pressedSprite;
+    }
+    public void ResetSprite()
+    {
+        GetComponent<Image>().sprite = buttonSprite;
     }
     //Basic Expanding Button
     bool inRange = false;

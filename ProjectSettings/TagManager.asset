@@ -8,6 +8,7 @@ TagManager:
   - Rock
   - Collectable
   - Tree
+  - Decor Item
   layers:
   - Default
   - TransparentFX

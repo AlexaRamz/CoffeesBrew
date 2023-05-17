@@ -128,6 +128,19 @@ public class BuildTrigger : MonoBehaviour
         info.decor[place] = null;
         Destroy(decor[place]);
     }
+    public void RemoveDecor(GameObject thisItem)
+    {
+        int i = 0;
+        foreach (GameObject item in decor)
+        {
+            if (item == thisItem)
+            {
+                ClearPlacement(i);
+                return;
+            }
+            i++;
+        }
+    }
     public bool CanDecorate()
     {
         return info.build && info.build.canDecorate;
@@ -137,11 +150,12 @@ public class BuildTrigger : MonoBehaviour
         GameObject obj = new GameObject("Decor");
         obj.transform.parent = transform;
         obj.transform.position = GetPlacePos(place); 
-        BoxCollider2D collider = obj.AddComponent<BoxCollider2D>();
-        collider.isTrigger = true;
         SpriteRenderer render = obj.AddComponent<SpriteRenderer>();
         render.sortingOrder = 1;
         render.sprite = item.asset;
+        BoxCollider2D collider = obj.AddComponent<BoxCollider2D>();
+        collider.isTrigger = true;
+        obj.tag = "Decor Item";
         info.decor[place] = item;
         decor[place] = obj;
     }

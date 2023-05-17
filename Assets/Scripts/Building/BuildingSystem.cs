@@ -39,6 +39,10 @@ public class BuildingSystem : MonoBehaviour
     List<GameObject> selectedObjects = new List<GameObject>();
 
     public GameObject OptionUI;
+
+    BuildTrigger selected;
+    GameObject selectedItem;
+
     void Start()
     {
         plrInv = FindObjectOfType<Inventory>();
@@ -79,7 +83,7 @@ public class BuildingSystem : MonoBehaviour
     // Object editing
     public void RotateObject()
     {
-        if (canPlace == false)
+        if (!canPlace)
         {
             List<GameObject> newObjects = new List<GameObject>();
             foreach (GameObject obj in selectedObjects)
@@ -103,25 +107,34 @@ public class BuildingSystem : MonoBehaviour
     }
     public void StoreBuild()
     {
-        if (canPlace == false)
+        if (!canPlace)
         {
-            while (selectedObjects.Count != 0)
+            if (selected)
             {
-                GameObject obj = selectedObjects[selectedObjects.Count - 1];
-                if (obj && obj.GetComponent<BuildTrigger>())
+                selected.RemoveDecor(selectedItem);
+                selected = null;
+                selectedItem = null;
+            }
+            else
+            {
+                while (selectedObjects.Count != 0)
                 {
-                    BuildInfo info = obj.GetComponent<BuildTrigger>().info;
-                    SetValue(info.gridPos, null, info.GetRotation().size);
-                    selectedObjects.RemoveAt(selectedObjects.Count - 1);
-                    Destroy(obj);
-                }
-                else if (obj.transform.parent.GetComponent<BuildTrigger>())
-                {
-                    BuildTrigger trigger = obj.transform.parent.GetComponent<BuildTrigger>();
-                    int place = trigger.GetDecorPlacement(obj);
-                    if (place != -1)
+                    GameObject obj = selectedObjects[selectedObjects.Count - 1];
+                    if (obj && obj.GetComponent<BuildTrigger>())
                     {
-                        trigger.ClearPlacement(place);
+                        BuildInfo info = obj.GetComponent<BuildTrigger>().info;
+                        SetValue(info.gridPos, null, info.GetRotation().size);
+                        selectedObjects.RemoveAt(selectedObjects.Count - 1);
+                        Destroy(obj);
+                    }
+                    else if (obj.transform.parent.GetComponent<BuildTrigger>())
+                    {
+                        BuildTrigger trigger = obj.transform.parent.GetComponent<BuildTrigger>();
+                        int place = trigger.GetDecorPlacement(obj);
+                        if (place != -1)
+                        {
+                            trigger.ClearPlacement(place);
+                        }
                     }
                 }
             }
@@ -536,6 +549,25 @@ public class BuildingSystem : MonoBehaviour
             }
         }
     }
+    GameObject GetPointerOnItem(Vector3 mouseWorldPos)
+    {
+        RaycastHit2D[] hits = Physics2D.RaycastAll(mouseWorldPos, Vector2.zero);
+        List<GameObject> Objects = new List<GameObject>();
+        for (int i = 0; i < hits.Length; i++)
+        {
+            if (hits[i].collider.gameObject.tag == "Decor Item")
+            {
+                Objects.Add(hits[i].collider.gameObject);
+            }
+        }
+        Objects = Objects.OrderBy(e => e.transform.position.y).ToList();
+        GameObject hit = null;
+        if (Objects.Count > 0)
+        {
+            hit = Objects[0];
+        }
+        return hit;
+    }
     GameObject GetPointerOn(Vector3 mouseWorldPos)
     {
         RaycastHit2D[] hits = Physics2D.RaycastAll(mouseWorldPos, Vector2.zero);
@@ -562,7 +594,6 @@ public class BuildingSystem : MonoBehaviour
     bool placing;
     bool selecting;
     bool available;
-    bool clickingUI;
 
     int nearestPlace;
     Vector3 placementPos;
@@ -743,60 +774,70 @@ public class BuildingSystem : MonoBehaviour
                 // Selecting
 
                 //calculate world and array coordinates of mouse (sprite/trigger dependent)
-                GameObject hit = GetPointerOn(point);
-                if (hit != null)
+                GameObject hit = GetPointerOnItem(point);
+                if (hit && !selecting && !onUI)
                 {
-                    arrayPos = hit.GetComponent<BuildTrigger>().info.gridPos;
-                    x = arrayPos.x;
-                    y = arrayPos.y;
-                    gridPos = ArrayToWorld(arrayPos);
-
-                    selectedTile = currentTilemap.WorldToCell(gridPos);
-                    if (selectedTile == previousTile)
+                    selected = hit.transform.parent.GetComponent<BuildTrigger>();
+                    //arrayPos = obj.info.gridPos;
+                    //x = arrayPos.x;
+                    //y = arrayPos.y;
+                    if (Input.GetMouseButtonDown(0))
                     {
-                        onPrevious = true;
-                    }
-                    else
-                    {
-                        onPrevious = false;
-                        previousTile = selectedTile;
+                        ClearSelected();
+                        selectedItem = hit;
+                        OptionUI.GetComponent<RectTransform>().position = Camera.main.WorldToScreenPoint(new Vector3(point.x + 1f, point.y + 1.5f, 0));
+                        OptionUI.GetComponent<Image>().enabled = true;
                     }
                 }
-
-                if (Input.GetMouseButtonDown(0))
+                else
                 {
-                    if (!onUI)
+                    hit = GetPointerOn(point);
+                    if (hit != null)
                     {
-                        clickingUI = false;
+                        arrayPos = hit.GetComponent<BuildTrigger>().info.gridPos;
+                        x = arrayPos.x;
+                        y = arrayPos.y;
+                        gridPos = ArrayToWorld(arrayPos);
+
+                        selectedTile = currentTilemap.WorldToCell(gridPos);
+                        if (selectedTile == previousTile)
+                        {
+                            onPrevious = true;
+                        }
+                        else
+                        {
+                            onPrevious = false;
+                            previousTile = selectedTile;
+                        }
+                    }
+
+                    if (Input.GetMouseButtonDown(0) && !onUI)
+                    {
                         startPos = (Vector2)gridPos;
                         previousTile = new Vector3Int(unreachableInt, unreachableInt, 0);
                         selecting = true;
                         ResetOptions();
                     }
-                    else
+                    else if (Input.GetMouseButtonUp(0) && !onUI)
                     {
-                        clickingUI = true;
+                        selecting = false;
+                        if (GetValue(x, y) == null)
+                        {
+                            ResetOptions();
+                        }
+                        else
+                        {
+                            OptionUI.GetComponent<RectTransform>().position = Camera.main.WorldToScreenPoint(new Vector3(point.x + 1f, point.y + 1.5f, 0));
+                            OptionUI.GetComponent<Image>().enabled = true;
+                        }
                     }
-                }
-                else if (Input.GetMouseButtonUp(0) && !onUI && !clickingUI)
-                {
-                    selecting = false;
-                    if (GetValue(x, y) == null)
+                    if (!onPrevious)
                     {
-                        ResetOptions();
-                    }
-                    else
-                    {
-                        OptionUI.GetComponent<RectTransform>().position = Camera.main.WorldToScreenPoint(new Vector3(point.x + 1f, point.y + 1.5f, 0));
-                        OptionUI.GetComponent<Image>().enabled = true;
-                    }
-                }
-                if (!onPrevious)
-                {
-                    if (selecting)
-                    {
-                        SelectAll(startPos, (Vector2)gridPos);
-                        UpdateSelected(new Color32(140, 255, 140, 255));
+                        if (selecting)
+                        {
+                            SelectAll(startPos, (Vector2)gridPos);
+                            UpdateSelected(new Color32(140, 255, 140, 255));
+                        }
                     }
                 }
             }

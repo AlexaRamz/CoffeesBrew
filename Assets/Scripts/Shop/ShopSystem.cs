@@ -8,6 +8,7 @@ public class ShopSystem : MonoBehaviour
     public Shop shopInfo;
     public Canvas shopUI;
     Inventory plrInv;
+    PlayerManager plr;
     public Transform container;
     public GameObject template;
     public Animator coinAnim;
@@ -18,6 +19,7 @@ public class ShopSystem : MonoBehaviour
     void Start()
     {
         plrInv = FindObjectOfType<Inventory>();
+        plr = FindObjectOfType<PlayerManager>();
     }
     public void Buy(Item item)
     {
@@ -41,18 +43,24 @@ public class ShopSystem : MonoBehaviour
     }
     public void OpenMenu(Shop info)
     {
-        shopInfo = info;
-        UpdateMoneyDisplay();
-        shopUI.enabled = true;
-        plrInv.HideInterface();
-        SetObjects();
+        if (plr.SetCurrentUI(shopUI))
+        {
+            shopInfo = info;
+            UpdateMoneyDisplay();
+            shopUI.enabled = true;
+            plrInv.HideInterface();
+            SetObjects();
+        }
     }
     public void CloseMenu()
     {
-        shopInfo = null;
-        shopUI.enabled = false;
-        plrInv.ShowInterface();
-        ClearObjects();
+        if (plr.SetCurrentUI(null))
+        {
+            shopInfo = null;
+            shopUI.enabled = false;
+            plrInv.ShowInterface();
+            ClearObjects();
+        }
     }
     void AnimateMoneyDisplay()
     {

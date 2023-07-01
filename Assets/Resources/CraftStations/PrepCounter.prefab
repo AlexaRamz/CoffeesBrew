@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3542549148598886478}
   - component: {fileID: 3542549148598886475}
   - component: {fileID: 3542549148598886473}
+  - component: {fileID: -4856282775502334459}
   - component: {fileID: -835345774377665686}
   m_Layer: 0
   m_Name: PrepCounter
@@ -109,6 +110,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   thisCrafting: {fileID: 11400000, guid: 1a4afa0a3dea5904ab595e3bec241251, type: 2}
+--- !u!114 &-4856282775502334459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3542549148598886479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 349d70c4a4c8bf34fb6e04ffc724061b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectSize: {x: 2, y: 1}
+  interactKey: 13
+  onClick: 1
+  interactAction:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3542549148598886473}
+        m_TargetAssemblyTypeName: CraftTrigger, Assembly-CSharp
+        m_MethodName: OpenCrafting
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &-835345774377665686
 MonoBehaviour:
   m_ObjectHideFlags: 0

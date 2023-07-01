@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 8330778572369786397}
   - component: {fileID: 8330778572369786396}
   - component: {fileID: 8330778572369786399}
+  - component: {fileID: 7064720023143926307}
   - component: {fileID: 8330778572369786392}
+  - component: {fileID: 1967920892988814344}
   m_Layer: 0
   m_Name: ShopTrigger
   m_TagString: Untagged
@@ -97,6 +99,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   thisShop: {fileID: 11400000, guid: 09b2d0d2d2f4ac34794e3f41c8866c5c, type: 2}
+--- !u!114 &7064720023143926307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8330778572369786371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 349d70c4a4c8bf34fb6e04ffc724061b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectSize: {x: 2, y: 1}
+  interactKey: 13
+  onClick: 1
+  interactAction:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8330778572369786399}
+        m_TargetAssemblyTypeName: ShopTrigger, Assembly-CSharp
+        m_MethodName: OpenShop
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!60 &8330778572369786392
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -113,8 +145,8 @@ PolygonCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.2, y: 0.16666667}
-    oldSize: {x: 2.5, y: 3}
+    pivot: {x: 0.3, y: 0.16666667}
+    oldSize: {x: 2.25, y: 2.5}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -122,7 +154,37 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -1, y: -0.48295456}
-      - {x: -1, y: 0.64204544}
-      - {x: 1, y: 0.64204544}
-      - {x: 1, y: -0.48295456}
+    - - {x: -0.55, y: -0.4166667}
+      - {x: -0.55, y: 0.5833333}
+      - {x: 1.45, y: 0.5833333}
+      - {x: 1.45, y: -0.4166667}
+    - - {x: 1.45, y: 0.5833333}
+      - {x: 1.45, y: 0.5833333}
+      - {x: 1.45, y: 0.5833333}
+      - {x: 1.45, y: 0.5833333}
+--- !u!61 &1967920892988814344
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8330778572369786371}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.45000002, y: 0.83333325}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.3, y: 0.16666667}
+    oldSize: {x: 2.25, y: 2.5}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 2.25, y: 2.5}
+  m_EdgeRadius: 0

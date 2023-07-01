@@ -5,15 +5,18 @@ using UnityEngine.UI;
 
 public class UI_Building : MonoBehaviour
 {
-    BuildingSystem buildSys;
+    public BuildingSystem buildSys;
+    PlayerManager plr;
     public GameObject slotTemplate;
     public Transform container;
     public ArrowScrolling scroll;
     [SerializeField] private Image doneButton;
+    Canvas canvas;
 
     void Start()
     {
-        buildSys = FindObjectOfType<BuildingSystem>();
+        plr = FindObjectOfType<PlayerManager>();
+        canvas = GetComponent<Canvas>();
     }
     BuildObject currentSelection;
     void ClearSelection()
@@ -25,14 +28,20 @@ public class UI_Building : MonoBehaviour
     }
     public void OpenBuilding() // Called by building system
     {
-        CancelPlace();
-        GetComponent<Canvas>().enabled = true;
+        if (plr.SetCurrentUI(canvas))
+        {
+            CancelPlace();
+            canvas.enabled = true;
+        }
     }
     public void CloseBuilding() // Called by close button
     {
-        CancelPlace();
-        GetComponent<Canvas>().enabled = false;
-        buildSys.CloseBuilding();
+        if (plr.SetCurrentUI(null))
+        {
+            CancelPlace();
+            canvas.enabled = false;
+            buildSys.CloseBuilding();
+        }
     }
     public void CancelPlace()
     {

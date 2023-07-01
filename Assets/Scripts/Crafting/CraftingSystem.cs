@@ -18,10 +18,12 @@ public class CraftingSystem : MonoBehaviour
 
     Item currentItem;
     Inventory plrInv;
+    PlayerManager plr;
 
     void Start()
     {
         plrInv = FindObjectOfType<Inventory>();
+        plr = FindObjectOfType<PlayerManager>();
         foreach (Transform display in ingredientContain)
         {
             invDisplay.Add(display);
@@ -40,20 +42,24 @@ public class CraftingSystem : MonoBehaviour
     }
     public void OpenMenu(CraftStation info)
     {
-        currentCrafting = info;
-        craftUI.enabled = true;
-        plrInv.HideInterface();
-        ClearIngredients();
-        SetObjects();
-        DisableButton();
+        if (plr.SetCurrentUI(craftUI))
+        {
+            currentCrafting = info;
+            craftUI.enabled = true;
+            ClearIngredients();
+            SetObjects();
+            DisableButton();
+        }
     }
     public void CloseMenu()
     {
-        craftUI.enabled = false;
-        currentItem = null;
-        plrInv.ShowInterface();
-        ClearObjects();
-        ClearDisplay();
+        if (plr.SetCurrentUI(null))
+        {
+            craftUI.enabled = false;
+            currentItem = null;
+            ClearObjects();
+            ClearDisplay();
+        }
     }
     public void ResetSelection()
     {
@@ -168,9 +174,5 @@ public class CraftingSystem : MonoBehaviour
             CraftItem button = Instantiate(template, container).GetComponent<CraftItem>();
             button.SetItem(item, this);
         }
-    }
-    void Update()
-    {
-        
     }
 }

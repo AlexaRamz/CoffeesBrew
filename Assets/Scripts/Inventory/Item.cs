@@ -16,8 +16,17 @@ public class Item : ScriptableObject
         Decor,
     }
 
-    public string name;
+    public enum FoodType
+    {
+        None,
+        Protein,
+        Fresh,
+        Dessert,
+    }
+
+    public new string name;
     public ItemType itemType;
+    public FoodType foodType;
     public Sprite asset;
     public int stackMax = 99;
     public List<ItemInfo> materials = new List<ItemInfo>();

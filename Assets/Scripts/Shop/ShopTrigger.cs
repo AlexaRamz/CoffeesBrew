@@ -6,21 +6,16 @@ public class ShopTrigger : MonoBehaviour
 {
     ShopSystem shopSys;
     public Shop thisShop;
-    Movement2D plr;
 
     void Start()
     {
         shopSys = FindObjectOfType<ShopSystem>();
-        plr = FindObjectOfType<Movement2D>();
     }
-    void Update()
+    public void OpenShop()
     { 
-        if (shopSys != null && thisShop != null)
+        if (shopSys && thisShop)
         {
-            if (Input.GetKeyDown(KeyCode.Return) && plr.isInteractingWith(transform.position))
-            {
-                shopSys.ToggleMenu(thisShop);
-            }
+            shopSys.ToggleMenu(thisShop);
         }
     }
 }

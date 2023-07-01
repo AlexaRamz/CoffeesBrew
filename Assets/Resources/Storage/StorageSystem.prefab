@@ -49,7 +49,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e17943a2e7df681459368231cbdf1972, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invManager: {fileID: 0}
   storageManager: {fileID: 3916067358223682681}
   slotTemplate: {fileID: 4208857245552493593, guid: 25cb032e878603a43b6a322665296716,
     type: 3}
@@ -123,7 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfeb4067a34ee3c4ab16cb286afa9261, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storageCanvas: {fileID: 3916067358644978116}
+  canvas: {fileID: 3916067358644978116}
   storageUI: {fileID: 3916067358166983821}
   barUI: {fileID: 3916067359439013827}
   invUI: {fileID: 3916067358594158902}
@@ -177,7 +176,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e17943a2e7df681459368231cbdf1972, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invManager: {fileID: 0}
   storageManager: {fileID: 3916067358223682681}
   slotTemplate: {fileID: 4208857245552493593, guid: 25cb032e878603a43b6a322665296716,
     type: 3}
@@ -434,7 +432,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e17943a2e7df681459368231cbdf1972, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invManager: {fileID: 0}
   storageManager: {fileID: 3916067358223682681}
   slotTemplate: {fileID: 4208857245552493593, guid: 25cb032e878603a43b6a322665296716,
     type: 3}

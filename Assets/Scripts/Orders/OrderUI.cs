@@ -7,31 +7,36 @@ public class OrderUI : MonoBehaviour
 {
     OrderSystem orderSys;
     Canvas canvas;
+    public Animator anim;
     public GameObject itemTemplate;
     public Transform container;
     public OrderButton mainButton;
     public GameObject customerImage;
+    Animator customerAnim;
+    public Text customerNum;
+    public Image customerNumIcon;
+    public GameObject chatButton;
+    SceneChangeManager effectManager;
 
     void Start()
     {
         orderSys = FindObjectOfType<OrderSystem>();
         canvas = GetComponent<Canvas>();
-
+        effectManager = FindObjectOfType<SceneChangeManager>();
+        customerAnim = customerImage.GetComponent<Animator>();
     }
 
     public void MainAction() // Called when click on main button
     {
         if (orderSys.takingOrder)
         {
-            TakeOrder();
+            orderSys.TakeOrder();
         }
         else if (orderSys.customerCount > 0)
         {
             ClearItems();
             orderSys.NextOrder();
             mainButton.SetState(OrderButton.OrderState.Take);
-            customerImage.GetComponent<Animator>().ResetTrigger("Slide");
-            customerImage.GetComponent<Animator>().SetTrigger("Slide");
         }
         else
         {
@@ -40,6 +45,10 @@ public class OrderUI : MonoBehaviour
     }
     void SetNextAction()
     {
+        chatButton.GetComponent<Button>().enabled = true;
+        chatButton.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+        chatButton.transform.Find("Image").GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+
         if (orderSys.customerCount == 0)
         {
             mainButton.SetState(OrderButton.OrderState.Done);
@@ -49,9 +58,19 @@ public class OrderUI : MonoBehaviour
             mainButton.SetState(OrderButton.OrderState.Next);
         }
     }
-    void TakeOrder()
+    public void UpdateNum(int num)
     {
-        orderSys.TakeOrder();
+        customerNum.text = num.ToString();
+        if (num == 0)
+        {
+            customerNumIcon.enabled = false;
+            customerNum.enabled = false;
+        }
+        else
+        {
+            customerNum.enabled = true;
+            customerNum.enabled = true;
+        }
     }
     public void ClearItems()
     {
@@ -75,21 +94,84 @@ public class OrderUI : MonoBehaviour
     public void DisplayOrder(Order order)
     {
         ClearItems();
+        // Disable Chat button
+        chatButton.GetComponent<Button>().enabled = false;
+        chatButton.GetComponent<Image>().color = new Color32(180, 180, 180, 255);
+        chatButton.transform.Find("Image").GetComponent<Image>().color = new Color32(180, 180, 180, 255);
         // Main button: Disable and "loading" mode
         mainButton.SetState(OrderButton.OrderState.Loading);
         StartCoroutine(ListOrders(order));
     }
+    void ClearPortrait()
+    {
+        Image Image = customerImage.transform.Find("Customer").GetComponent<Image>();
+        Image.sprite = null;
+        Image.enabled = false;
+
+        Image = customerImage.transform.Find("Customer2").GetComponent<Image>();
+        Image.sprite = null;
+        Image.enabled = false;
+    }
+    bool portrait1;
     public void LoadPortrait(Sprite image)
     {
-
+        customerAnim.ResetTrigger("Slide");
+        customerAnim.SetTrigger("Slide");
+        Image Image;
+        if (portrait1)
+        {
+            Image = customerImage.transform.Find("Customer").GetComponent<Image>();
+            Image.sprite = image;
+            Image.enabled = true;
+            portrait1 = false;
+        }
+        else
+        {
+            Image = customerImage.transform.Find("Customer2").GetComponent<Image>();
+            Image.sprite = image;
+            Image.enabled = true;
+            portrait1 = true;
+        }
+    }
+    public void OpenChat() // Call when click on chat button
+    {
+        anim.SetBool("Hide", true);
+        customerAnim.SetBool("Center", true);
+        IEnumerator Delay()
+        {
+            yield return new WaitForSeconds(2f);
+            CloseChat();
+        }
+        StartCoroutine(Delay());
+    }
+    public void CloseChat()
+    {
+        anim.SetBool("Hide", false);
+        customerAnim.SetBool("Center", false);
     }
     public void OpenMenu()
     {
-        canvas.enabled = true;
+        StartCoroutine(OpenMenuC());
+        IEnumerator OpenMenuC()
+        {
+            anim.SetBool("Hide", true);
+            yield return StartCoroutine(effectManager.FadeToBlack());
+            canvas.enabled = true;
+            anim.SetBool("Hide", false);
+            yield return StartCoroutine(effectManager.FadeToClear());
+        }
     }
     public void CloseMenu() // Called when click on close button
     {
-        orderSys.CloseMenu();
-        canvas.enabled = false;
+        mainButton.SetState(OrderButton.OrderState.Off);
+        StartCoroutine(CloseMenuC());
+        IEnumerator CloseMenuC()
+        {
+            yield return StartCoroutine(effectManager.FadeToBlack());
+            orderSys.CloseMenu();
+            canvas.enabled = false;
+            ClearPortrait();
+            yield return StartCoroutine(effectManager.FadeToClear());
+        }
     }
 }

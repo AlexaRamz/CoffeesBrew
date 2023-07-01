@@ -5,13 +5,14 @@ using UnityEngine;
 public class OrderSystem : MonoBehaviour
 {
     OrderUI orderUI;
-    Queue<string> customers = new Queue<string>();
+    public List<CustomerPref> customerList;
+    Queue<CustomerPref> customers = new Queue<CustomerPref>();
     public List<Order> orderList = new List<Order>();
     public List<Item> menu = new List<Item>();
 
     public bool takingOrder = true;
-    string currentCustomer;
-    // CustomerPref currentCustomer;
+    CustomerPref currentCustomer;
+    // Portrait, dialogue, preferences (add food types to items)
     Order currentOrder;
     public int customerCount = 0;
 
@@ -22,18 +23,24 @@ public class OrderSystem : MonoBehaviour
         orderUI = transform.Find("OrderMenu").GetComponent<OrderUI>();
         orderQueue = FindObjectOfType<OrderQueue>();
 
-        customers.Enqueue("Fern");
-        customers.Enqueue("Bear");
-        customers.Enqueue("Raccoon");
+        customers.Enqueue(customerList[0]);
+        customers.Enqueue(customerList[1]);
+        customers.Enqueue(customerList[2]);
         customerCount = 3;
-        NextOrder();
+        
+        //IEnumerator OpenDelay()
+        //{
+        //    yield return new WaitForSeconds(1f);
+        //    OpenMenu();
+        //}
+        //StartCoroutine(OpenDelay());
     }
 
-    Order GenerateOrder(string customer)
+    Order GenerateOrder(CustomerPref customer)
     {
         // Randomize order from customer prefs: items and amounts
         // currentCustomer.items
-        Order newOrder = new Order(customer);
+        Order newOrder = new Order(customer.name);
         if (menu.Count > 0)
         {
             Item item = menu[Random.Range(0, menu.Count)];
@@ -55,6 +62,7 @@ public class OrderSystem : MonoBehaviour
             takingOrder = false;
             customerCount -= 1;
             orderUI.DisplayOrder(currentOrder);
+            orderUI.UpdateNum(customerCount);
         }
     }
     public void DeleteOrder(int index)
@@ -64,7 +72,7 @@ public class OrderSystem : MonoBehaviour
     }
     public void OpenMenu()
     {
-        NextOrder();
+        NextOrder(false);
         orderUI.OpenMenu();
     }
     public void CloseMenu()
@@ -72,14 +80,14 @@ public class OrderSystem : MonoBehaviour
         orderQueue.UpdateOrders(orderList);
     }
 
-    public void NextOrder()
+    public void NextOrder(bool slide = true)
     {
         if (customers.Count > 0)
         {
             takingOrder = true;
             currentCustomer = customers.Dequeue();
-            //currentCustomer = customerPrefs.GetCustomer(currentCustomer);
-            //orderUI.LoadPortrait(currentCustomer.image);
+            orderUI.LoadPortrait(currentCustomer.portrait);
+            orderUI.UpdateNum(customerCount);
         }
     }
 }

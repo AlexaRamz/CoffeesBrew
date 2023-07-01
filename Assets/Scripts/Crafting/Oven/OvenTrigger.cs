@@ -8,7 +8,6 @@ public class OvenTrigger : MonoBehaviour
     ProgressBarManager progressBar;
     
     bool cooking = false;
-    bool inRange;
     Inventory plrInv;
     Item cookingItem;
     bool cooked = false;
@@ -16,6 +15,7 @@ public class OvenTrigger : MonoBehaviour
     void Start()
     {
         progressBar = FindObjectOfType<ProgressBarManager>();
+        plrInv = FindObjectOfType<Inventory>();
     }
     void CookingOn()
     {
@@ -29,6 +29,10 @@ public class OvenTrigger : MonoBehaviour
             GetComponent<Animator>().SetBool("Cooking", true);
             StartCoroutine(Progress());
         }
+    }
+    void DisplayCooked()
+    {
+
     }
     void CookingOff()
     {
@@ -52,38 +56,20 @@ public class OvenTrigger : MonoBehaviour
             time += Time.deltaTime;
             yield return null;
         }
+        DisplayCooked();
         CookingOff();
     }
-    void OnTriggerEnter2D(Collider2D collision)
+    public void InteractWithOven()
     {
-        if (collision.gameObject.tag == "Player")
+        if (!cooking)
         {
-            inRange = true;
-            plrInv = collision.gameObject.GetComponent<Inventory>();
-        }
-    }
-    void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Player")
-        {
-            inRange = false;
-            plrInv = null;
-        }
-    }
-    void Update()
-    {
-        if (inRange && cooking == false && plrInv != null)
-        {
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (!cooked)
             {
-                if (cooked == false)
-                {
-                    CookingOn();
-                }
-                else
-                {
-                    CollectItem();
-                }
+                CookingOn();
+            }
+            else
+            {
+                CollectItem();
             }
         }
     }

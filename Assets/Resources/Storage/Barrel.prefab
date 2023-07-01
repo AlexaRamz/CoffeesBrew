@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6160256861360528490}
   - component: {fileID: 6160256861360528485}
   - component: {fileID: -5745800912242755600}
+  - component: {fileID: 7230224538011061320}
   m_Layer: 0
   m_Name: Barrel
   m_TagString: Untagged
@@ -118,3 +119,33 @@ MonoBehaviour:
     gridPos: {x: 0, y: 0}
     decor: []
   decor: []
+--- !u!114 &7230224538011061320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6160256861360528488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 349d70c4a4c8bf34fb6e04ffc724061b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectSize: {x: 1, y: 1}
+  interactKey: 13
+  onClick: 1
+  interactAction:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6160256861360528485}
+        m_TargetAssemblyTypeName: StorageTrigger, Assembly-CSharp
+        m_MethodName: OpenStorage
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

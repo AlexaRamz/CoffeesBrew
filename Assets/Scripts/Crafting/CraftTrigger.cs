@@ -6,21 +6,16 @@ public class CraftTrigger : MonoBehaviour
 {
     public CraftStation thisCrafting;
     CraftingSystem craftSys;
-    Movement2D plr;
 
     void Start()
     {
         craftSys = FindObjectOfType<CraftingSystem>();
-        plr = FindObjectOfType<Movement2D>();
     }
-    void Update()
+    public void OpenCrafting()
     {
-        if (craftSys != null && thisCrafting != null)
+        if (craftSys && thisCrafting)
         {
-            if (Input.GetKeyDown(KeyCode.Return) && plr.isInteractingWith(transform.position))
-            {
-                craftSys.ToggleMenu(thisCrafting);
-            }
+            craftSys.ToggleMenu(thisCrafting);
         }
     }
 }

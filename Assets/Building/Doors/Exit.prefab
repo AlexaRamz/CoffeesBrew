@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3870722041384925502}
   - component: {fileID: 3870722041384925503}
   - component: {fileID: 3870722041384925496}
+  - component: {fileID: 122831613782998705}
   m_Layer: 0
   m_Name: Exit
   m_TagString: Untagged
@@ -123,5 +124,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   changeTo: Town2
-  fadeTime: 0.3
-  onInteract: 0
+  teleportTo: {fileID: 0}
+--- !u!114 &122831613782998705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3870722041384925500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 978eb2ef8788be247ab552937e916e17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionOnEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3870722041384925496}
+        m_TargetAssemblyTypeName: SceneChange, Assembly-CSharp
+        m_MethodName: ChangeScene
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  actionOnExit:
+    m_PersistentCalls:
+      m_Calls: []
+  tags:
+  - Player

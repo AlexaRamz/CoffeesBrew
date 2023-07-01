@@ -20,18 +20,6 @@ TextureImporter:
   - first:
       213: 213361539938862025
     second: OrderButtons_5
-  - first:
-      213: -8341606612549012040
-    second: OrderButtons_6
-  - first:
-      213: 4984283770552336057
-    second: OrderButtons_7
-  - first:
-      213: 6928557744977815821
-    second: OrderButtons_8
-  - first:
-      213: 339022700908609410
-    second: OrderButtons_9
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -150,10 +138,10 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 36
-        height: 18
+        width: 17
+        height: 17
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -169,12 +157,12 @@ TextureImporter:
       name: OrderButtons_1
       rect:
         serializedVersion: 2
-        x: 36
+        x: 17
         y: 0
-        width: 36
-        height: 18
+        width: 17
+        height: 17
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -190,12 +178,12 @@ TextureImporter:
       name: OrderButtons_2
       rect:
         serializedVersion: 2
-        x: 72
+        x: 34
         y: 0
-        width: 36
-        height: 18
+        width: 17
+        height: 17
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -211,12 +199,12 @@ TextureImporter:
       name: OrderButtons_3
       rect:
         serializedVersion: 2
-        x: 108
+        x: 51
         y: 0
-        width: 36
-        height: 18
+        width: 17
+        height: 17
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -232,12 +220,12 @@ TextureImporter:
       name: OrderButtons_4
       rect:
         serializedVersion: 2
-        x: 144
+        x: 75
         y: 0
-        width: 36
-        height: 18
+        width: 2
+        height: 17
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -253,12 +241,12 @@ TextureImporter:
       name: OrderButtons_5
       rect:
         serializedVersion: 2
-        x: 180
+        x: 77
         y: 0
-        width: 36
-        height: 18
+        width: 8
+        height: 8
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -266,90 +254,6 @@ TextureImporter:
       bones: []
       spriteID: 9c349cca03306f200800000000000000
       internalID: 213361539938862025
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OrderButtons_6
-      rect:
-        serializedVersion: 2
-        x: 216
-        y: 0
-        width: 36
-        height: 18
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8b577fa4bf8ac3c80800000000000000
-      internalID: -8341606612549012040
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OrderButtons_7
-      rect:
-        serializedVersion: 2
-        x: 269
-        y: 0
-        width: 2
-        height: 18
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9be34837eabbb2540800000000000000
-      internalID: 4984283770552336057
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OrderButtons_8
-      rect:
-        serializedVersion: 2
-        x: 288
-        y: 0
-        width: 36
-        height: 18
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d092f2b5f8e272060800000000000000
-      internalID: 6928557744977815821
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OrderButtons_9
-      rect:
-        serializedVersion: 2
-        x: 324
-        y: 0
-        width: 36
-        height: 18
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 28f737aa95374b400800000000000000
-      internalID: 339022700908609410
       vertices: []
       indices: 
       edges: []

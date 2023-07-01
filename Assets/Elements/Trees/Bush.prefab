@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6171106122141680057}
   - component: {fileID: 6171106122141680059}
   - component: {fileID: 1502682974169823178}
+  - component: {fileID: 7690181828441288578}
   m_Layer: 0
   m_Name: Bush
   m_TagString: Untagged
@@ -128,3 +129,33 @@ MonoBehaviour:
   holdingSprite: {fileID: 21300000, guid: 1c822810e4c995b46aa81c06941e2443, type: 3}
   normalSprite: {fileID: 21300000, guid: 63170489f8d385848a987aeef6481ab0, type: 3}
   holding: 0
+  pop: 1
+--- !u!114 &7690181828441288578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6171106122141680054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 349d70c4a4c8bf34fb6e04ffc724061b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectSize: {x: 1, y: 1}
+  interactKey: 13
+  interactAction:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1502682974169823178}
+        m_TargetAssemblyTypeName: CollectOnInteract, Assembly-CSharp
+        m_MethodName: DropItems
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

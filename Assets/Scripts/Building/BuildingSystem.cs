@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
 using System.Linq;
@@ -9,8 +8,8 @@ using UnityEngine.Rendering;
 
 public class BuildingSystem : MonoBehaviour
 {
+    PlayerManager plr;
     Inventory plrInv;
-    GraphicRaycaster gr;
     public Transform buildObjects;
     public GameObject buildTemplate;
     public GameObject template;
@@ -45,10 +44,10 @@ public class BuildingSystem : MonoBehaviour
 
     void Start()
     {
+        plr = FindObjectOfType<PlayerManager>();
         plrInv = FindObjectOfType<Inventory>();
 
         Transform UI = transform.Find("BuildingMenu");
-        gr = UI.GetComponent<GraphicRaycaster>();
         objectUI = UI.GetComponent<UI_Building>();
 
         gridOrigin = (Vector2Int)tilemap.origin;
@@ -258,13 +257,11 @@ public class BuildingSystem : MonoBehaviour
         objectUI.OpenBuilding();
         canBuild = true;
         ChangeCategory("Furniture");
-        plrInv.HideInterface();
     }
     public void CloseBuilding()
     {
         canBuild = false;
         ResetOptions();
-        plrInv.ShowInterface();
     }
     public void CancelPlace()
     {
@@ -568,25 +565,6 @@ public class BuildingSystem : MonoBehaviour
         }
         return hit;
     }
-    GameObject GetPointerOn(Vector3 mouseWorldPos)
-    {
-        RaycastHit2D[] hits = Physics2D.RaycastAll(mouseWorldPos, Vector2.zero);
-        List<GameObject> Objects = new List<GameObject>();
-        for (int i = 0; i < hits.Length; i++)
-        {
-            if (hits[i].collider != null && hits[i].collider.gameObject.GetComponent<BuildTrigger>())
-            {
-                Objects.Add(hits[i].collider.gameObject);
-            }
-        }
-        Objects = Objects.OrderBy(e => e.transform.position.y).ToList();
-        GameObject hit = null;
-        if (Objects.Count > 0)
-        {
-            hit = Objects[0];
-        }
-        return hit;
-    }
 
     const int unreachableInt = -100;
     Vector3Int previousTile = new Vector3Int(unreachableInt, unreachableInt, 0);
@@ -606,13 +584,7 @@ public class BuildingSystem : MonoBehaviour
         {
             Vector3 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            // Check on UI
-            bool onUI = false;
-            PointerEventData ped = new PointerEventData(null);
-            ped.position = Input.mousePosition;
-            List<RaycastResult> results = new List<RaycastResult>();
-            gr.Raycast(ped, results);
-            onUI = results.Count != 0;
+            bool onUI = plr.CheckOnUI();
 
             //calculate world and array coordinates of mouse (grid dependent)
             Vector3Int selectedTile = currentTilemap.WorldToCell(point);
@@ -697,8 +669,8 @@ public class BuildingSystem : MonoBehaviour
                 else if (currentItem) // Place item decor
                 {
                     //calculate world and array coordinates of mouse (sprite/trigger dependent)
-                    GameObject hit = GetPointerOn(point);
-                    if (hit)
+                    GameObject hit = plr.GetPointerOn();
+                    if (hit && hit.GetComponent<BuildTrigger>())
                     {
                         arrayPos = hit.GetComponent<BuildTrigger>().info.gridPos;
                         x = arrayPos.x;
@@ -791,8 +763,8 @@ public class BuildingSystem : MonoBehaviour
                 }
                 else
                 {
-                    hit = GetPointerOn(point);
-                    if (hit != null)
+                    hit = plr.GetPointerOn();
+                    if (hit != null && hit.GetComponent<BuildTrigger>())
                     {
                         arrayPos = hit.GetComponent<BuildTrigger>().info.gridPos;
                         x = arrayPos.x;

@@ -19,7 +19,7 @@ public class SceneChangeManager : MonoBehaviour
         fade = transform.Find("Overlay").transform.Find("Fade").GetComponent<Image>();
         StartCoroutine(FadeToClear());
     }
-    IEnumerator FadeToBlack()
+    public IEnumerator FadeToBlack()
     {
         fade.color = Color.clear;
         float rate = 1.0f / fadeTime;
@@ -34,7 +34,7 @@ public class SceneChangeManager : MonoBehaviour
             yield return null;
         }
     }
-    IEnumerator FadeToClear()
+    public IEnumerator FadeToClear()
     {
         fade.color = Color.black;
         float rate = 1.0f / fadeTime;

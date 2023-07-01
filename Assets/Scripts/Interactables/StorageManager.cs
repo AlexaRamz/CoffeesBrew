@@ -4,42 +4,59 @@ using UnityEngine;
 
 public class StorageManager : MonoBehaviour
 {
-    public Canvas storageCanvas;
+    public Canvas canvas;
     public InventoryUI storageUI;
     public InventoryUI barUI;
     public InventoryUI invUI;
     public List<ItemInfo> itemInv;
     Inventory plrInv;
+    PlayerManager plr;
     StorageTrigger thisStorage;
 
     void Start()
     {
         plrInv = FindObjectOfType<Inventory>();
+        plr = FindObjectOfType<PlayerManager>();
+    }
+    public void ToggleMenu(StorageTrigger storage, List<ItemInfo> items, int maxInv)
+    {
+        if (canvas.enabled)
+        {
+            CloseMenu();
+        }
+        else
+        {
+            OpenMenu(storage, items, maxInv);
+        }
     }
     public void OpenMenu(StorageTrigger storage, List<ItemInfo> items, int maxInv)
     {
-        ClearItems();
-        CreateItemList(maxInv);
-        thisStorage = storage;
-        int i = 0;
-        foreach (ItemInfo it in items)
+        if (plr.SetCurrentUI(canvas))
         {
-            itemInv[i] = it;
-            i++;
+            ClearItems();
+            CreateItemList(maxInv);
+            thisStorage = storage;
+            int i = 0;
+            foreach (ItemInfo it in items)
+            {
+                itemInv[i] = it;
+                i++;
+            }
+            storageUI.SetInventory(items);
+            canvas.enabled = true;
+            plrInv.storing = true;
+            plrInv.SetInventories();
         }
-        storageUI.SetInventory(items);
-        plrInv.HideInterface();
-        storageCanvas.enabled = true;
-        plrInv.storing = true;
-        plrInv.SetInventories();
     }
     public void CloseMenu()
     {
-        plrInv.storing = false;
-        storageCanvas.enabled = false;
-        plrInv.ShowInterface();
-        storageUI.ClearInventory();
-        ClearItems();
+        if (plr.SetCurrentUI(null))
+        {
+            plrInv.storing = false;
+            canvas.enabled = false;
+            storageUI.ClearInventory();
+            ClearItems();
+        } 
     }
     public ItemInfo GetItem(int slot)
     {

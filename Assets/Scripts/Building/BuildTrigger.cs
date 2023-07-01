@@ -9,12 +9,12 @@ public class BuildTrigger : MonoBehaviour
     public BuildInfo info;
     Inventory plrInv;
     public GameObject[] decor;
-    Movement2D plr;
+    PlayerManager plr;
     BuildingSystem buildSys;
 
     void Start()
     {
-        plr = FindObjectOfType<Movement2D>();
+        plr = FindObjectOfType<PlayerManager>();
         plrInv = FindObjectOfType<Inventory>();
     }
     public void SetObject(BuildInfo thisInfo, Vector2Int gridPos)
@@ -199,37 +199,34 @@ public class BuildTrigger : MonoBehaviour
     }
     void Update()
     {
-        if (plrInv != null && CanDecorate())
+        if (Input.GetKeyDown(KeyCode.Return) && CanDecorate() && plr.isInteractingWithObject(gameObject))
         {
-            if (Input.GetKeyDown(KeyCode.Return) && plr.isInteractingWithObject(gameObject))
+            int place = 0;
+            Placement[] placements = info.GetPlacements();
+            for (int i = 0; i < placements.Length; i++)
             {
-                int place = 0;
-                Placement[] placements = info.GetPlacements();
-                for (int i = 0; i < placements.Length; i++)
+                if (plr.GetInteractArrayPos() == info.gridPos + placements[i].position)
                 {
-                    if (plr.GetInteractArrayPos() == info.gridPos + placements[i].position)
-                    {
-                        place = i;
-                        break;
-                    }
+                    place = i;
+                    break;
                 }
+            }
 
-                Item current = info.decor[place];
-                if (current != null)
+            Item current = info.decor[place];
+            if (current != null)
+            {
+                if (plrInv.CollectItem(new ItemInfo { item = current, amount = 1 }))
                 {
-                    if (plrInv.CollectItem(new ItemInfo { item = current, amount = 1 }))
-                    {
-                        ClearPlacement(place);
-                    }
+                    ClearPlacement(place);
                 }
-                else
+            }
+            else
+            {
+                Item item = plrInv.GetCurrentItem();
+                if (item != null)
                 {
-                    Item item = plrInv.GetCurrentItem();
-                    if (item != null)
-                    {
-                        plrInv.DepleteCurrentItem();
-                        PlaceDecor(item, place);
-                    }
+                    plrInv.DepleteCurrentItem();
+                    PlaceDecor(item, place);
                 }
             }
         }

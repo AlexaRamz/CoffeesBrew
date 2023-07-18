@@ -5,33 +5,36 @@ using UnityEngine.Events;
 
 public class Interactable : MonoBehaviour
 {
-    PlayerManager plr;
     public Vector2Int objectSize = new Vector2Int(1, 1);
     public KeyCode interactKey = KeyCode.Return;
-    public bool onClick = true;
-    public UnityEvent interactAction;
 
-    void Start()
-    {
-        plr = FindObjectOfType<PlayerManager>();
-        // this interactable *subscribes* its own function to the onClick event
-        plr.onMouseDown += InteractOnClick;
-    }
     void Update()
     {
-        if (Input.GetKeyDown(interactKey) && plr.isInteractingWith(transform.position, objectSize))
+        if (Input.GetKeyDown(interactKey) && FindObjectOfType<PlayerManager>().isInteractingWith(transform.position, objectSize))
         {
-            interactAction.Invoke();
+            Interact();
+            Interact(InputType.OnKey);
         }
     }
-    void InteractOnClick()
+    public virtual bool CanInteract()
     {
-        if (onClick)
-        {
-            if (plr.pointerOn == gameObject)
-            {
-                interactAction.Invoke();
-            }
-        }
+        return true;
+    }
+    public void UpdateState() // Update the cursor when the "can interact" state of the interactable has changed
+    {
+        FindObjectOfType<PlayerManager>().UpdateCursor();
+    }
+    public virtual void Interact()
+    {
+        
+    }
+    public enum InputType
+    {
+        OnKey,
+        OnClick,
+    }
+    public virtual void Interact(InputType input) // Cares about input type
+    {
+
     }
 }

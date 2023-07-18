@@ -1,15 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Tilemaps;
 using System.Linq;
 using UnityEngine.Rendering;
 
+[System.Serializable]
+    public class BuildAmount
+    {
+        public Build build;
+        public int amount = 1;
+    }
 public class BuildingSystem : MonoBehaviour
 {
     PlayerManager plr;
-    Inventory plrInv;
     public Transform buildObjects;
     public GameObject buildTemplate;
     public GameObject template;
@@ -18,7 +22,7 @@ public class BuildingSystem : MonoBehaviour
     Item currentItem;
 
     public bool canBuild = true;
-    public bool canPlace = false;
+    bool canPlace = false;
     public Tilemap tilemap;
     public Tilemap walls;
     Tilemap currentTilemap;
@@ -30,26 +34,32 @@ public class BuildingSystem : MonoBehaviour
     Vector2Int gridOrigin;
     GameObject[,] currentArray;
 
-    UI_Building objectUI;
+    public UI_Building objectUI;
 
-    public List<Build> furnitureList = new List<Build>();
     public List<Build> wallDecList = new List<Build>();
     public List<Item> itemList = new List<Item>();
     List<GameObject> selectedObjects = new List<GameObject>();
 
-    public GameObject OptionUI;
-
     BuildTrigger selected;
     GameObject selectedItem;
+
+    [System.Serializable]
+    public class BuildCategory
+    {
+        public Build.ObjectType category;
+        public List<BuildAmount> builds = new List<BuildAmount>();
+        // Future: inventory of builds (build and amount)
+        // Add method
+        // Remove method
+    }
+    public List<BuildCategory> categories = new List<BuildCategory>(); // Match tabs to categories by index
+
 
     void Start()
     {
         plr = FindObjectOfType<PlayerManager>();
-        plrInv = FindObjectOfType<Inventory>();
 
-        Transform UI = transform.Find("BuildingMenu");
-        objectUI = UI.GetComponent<UI_Building>();
-
+        // Calculate build array sizes based on the respective tilemaps
         gridOrigin = (Vector2Int)tilemap.origin;
         width = tilemap.size.x;
         height = tilemap.size.y;
@@ -61,7 +71,12 @@ public class BuildingSystem : MonoBehaviour
 
         currentInfo = new BuildInfo();
 
-        //Add existing
+        AddExisting();
+    }
+    void AddExisting()
+    {
+        // Add any exising builds in the build area
+        // FUTURE: Track tiles with non-build colliders: you cannot place anything here.
         foreach (Transform buildObj in buildObjects)
         {
             BuildTrigger buildTrigger = buildObj.GetComponent<BuildTrigger>();
@@ -78,7 +93,99 @@ public class BuildingSystem : MonoBehaviour
             }
         }
     }
-    
+
+    // UI Control
+    public void ResetOptions()
+    {
+        objectUI.ResetOptionsPos();
+        ClearSelected();
+    }
+    public void OpenBuilding()
+    {
+        objectUI.OpenBuilding();
+        canBuild = true;
+        ChangeCategory(0);
+    }
+    public void CloseBuilding()
+    {
+        canBuild = false;
+        ResetOptions();
+    }
+    public void CancelPlace()
+    {
+        canPlace = false;
+        template.GetComponent<SpriteRenderer>().enabled = false;
+        ClearTemplates();
+    }
+    public void ChangeObject(Build build)
+    {
+        canPlace = true;
+        template.GetComponent<SpriteRenderer>().enabled = true;
+        ResetOptions();
+        currentItem = null;
+        currentInfo.ResetInfo();
+        currentInfo.SetInfo(build);
+        SetTemplate(template);
+        previousPos = Vector3.zero;
+    }
+    public void ChangeItem(Item item)
+    {
+        canPlace = true;
+        template.GetComponent<SpriteRenderer>().enabled = true;
+        ResetOptions();
+        currentInfo.ResetInfo();
+        currentItem = item;
+        SetTemplate(template);
+        previousPos = Vector3.zero;
+    }
+    public void ChangeCategory(string category)
+    {
+        if (category == "WallDecor")
+        {
+            currentArray = wallArray;
+            currentTilemap = walls;
+            objectUI.SetObjects(wallDecList);
+            if (canPlace == true)
+            {
+                ChangeObject(wallDecList[0]);
+            }
+        }
+        if (category == "ItemDecor")
+        {
+            currentArray = gridArray;
+            currentTilemap = tilemap;
+            objectUI.SetItems(itemList);
+            if (canPlace == true)
+            {
+                ChangeItem(itemList[0]);
+            }
+        }
+    }
+    public void ChangeCategory(int index)
+    {
+        if (index >= 0 && index < categories.Count)
+        {
+            List<BuildAmount> builds = categories[index].builds;
+            currentArray = gridArray;
+            currentTilemap = tilemap;
+            objectUI.SetObjects(builds);
+            if (canPlace == true)
+            {
+                ChangeObject(builds[0].build);
+            }
+        }
+        else
+        {
+            Debug.Log("invalid category");
+        }
+    }
+    void RotateBuild()
+    {
+        currentInfo.AdvanceRotation();
+        SetTemplate(template);
+        previousPos = Vector3.zero;
+    }
+
     // Object editing
     public void RotateObject()
     {
@@ -243,91 +350,6 @@ public class BuildingSystem : MonoBehaviour
         SpriteRenderer render = template.GetComponent<SpriteRenderer>();
         render.color = color;
         render.enabled = true;
-    }
-
-    // UI Control
-    public void ResetOptions()
-    {
-        OptionUI.GetComponent<RectTransform>().position = new Vector3(-10, -10, 0);
-        OptionUI.GetComponent<Image>().enabled = false;
-        ClearSelected();
-    }
-    public void OpenBuilding()
-    {
-        objectUI.OpenBuilding();
-        canBuild = true;
-        ChangeCategory("Furniture");
-    }
-    public void CloseBuilding()
-    {
-        canBuild = false;
-        ResetOptions();
-    }
-    public void CancelPlace()
-    {
-        canPlace = false;
-        template.GetComponent<SpriteRenderer>().enabled = false;
-        ClearTemplates();
-    }
-    public void ChangeObject(Build build)
-    {
-        canPlace = true;
-        template.GetComponent<SpriteRenderer>().enabled = true;
-        ResetOptions();
-        currentItem = null;
-        currentInfo.ResetInfo();
-        currentInfo.build = build;
-        SetTemplate(template);
-        previousTile = new Vector3Int(0, 0, 0);
-    }
-    public void ChangeItem(Item item)
-    {
-        canPlace = true;
-        template.GetComponent<SpriteRenderer>().enabled = true;
-        ResetOptions();
-        currentInfo.ResetInfo();
-        currentItem = item;
-        SetTemplate(template);
-        previousTile = new Vector3Int(0, 0, 0);
-    }
-    public void ChangeCategory(string category)
-    {
-        if (category == "Furniture")
-        {
-            currentArray = gridArray;
-            currentTilemap = tilemap;
-            objectUI.SetObjects(furnitureList);
-            if (canPlace == true)
-            {
-                ChangeObject(furnitureList[0]);
-            }
-        }
-        if (category == "WallDecor")
-        {
-            currentArray = wallArray;
-            currentTilemap = walls;
-            objectUI.SetObjects(wallDecList);
-            if (canPlace == true)
-            {
-                ChangeObject(wallDecList[0]);
-            }
-        }
-        if (category == "ItemDecor")
-        {
-            currentArray = gridArray;
-            currentTilemap = tilemap;
-            objectUI.SetItems(itemList);
-            if (canPlace == true)
-            {
-                ChangeItem(itemList[0]);
-            }
-        }
-    }
-    void RotateBuild()
-    {
-        currentInfo.AdvanceRotation();
-        SetTemplate(template);
-        previousTile = new Vector3Int(0, 0, 0);
     }
 
     // Updating surrounding objects
@@ -498,7 +520,7 @@ public class BuildingSystem : MonoBehaviour
     }
 
     //Manage templates while placing
-    public List<GameObject> templates = new List<GameObject>();
+    List<GameObject> templates = new List<GameObject>();
     void ClearTemplates()
     {
         foreach (GameObject template in templates)
@@ -566,8 +588,6 @@ public class BuildingSystem : MonoBehaviour
         return hit;
     }
 
-    const int unreachableInt = -100;
-    Vector3Int previousTile = new Vector3Int(unreachableInt, unreachableInt, 0);
     Vector2 startPos;
     bool placing;
     bool selecting;
@@ -578,39 +598,41 @@ public class BuildingSystem : MonoBehaviour
     BuildTrigger trigger;
     bool decorable;
 
+    Vector2Int CalculateArrayPos()
+    {
+        Vector3 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        //calculate world and array coordinates of mouse (grid dependent)
+        Vector3Int selectedTile = currentTilemap.WorldToCell(point);
+        return WorldToArray(point);
+    }
+    const int unreachableInt = -100;
+    Vector3 previousPos = new Vector3(unreachableInt, unreachableInt, 0);
+    bool OnPrevious(Vector3 gridPos)
+    {
+        //determine whether on tile in previous update
+        if (gridPos == previousPos)
+        {
+            return true;
+        }
+        else
+        {
+            previousPos = gridPos;
+            return false;
+        }
+    }
     void Update()
     {
         if (canBuild)
         {
-            Vector3 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            bool onUI = plr.CheckOnUI();
-
-            //calculate world and array coordinates of mouse (grid dependent)
-            Vector3Int selectedTile = currentTilemap.WorldToCell(point);
-            Vector2Int arrayPos = WorldToArray(point);
-            int x = arrayPos.x;
-            int y = arrayPos.y;
-
-            Vector3 gridPos = ArrayToWorld(arrayPos);
-            bool onPrevious = false;
-
             if (canPlace)
             {
+                Vector2Int arrayPos = CalculateArrayPos();
+                Vector3 gridPos = ArrayToWorld(arrayPos);
+
                 if (currentInfo.build) // Place build
                 {
-                    //determine whether on tile in previous update
-                    if (selectedTile == previousTile)
-                    {
-                        onPrevious = true;
-                    }
-                    else
-                    {
-                        onPrevious = false;
-                        previousTile = selectedTile;
-                    }
                     // Update the template tiles and check available only each time the tile changes
-                    if (!onPrevious)
+                    if (!OnPrevious(gridPos))
                     {
                         template.transform.position = gridPos;
                         if (placing)
@@ -645,16 +667,17 @@ public class BuildingSystem : MonoBehaviour
                     }
 
                     //If mouse down, start placing. If mouse up place objects
-                    if (Input.GetMouseButtonDown(0) && !onUI)
+                    if (Input.GetMouseButtonDown(0) && !plr.CheckOnUI())
                     {
                         startPos = (Vector2)gridPos;
+                        previousPos = new Vector3(unreachableInt, unreachableInt, 0);
                         placing = true;
                     }
-                    else if (Input.GetMouseButtonUp(0))
+                    else if (Input.GetMouseButtonUp(0) && placing)
                     {
                         placing = false;
                         ClearTemplates();
-                        if (available && !onUI)
+                        if (available && !plr.CheckOnUI())
                         {
                             PlaceAll(startPos, (Vector2)gridPos);
                             template.GetComponent<SpriteRenderer>().enabled = false;
@@ -673,26 +696,12 @@ public class BuildingSystem : MonoBehaviour
                     if (hit && hit.GetComponent<BuildTrigger>())
                     {
                         arrayPos = hit.GetComponent<BuildTrigger>().info.gridPos;
-                        x = arrayPos.x;
-                        y = arrayPos.y;
                         gridPos = ArrayToWorld(arrayPos);
                     }
 
-                    //determine whether on tile in previous update
-                    selectedTile = currentTilemap.WorldToCell(gridPos);
-                    if (selectedTile == previousTile)
+                    if (!OnPrevious(gridPos))
                     {
-                        onPrevious = true;
-                    }
-                    else
-                    {
-                        onPrevious = false;
-                        previousTile = selectedTile;
-                    }
-
-                    if (!onPrevious)
-                    {
-                        GameObject obj = GetValue(x, y);
+                        GameObject obj = GetValue(arrayPos.x, arrayPos.y);
                         if (obj && obj.GetComponent<BuildTrigger>() && obj.GetComponent<BuildTrigger>().CanDecorate())
                         {
                             available = false;
@@ -726,7 +735,7 @@ public class BuildingSystem : MonoBehaviour
                         template.transform.position = placementPos;
                         if (available)
                         {
-                            if (Input.GetMouseButtonDown(0) && !onUI)
+                            if (Input.GetMouseButtonDown(0) && !plr.CheckOnUI())
                             {
                                 trigger.PlaceDecor(currentItem, nearestPlace);
                                 template.GetComponent<SpriteRenderer>().enabled = false;
@@ -736,7 +745,7 @@ public class BuildingSystem : MonoBehaviour
                     }
                     else
                     {
-                        //template.transform.position = gridPos;
+                        Vector3 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                         template.transform.position = new Vector3(point.x, point.y, 0);
                     }
                 }
@@ -746,64 +755,50 @@ public class BuildingSystem : MonoBehaviour
                 // Selecting
 
                 //calculate world and array coordinates of mouse (sprite/trigger dependent)
+                Vector3 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 GameObject hit = GetPointerOnItem(point);
-                if (hit && !selecting && !onUI)
+                if (hit && !selecting && !plr.CheckOnUI())
                 {
                     selected = hit.transform.parent.GetComponent<BuildTrigger>();
-                    //arrayPos = obj.info.gridPos;
-                    //x = arrayPos.x;
-                    //y = arrayPos.y;
                     if (Input.GetMouseButtonDown(0))
                     {
                         ClearSelected();
                         selectedItem = hit;
-                        OptionUI.GetComponent<RectTransform>().position = Camera.main.WorldToScreenPoint(new Vector3(point.x + 1f, point.y + 1.5f, 0));
-                        OptionUI.GetComponent<Image>().enabled = true;
+                        objectUI.SetOptionsPos(Camera.main.WorldToScreenPoint(new Vector3(point.x + 1f, point.y + 1.5f, 0)));
                     }
                 }
                 else
                 {
                     hit = plr.GetPointerOn();
+                    Vector2Int arrayPos = CalculateArrayPos();
+                    Vector3 gridPos = ArrayToWorld(arrayPos);
+
                     if (hit != null && hit.GetComponent<BuildTrigger>())
                     {
                         arrayPos = hit.GetComponent<BuildTrigger>().info.gridPos;
-                        x = arrayPos.x;
-                        y = arrayPos.y;
                         gridPos = ArrayToWorld(arrayPos);
-
-                        selectedTile = currentTilemap.WorldToCell(gridPos);
-                        if (selectedTile == previousTile)
-                        {
-                            onPrevious = true;
-                        }
-                        else
-                        {
-                            onPrevious = false;
-                            previousTile = selectedTile;
-                        }
                     }
 
-                    if (Input.GetMouseButtonDown(0) && !onUI)
+                    if (Input.GetMouseButtonDown(0) && !plr.CheckOnUI())
                     {
                         startPos = (Vector2)gridPos;
-                        previousTile = new Vector3Int(unreachableInt, unreachableInt, 0);
+                        previousPos = new Vector3(unreachableInt, unreachableInt, 0);
                         selecting = true;
                         ResetOptions();
                     }
-                    else if (Input.GetMouseButtonUp(0) && !onUI)
+                    else if (Input.GetMouseButtonUp(0) && selecting)
                     {
                         selecting = false;
-                        if (GetValue(x, y) == null)
+                        if (GetValue(arrayPos.x, arrayPos.y) == null)
                         {
                             ResetOptions();
                         }
                         else
                         {
-                            OptionUI.GetComponent<RectTransform>().position = Camera.main.WorldToScreenPoint(new Vector3(point.x + 1f, point.y + 1.5f, 0));
-                            OptionUI.GetComponent<Image>().enabled = true;
+                            objectUI.SetOptionsPos(Camera.main.WorldToScreenPoint(new Vector3(point.x + 1f, point.y + 1.5f, 0)));
                         }
                     }
-                    if (!onPrevious)
+                    if (!OnPrevious(gridPos))
                     {
                         if (selecting)
                         {

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CraftingSystem : MonoBehaviour
+public class CraftingSystem : MonoBehaviour, IMenu
 {
     CraftStation currentCrafting;
-    public Canvas craftUI;
+    public Canvas canvas;
     public GameObject template;
     public Transform container;
     public Transform display;
@@ -29,37 +29,33 @@ public class CraftingSystem : MonoBehaviour
             invDisplay.Add(display);
         }
     }
-    public void ToggleMenu(CraftStation info)
-    {
-        if (craftUI.enabled)
-        {
-            CloseMenu();
-        }
-        else
-        {
-            OpenMenu(info);
-        }
-    }
+    bool open = false;
     public void OpenMenu(CraftStation info)
     {
-        if (plr.SetCurrentUI(craftUI))
+        if (!open && plr.SetCurrentUI(this))
         {
             currentCrafting = info;
-            craftUI.enabled = true;
+            canvas.enabled = true;
             ClearIngredients();
             SetObjects();
             DisableButton();
+            open = true;
         }
     }
     public void CloseMenu()
     {
-        if (plr.SetCurrentUI(null))
+        if (open && plr.SetCurrentUI(null))
         {
-            craftUI.enabled = false;
+            canvas.enabled = false;
             currentItem = null;
             ClearObjects();
             ClearDisplay();
+            open = false;
         }
+    }
+    public GraphicRaycaster GetGraphicRaycaster()
+    {
+        return canvas.GetComponent<GraphicRaycaster>();
     }
     public void ResetSelection()
     {
@@ -143,10 +139,12 @@ public class CraftingSystem : MonoBehaviour
     void EnableButton()
     {
         craftButton.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+        craftButton.GetComponent<ButtonAnims>().Enable();
     }
     void DisableButton()
     {
         craftButton.GetComponent<Image>().color = new Color32(210, 210, 210, 255);
+        craftButton.GetComponent<ButtonAnims>().Disable();
     }
     void ClearIngredients()
     {

@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DialogueTrigger : MonoBehaviour
+public class DialogueTrigger : Interactable
 {
-    bool inRange = false;
     public Dialogue[] dialogues;
     DialogueManager dialogueSys;
     public bool isBubble = true;
@@ -12,21 +11,6 @@ public class DialogueTrigger : MonoBehaviour
     void Start()
     {
         dialogueSys = FindObjectOfType<DialogueManager>();
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Player")
-        {
-            inRange = true;
-        }
-    }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Player")
-        {
-            inRange = false;
-        }
     }
     void PauseAnim()
     {
@@ -36,29 +20,27 @@ public class DialogueTrigger : MonoBehaviour
     {
         if (isBubble)
         {
-            gameObject.transform.Find("Image").GetComponent<Animator>().SetTrigger("Poof");
-            gameObject.transform.Find("Image").GetComponent<Animator>().SetBool("Pause", false);
+            Animator anim = transform.Find("Image").GetComponent<Animator>();
+            anim.SetTrigger("Poof");
+            anim.SetBool("Pause", false);
             this.enabled = false;
         }
     }
-    void Update()
+    public override void Interact()
     {
-        if (inRange)
+        if (dialogueSys.talking == false)
         {
-            if (Input.GetKeyDown(KeyCode.Return) && dialogueSys.talking == false)
+            Dialogue dialogue = dialogues[0];
+            if (randomized && dialogues.Length > 1)
             {
-                Dialogue dialogue = dialogues[0];
-                if (randomized && dialogues.Length > 1)
-                {
-                    dialogue = dialogues[Random.Range(0, dialogues.Length)];
-                    Debug.Log("ddd");
-                }
-                dialogueSys.StartDialogue(dialogue);
-                dialogueSys.currentTrigger = this;
-                if (isBubble)
-                {
-                    PauseAnim();
-                }
+                dialogue = dialogues[Random.Range(0, dialogues.Length)];
+                Debug.Log("ddd");
+            }
+            dialogueSys.StartDialogue(dialogue);
+            dialogueSys.currentTrigger = this;
+            if (isBubble)
+            {
+                PauseAnim();
             }
         }
     }

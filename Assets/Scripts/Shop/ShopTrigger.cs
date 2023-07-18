@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShopTrigger : MonoBehaviour
+public class ShopTrigger : Interactable
 {
     ShopSystem shopSys;
     public Shop thisShop;
@@ -11,11 +11,11 @@ public class ShopTrigger : MonoBehaviour
     {
         shopSys = FindObjectOfType<ShopSystem>();
     }
-    public void OpenShop()
+    public override void Interact()
     { 
         if (shopSys && thisShop)
         {
-            shopSys.ToggleMenu(thisShop);
+            shopSys.OpenMenu(thisShop);
         }
     }
 }

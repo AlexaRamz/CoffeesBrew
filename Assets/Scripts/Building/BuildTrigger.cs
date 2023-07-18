@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class BuildTrigger : MonoBehaviour
+public class BuildTrigger : Interactable
 {
     //Handles build actions on interact such as decorating and movement
     public BuildInfo info;
@@ -14,11 +14,12 @@ public class BuildTrigger : MonoBehaviour
 
     void Start()
     {
-        plr = FindObjectOfType<PlayerManager>();
         plrInv = FindObjectOfType<Inventory>();
     }
     public void SetObject(BuildInfo thisInfo, Vector2Int gridPos)
     {
+        plr = FindObjectOfType<PlayerManager>();
+
         buildSys = FindObjectOfType<BuildingSystem>();
         info.SetInfo(thisInfo.build, thisInfo.rot);
         info.gridPos = gridPos;
@@ -31,11 +32,11 @@ public class BuildTrigger : MonoBehaviour
         //UpdateSprite();
         render.flipX = info.GetRotation().flipped;
         SetTrigger();
-        if (build.Type == Build.ObjectType.Furniture)
+        if (build.category == Build.ObjectType.Table || build.category == Build.ObjectType.Seat || build.category == Build.ObjectType.Furniture)
         {
             SetCollider();
         }
-        else if (build.Type == Build.ObjectType.FloorDecor)
+        else if (build.category == Build.ObjectType.FloorDecor)
         {
             render.sortingOrder = -1;
         }
@@ -45,8 +46,13 @@ public class BuildTrigger : MonoBehaviour
             {
                 gameObject.AddComponent<SortingGroup>();
             }
+            objectSize = info.GetRotation().size;
             SetPlacements();
         }
+    }
+    public bool CanDecorate()
+    {
+        return info.build && info.build.canDecorate;
     }
     public void SetColor(Color32 color)
     {
@@ -141,10 +147,6 @@ public class BuildTrigger : MonoBehaviour
             i++;
         }
     }
-    public bool CanDecorate()
-    {
-        return info.build && info.build.canDecorate;
-    }
     public void PlaceDecor(Item item, int place)
     {
         GameObject obj = new GameObject("Decor");
@@ -179,12 +181,13 @@ public class BuildTrigger : MonoBehaviour
     }
     public int GetNearestPlace(Vector3 worldPos)
     {
-        float min = 0;
+        float min = 1000;
         int place = 0;
         Placement[] placements = info.GetPlacements();
         for (int i = 0; i < placements.Length; i++)
         {
-            float distance = Vector3.Distance(transform.position + (Vector3Int)placements[i].position, worldPos);
+            Placement thisPlacement = placements[i];
+            float distance = Vector3.Distance(transform.position + (Vector3)(thisPlacement.position + thisPlacement.offset), worldPos);
             if (distance < min)
             {
                 place = i;
@@ -197,21 +200,22 @@ public class BuildTrigger : MonoBehaviour
     {
         return info.decor[place] == null;
     }
-    void Update()
+    int GetFacingPlace()
     {
-        if (Input.GetKeyDown(KeyCode.Return) && CanDecorate() && plr.isInteractingWithObject(gameObject))
+        Placement[] placements = info.GetPlacements();
+        for (int i = 0; i < placements.Length; i++)
         {
-            int place = 0;
-            Placement[] placements = info.GetPlacements();
-            for (int i = 0; i < placements.Length; i++)
+            if (plr.GetInteractArrayPos() == info.gridPos + placements[i].position)
             {
-                if (plr.GetInteractArrayPos() == info.gridPos + placements[i].position)
-                {
-                    place = i;
-                    break;
-                }
+                return i;
             }
-
+        }
+        return 0;
+    }
+    public void Decorate(int place)
+    {
+        if (CanDecorate())
+        {
             Item current = info.decor[place];
             if (current != null)
             {
@@ -230,6 +234,37 @@ public class BuildTrigger : MonoBehaviour
                 }
             }
         }
+    }
+    // Decor Interactable
+    public override void Interact(InputType input)
+    {
+        if (input == InputType.OnKey)
+        {
+            Decorate(GetFacingPlace());
+        }
+        else if (input == InputType.OnClick)
+        {
+            Decorate(GetNearestPlace(Camera.main.ScreenToWorldPoint(Input.mousePosition)));
+        }
+    }
+    public override bool CanInteract()
+    {
+        if (CanDecorate())
+        {
+            Item current = info.decor[GetNearestPlace(Camera.main.ScreenToWorldPoint(Input.mousePosition))];
+            if (current == null)
+            {
+                if (plrInv.GetCurrentItem() != null)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

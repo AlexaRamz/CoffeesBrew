@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DialogueManager : MonoBehaviour
+public class DialogueManager : MonoBehaviour, IMenu
 {
     Dialogue currentDialogue;
     Queue<string> sentences;
@@ -23,7 +23,6 @@ public class DialogueManager : MonoBehaviour
     public Text textDisplay;
     public Image iconDisplay;
     IEnumerator currentCoroutine;
-    Movement2D plr;
 
     public bool talking = false;
     bool typing;
@@ -34,38 +33,54 @@ public class DialogueManager : MonoBehaviour
     public float pauseTime = 0.8f;
 
     public DialogueTrigger currentTrigger;
+    PlayerManager plr;
 
     void Start()
     {
-        plr = FindObjectOfType<Movement2D>();
         sentences = new Queue<string>();
         icons = new Queue<IconSet>();
         icons2 = new Queue<Sprite>();
+        plr = FindObjectOfType<PlayerManager>();
+    }
+    bool open = false;
+    public void CloseMenu()
+    {
+        if (open && plr.SetCurrentUI(null))
+        {
+            open = false;
+            EndDialogue();
+        }
+    }
+    public GraphicRaycaster GetGraphicRaycaster()
+    {
+        return textBox.GetComponent<GraphicRaycaster>();
     }
 
     public void StartDialogue(Dialogue dialogue)
     {
-        currentDialogue = dialogue;
-        plr.plrActive = false;
-        StartCoroutine(StartDelay());
-        sentences.Clear();
-        icons.Clear();
-        icons2.Clear();
-        textDisplay.text = "";
-        iconDisplay.GetComponent<Image>().enabled = true;
-        textBox.enabled = true;
-
-        responses = dialogue.responses;
-
-        foreach (string sentence in dialogue.sentences)
+        if (!open && plr.SetCurrentUI(this))
         {
-            sentences.Enqueue(sentence);
+            currentDialogue = dialogue;
+            StartCoroutine(StartDelay());
+            sentences.Clear();
+            icons.Clear();
+            icons2.Clear();
+            textDisplay.text = "";
+            iconDisplay.GetComponent<Image>().enabled = true;
+            textBox.enabled = true;
+
+            responses = dialogue.responses;
+
+            foreach (string sentence in dialogue.sentences)
+            {
+                sentences.Enqueue(sentence);
+            }
+            foreach (IconSet icon in dialogue.icons)
+            {
+                icons.Enqueue(icon);
+            }
+            DisplayNextSentence();
         }
-        foreach (IconSet icon in dialogue.icons)
-        {
-            icons.Enqueue(icon);
-        }
-        DisplayNextSentence();
     }
     IEnumerator StartDelay()
     {
@@ -191,7 +206,6 @@ public class DialogueManager : MonoBehaviour
         iconDisplay.GetComponent<Image>().enabled = false;
         currentSentence = null;
         textBox.enabled = false;
-        plr.plrActive = true;
         StartCoroutine(EndDelay());
         if (currentTrigger != null)
         {

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Movement2D : MonoBehaviour
 {
@@ -10,8 +11,8 @@ public class Movement2D : MonoBehaviour
     string lastDir = "none";
 
     Animator anim;
-    float movementSpeed;
-    public bool plrActive = true;
+    public float movementSpeed;
+    bool plrActive = true;
 
     public enum Direction { Up, Down, Left, Right};
     [HideInInspector] public Direction facing = Direction.Up;
@@ -20,6 +21,8 @@ public class Movement2D : MonoBehaviour
     public Collider2D downTrigger;
     public Collider2D leftTrigger;
     public Collider2D rightTrigger;
+
+    public SortingGroup itemHolder;
 
     void Start()
     {
@@ -43,7 +46,15 @@ public class Movement2D : MonoBehaviour
                 return Vector3.zero;
         }
     }
-
+    public void SetPlrActive(bool active)
+    {
+        plrActive = active;
+        if (!plrActive)
+        {
+            ProcessInputs();
+            Animate();
+        }
+    }
     // Determine whether there is a collision in direction currently facing
     bool colliding = false;
     public void SetCollidingBool(bool b)
@@ -73,37 +84,59 @@ public class Movement2D : MonoBehaviour
                 return;
         }
     }
+    bool holding = false;
+    public void SetHolding(bool hold)
+    {
+        holding = hold;
+        UpdateHoldingSortOrder();
+    }
+    void UpdateHoldingSortOrder()
+    {
+        if (holding && (facing == Direction.Left || facing == Direction.Right))
+        {
+            itemHolder.sortingOrder = -1;
+        }
+        else
+        {
+            itemHolder.sortingOrder = 0;
+        }
+    }
     void SetFacing(Direction dir)
     {
         facing = dir;
+        UpdateHoldingSortOrder();
         SetTriggerDirection();
     }
     void SetFacing()
     {
-        Vector2 inputs = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        if (lastDir == "vertical")
+        if (plrActive)
         {
-            if (inputs.x > 0f)
+            Vector2 inputs = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            if (lastDir == "vertical")
             {
-                facing = Direction.Right;
+                if (inputs.x > 0f)
+                {
+                    facing = Direction.Right;
+                }
+                else if (inputs.x < 0f)
+                {
+                    facing = Direction.Left;
+                }
             }
-            else if (inputs.x < 0f)
+            else if (lastDir == "horizontal")
             {
-                facing = Direction.Left;
+                if (inputs.y > 0f)
+                {
+                    facing = Direction.Up;
+                }
+                else if (inputs.y < 0f)
+                {
+                    facing = Direction.Down;
+                }
             }
+            UpdateHoldingSortOrder();
+            SetTriggerDirection();
         }
-        else if (lastDir == "horizontal")
-        {
-            if (inputs.y > 0f)
-            {
-                facing = Direction.Up;
-            }
-            else if (inputs.y < 0f)
-            {
-                facing = Direction.Down;
-            }
-        }
-        SetTriggerDirection();
     }
     void Update()
     {
@@ -146,7 +179,7 @@ public class Movement2D : MonoBehaviour
 
     void ProcessInputs()
     {
-        if (!colliding)
+        if (plrActive && !colliding)
         {
             movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
             if (movement.x == 0f && movement.y != 0f)

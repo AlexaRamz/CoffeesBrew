@@ -13,29 +13,33 @@ MonoBehaviour:
   m_Name: Chair
   m_EditorClassIdentifier: 
   rotations:
-  - sprite: {fileID: 5843985864524226762, guid: 35833be6a3d1d08459c63e41b333c55a,
+  - sprite: {fileID: 5427164035194450293, guid: 48baeb6aa24b90749b06795992d50754,
       type: 3}
     Object: {fileID: 0}
     flipped: 0
     size: {x: 1, y: 1}
     placements: []
-  - sprite: {fileID: -1396135034660978453, guid: 35833be6a3d1d08459c63e41b333c55a,
+    ruleBuilds: []
+  - sprite: {fileID: 8939544657902912227, guid: 48baeb6aa24b90749b06795992d50754,
+      type: 3}
+    Object: {fileID: 0}
+    flipped: 0
+    size: {x: 1, y: 1}
+    placements: []
+    ruleBuilds: []
+  - sprite: {fileID: 7967274755641553088, guid: 48baeb6aa24b90749b06795992d50754,
+      type: 3}
+    Object: {fileID: 0}
+    flipped: 0
+    size: {x: 1, y: 1}
+    placements: []
+    ruleBuilds: []
+  - sprite: {fileID: 8939544657902912227, guid: 48baeb6aa24b90749b06795992d50754,
       type: 3}
     Object: {fileID: 0}
     flipped: 1
     size: {x: 1, y: 1}
     placements: []
-  - sprite: {fileID: -3557824870861491401, guid: 35833be6a3d1d08459c63e41b333c55a,
-      type: 3}
-    Object: {fileID: 0}
-    flipped: 0
-    size: {x: 1, y: 1}
-    placements: []
-  - sprite: {fileID: -1396135034660978453, guid: 35833be6a3d1d08459c63e41b333c55a,
-      type: 3}
-    Object: {fileID: 0}
-    flipped: 0
-    size: {x: 1, y: 1}
-    placements: []
-  Type: 0
+    ruleBuilds: []
+  category: 5
   canDecorate: 0

@@ -44,8 +44,10 @@ public class Build : ScriptableObject
         WallDecor,
         TableDecor,
         FloorDecor,
+        Table,
+        Seat,
     }
-    public ObjectType Type;
+    public ObjectType category;
     public bool canDecorate = false; //canDecorate is true assumes all rotations have placements
     public Rotation GetRotation(int rot)
     {

@@ -42,5 +42,5 @@ MonoBehaviour:
       flipped: 1
       adjacentBuilds: 02000000000000000200000000000000
       cornerBuilds: 
-  Type: 1
+  category: 1
   canDecorate: 1

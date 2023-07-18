@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class StorageManager : MonoBehaviour
+public class StorageManager : MonoBehaviour, IMenu
 {
     public Canvas canvas;
     public InventoryUI storageUI;
@@ -18,20 +19,10 @@ public class StorageManager : MonoBehaviour
         plrInv = FindObjectOfType<Inventory>();
         plr = FindObjectOfType<PlayerManager>();
     }
-    public void ToggleMenu(StorageTrigger storage, List<ItemInfo> items, int maxInv)
-    {
-        if (canvas.enabled)
-        {
-            CloseMenu();
-        }
-        else
-        {
-            OpenMenu(storage, items, maxInv);
-        }
-    }
+    bool open = false;
     public void OpenMenu(StorageTrigger storage, List<ItemInfo> items, int maxInv)
     {
-        if (plr.SetCurrentUI(canvas))
+        if (!open && plr.SetCurrentUI(this))
         {
             ClearItems();
             CreateItemList(maxInv);
@@ -46,17 +37,23 @@ public class StorageManager : MonoBehaviour
             canvas.enabled = true;
             plrInv.storing = true;
             plrInv.SetInventories();
+            open = true;
         }
     }
     public void CloseMenu()
     {
-        if (plr.SetCurrentUI(null))
+        if (open && plr.SetCurrentUI(null))
         {
             plrInv.storing = false;
             canvas.enabled = false;
             storageUI.ClearInventory();
             ClearItems();
+            open = false;
         } 
+    }
+    public GraphicRaycaster GetGraphicRaycaster()
+    {
+        return canvas.GetComponent<GraphicRaycaster>();
     }
     public ItemInfo GetItem(int slot)
     {

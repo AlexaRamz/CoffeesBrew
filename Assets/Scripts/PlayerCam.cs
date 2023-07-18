@@ -6,16 +6,9 @@ using UnityEngine.Tilemaps;
 public class PlayerCam : MonoBehaviour
 {
     public Transform target;
-    void Start()
-    {
-        Vector3 targetPos = target.position;
-        targetPos.z = transform.position.z;
-        transform.position = targetPos;
-    }
     void FixedUpdate()
     {
-        Vector3 targetPos = target.position;
-        targetPos.z = transform.position.z;
+        Vector3 targetPos = new Vector3(target.position.x, target.position.y, transform.position.z);
         transform.position = targetPos;
     }
 }

@@ -49,3 +49,6 @@ TagManager:
   - name: Furniture
     uniqueID: 1508840343
     locked: 0
+  - name: UI
+    uniqueID: 1526195639
+    locked: 0

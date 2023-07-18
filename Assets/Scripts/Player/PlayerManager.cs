@@ -8,29 +8,48 @@ using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
 {
+    public enum PlayerState
+    {
+        Normal, 
+        Frozen, // Movement and world interactions not allowed (typically when in a menu)
+    }
+    PlayerState plrState;
+
     public BuildingSystem buildSys;
     Movement2D movement;
     public Tilemap tilemap;
-    public Canvas currentUI;
+    public IMenu currentMenu;
     Inventory plrInv;
+    public int interactRange = 3;
 
     private void Start()
     {
         movement = GetComponent<Movement2D>();
         plrInv = GetComponent<Inventory>();
+
+        timeLeft = cursorActiveTime;
+        Cursor.visible = false;
     }
-    public bool SetCurrentUI(Canvas thisUI)
+    public bool SetCurrentUI(IMenu thisMenu)
     {
-        if (!currentUI && thisUI)
+        if (currentMenu == null && thisMenu != null)
         {
             plrInv.HideInterface();
-            currentUI = thisUI;
+            currentMenu = thisMenu;
+            plrState = PlayerState.Frozen;
+            movement.SetPlrActive(false);
+            cursor.sprite = normalCursor;
+            cursor.color = new Color32(255, 255, 255, 255);
+
             return true;
         }
-        else if (currentUI && !thisUI)
+        else if (currentMenu != null && thisMenu == null)
         {
             plrInv.ShowInterface();
-            currentUI = null;
+            currentMenu = null;
+            plrState = PlayerState.Normal;
+            movement.SetPlrActive(true);
+            CursorOff();
             return true;
         }
         return false;
@@ -43,14 +62,18 @@ public class PlayerManager : MonoBehaviour
     }
     public bool isInteractingWith(Vector3 pos, Vector2Int objectSize)
     {
-        Vector3Int targetedPos = tilemap.WorldToCell(movement.GetInteractArea());
-        Vector3Int originPos = tilemap.WorldToCell(pos);
-        for (int i = 0; i < objectSize.x; i++) {
-            for (int j = 0; j < objectSize.y; j++)
+        if (plrState == PlayerState.Normal)
+        {
+            Vector3Int targetedPos = tilemap.WorldToCell(movement.GetInteractArea());
+            Vector3Int originPos = tilemap.WorldToCell(pos);
+            for (int i = 0; i < objectSize.x; i++)
             {
-                if (new Vector3Int(originPos.x + i, originPos.y + j, originPos.z) == targetedPos)
+                for (int j = 0; j < objectSize.y; j++)
                 {
-                    return true;
+                    if (new Vector3Int(originPos.x + i, originPos.y + j, originPos.z) == targetedPos)
+                    {
+                        return true;
+                    }
                 }
             }
         }
@@ -73,7 +96,7 @@ public class PlayerManager : MonoBehaviour
 
 
     // Input handler
-    [HideInInspector] public GameObject pointerOn;
+    Interactable pointerOn;
     public GameObject GetPointerOn()
     {
         Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -97,9 +120,9 @@ public class PlayerManager : MonoBehaviour
     public bool CheckOnUI()
     {
         // Check on UI
-        if (currentUI != null)
+        if (currentMenu != null)
         {
-            GraphicRaycaster gr = currentUI.gameObject.GetComponent<GraphicRaycaster>();
+            GraphicRaycaster gr = currentMenu.GetGraphicRaycaster();
             PointerEventData ped = new PointerEventData(null);
             ped.position = Input.mousePosition;
             List<RaycastResult> results = new List<RaycastResult>();
@@ -108,18 +131,127 @@ public class PlayerManager : MonoBehaviour
         }
         return false;
     }
-    public delegate void MyDelegate();
-    public MyDelegate onMouseDown;
+    public float cursorActiveTime = 5f;
+    float timeLeft;
+    bool cursorMoving = false;
+    bool cursorOn = true;
+    public Image cursor;
+    public Sprite interactCursor;
+    public Sprite normalCursor;
+
+    void CursorOn()
+    {
+        cursorOn = true;
+        cursor.enabled = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+    void CursorOff()
+    {
+        cursorOn = false;
+        cursor.enabled = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+    bool CanInteractWith()
+    {
+        bool InRange()
+        {
+            Vector2Int plrTile = (Vector2Int)tilemap.WorldToCell(transform.position);
+            Vector2Int interactTile = (Vector2Int)tilemap.WorldToCell(pointerOn.transform.position);
+            for (int x = 0; x < pointerOn.objectSize.x; x++)
+            {
+                for (int y = 0; y < pointerOn.objectSize.y; y++)
+                {
+                    if (Vector2Int.Distance(plrTile, new Vector2Int(interactTile.x + x, interactTile.y + y)) <= interactRange)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        return pointerOn != null && pointerOn.CanInteract() && (InRange() || (pointerOn.GetComponent<BuildTrigger>() && pointerOn.GetComponent<BuildTrigger>().info.build.category == Build.ObjectType.WallDecor));
+    }
+    public void UpdateCursor()
+    {
+        if (cursorOn && plrState == PlayerState.Normal && !CheckOnUI())
+        {
+            GameObject hit = GetPointerOn();
+            if (hit != null)
+            {
+                pointerOn = hit.GetComponent<Interactable>();
+            }
+            else
+            {
+                pointerOn = null;
+            }
+            if (pointerOn != null)
+            {
+                Debug.Log("yes");
+                cursor.sprite = interactCursor;
+                if (CanInteractWith())
+                {
+                    cursor.color = new Color32(255, 255, 255, 255);
+                }
+                else
+                {
+                    cursor.color = new Color32(255, 255, 255, 128);
+                }
+            }
+            else
+            {
+                Debug.Log("no");
+                cursor.sprite = normalCursor;
+                cursor.color = new Color32(255, 255, 255, 255);
+            }
+        }
+        cursor.GetComponent<RectTransform>().position = Input.mousePosition;
+    }
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !CheckOnUI())
+        if (Input.GetAxis("Mouse X") == 0f && Input.GetAxis("Mouse Y") == 0f)
         {
-            pointerOn = GetPointerOn();
-            onMouseDown?.Invoke();
+            if (cursorOn)
+            {
+                timeLeft -= Time.deltaTime;
+                if (timeLeft <= 0)
+                {
+                    cursorOn = false;
+                    CursorOff();
+                }
+                if (movement.movementSpeed != 0f)
+                {
+                    UpdateCursor();
+                }
+            }
+            if (cursorMoving)
+            {
+                cursorMoving = false;
+            }
         }
-        if (Input.GetMouseButtonUp(0))
+        else
         {
-            pointerOn = null;
+            if (!cursorMoving)
+            {
+                cursorMoving = true;
+                timeLeft = cursorActiveTime;
+                CursorOn();
+            }
+            UpdateCursor();
+        }
+
+        if (Input.GetMouseButtonDown(0) && plrState == PlayerState.Normal && CanInteractWith() && !CheckOnUI())
+        {
+            pointerOn.Interact();
+            pointerOn.Interact(Interactable.InputType.OnClick);
+            UpdateCursor();
+        }
+        if (Input.GetKeyDown(KeyCode.RightShift))
+        {
+            if (currentMenu != null)
+            {
+                currentMenu.CloseMenu();
+            }
+            CursorOff();
         }
     }
 }

@@ -36,7 +36,7 @@ public class ShopItem : MonoBehaviour
             image.color = normalCol;
             coinImage.color = normalCol;
             canSelect = true;
-            anim.isOn = true;
+            anim.Enable();
         }
         else
         {
@@ -45,7 +45,7 @@ public class ShopItem : MonoBehaviour
             image.color = grayCol;
             coinImage.color = grayCol;
             canSelect = false;
-            anim.isOn = false;
+            anim.Disable();
         }
     }
     public void BuyItem()

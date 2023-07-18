@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 132788951810461166}
   - component: {fileID: 132788951810461167}
   - component: {fileID: 132788951810461164}
-  - component: {fileID: 284451815922905579}
+  - component: {fileID: 2449694846115817969}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -96,34 +96,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0250847ac45321149b7f514e7b3208df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectSize: {x: 1, y: 1}
+  interactKey: 13
   changeTo: Town2
   teleportTo: {fileID: 0}
---- !u!114 &284451815922905579
-MonoBehaviour:
+--- !u!61 &2449694846115817969
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 132788951810461165}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 349d70c4a4c8bf34fb6e04ffc724061b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectSize: {x: 1, y: 1}
-  interactKey: 13
-  interactAction:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 132788951810461164}
-        m_TargetAssemblyTypeName: SceneChange, Assembly-CSharp
-        m_MethodName: ChangeScene
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.625}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.22222222}
+    oldSize: {x: 1.5, y: 2.25}
+    newSize: {x: 1.5, y: 2.25}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.5, y: 2.25}
+  m_EdgeRadius: 0

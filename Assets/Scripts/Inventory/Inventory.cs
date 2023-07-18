@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Inventory : MonoBehaviour
+public class Inventory : MonoBehaviour, IMenu
 {
     public List<ItemInfo> itemInv;
     public InventoryUI barUI;
@@ -28,15 +28,18 @@ public class Inventory : MonoBehaviour
     ItemInfo movingItem;
 
     public ItemInfo firstToolObject;
-    bool interfaceOn = true;
 
     StorageManager storageManager;
     public bool storing;
 
+    Movement2D plrMovement;
+    PlayerManager plr;
+
     private void Start()
     {
         storageManager = GameObject.Find("StorageSystem").GetComponent<StorageManager>();
-        anim = gameObject.GetComponent<Animator>();
+        plrMovement = GetComponent<Movement2D>();
+        anim = GetComponent<Animator>();
         holder = transform.Find("ItemHolder");
         for (int i = 0; i < maxInv; i++)
         {
@@ -44,19 +47,49 @@ public class Inventory : MonoBehaviour
         }
         CollectItem(firstToolObject);
         SetInventories();
+        plr = FindObjectOfType<PlayerManager>();
+    }
+    bool open = false;
+    public void OpenMenu()
+    {
+        if (!open && plr.SetCurrentUI(this))
+        {
+            invCanvas.enabled = true;
+            open = true;
+        }
+    }
+    public void CloseMenu()
+    {
+        if (open && plr.SetCurrentUI(null))
+        {
+            CancelMoving();
+            invCanvas.enabled = false;
+            open = false;
+
+        }
+    }
+    public void ToggleInv()
+    {
+        if (open)
+        {
+            CloseMenu();
+        }
+        else
+        {
+            OpenMenu();
+        }
+    }
+    public GraphicRaycaster GetGraphicRaycaster()
+    {
+        return invCanvas.GetComponent<GraphicRaycaster>();
     }
     public void ShowInterface()
     {
         hotCanvas.enabled = true;
-        interfaceOn = true;
-        GetComponent<Movement2D>().plrActive = true;
     }
     public void HideInterface()
     {
-        invCanvas.enabled = false;
         hotCanvas.enabled = false;
-        interfaceOn = false;
-        GetComponent<Movement2D>().plrActive = false;
     }
     public bool Spend(int amount, ItemInfo item = null)
     {
@@ -170,6 +203,7 @@ public class Inventory : MonoBehaviour
     void RemoveItem(List<ItemInfo> inventory, int i)
     {
         inventory[i - 1] = null;
+        plr.UpdateCursor();
     }
     public bool AddItem(List<ItemInfo> inventory, ItemInfo item, int startSlot=1, int endSlot=24)
     {
@@ -187,6 +221,8 @@ public class Inventory : MonoBehaviour
                 return true;
             }
         }
+        plr.UpdateCursor();
+        Debug.Log("Inventory full!");
         return false;
     }
     public bool DepleteItem(int slot, int amount)
@@ -199,7 +235,7 @@ public class Inventory : MonoBehaviour
         item.amount -= amount;
         if (item.amount == 0)
         {
-            itemInv[slot - 1] = null;
+            RemoveItem(itemInv, slot);
         }
         SetInventories();
         return true;
@@ -336,42 +372,28 @@ public class Inventory : MonoBehaviour
         {
             ChangeItem(itemInv[slot - 1]);
         }
-        //transform.Find("HitRange").GetComponent<Attacking>().ResetActions();
     }
     public void SelectSlot(int slot)
     {
         hotUI.SelectSlot(slot);
         ChangeSlot(slot);
+        plr.UpdateCursor();
     }
     public void HoldItem()
     {
         SpriteRenderer renderer = holder.GetComponent<SpriteRenderer>();
-        if (currentItem != null && currentItem.item != null && currentItem.item.itemType.ToString() != "Tool")
+        if (currentItem != null && currentItem.item != null)
         {
             renderer.sprite = currentItem.item.asset;
             renderer.enabled = true;
             anim.SetBool("Holding", true);
+            plrMovement.SetHolding(true);
         }
         else
         {
             renderer.enabled = false;
             anim.SetBool("Holding", false);
-        }
-    }
-    public void ToggleInv()
-    {
-        if (interfaceOn)
-        {
-            if (invCanvas.enabled == true)
-            {
-                invCanvas.enabled = false;
-                hotCanvas.enabled = true;
-            }
-            else
-            {
-                invCanvas.enabled = true;
-                hotCanvas.enabled = false;
-            }
+            plrMovement.SetHolding(false);
         }
     }
     void Update()

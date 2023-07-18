@@ -123,8 +123,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0250847ac45321149b7f514e7b3208df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectSize: {x: 1, y: 1}
+  interactKey: 13
   changeTo: Town2
   teleportTo: {fileID: 0}
+  onTrigger: 1
 --- !u!114 &122831613782998705
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CraftTrigger : MonoBehaviour
+public class CraftTrigger : Interactable
 {
     public CraftStation thisCrafting;
     CraftingSystem craftSys;
@@ -11,11 +11,11 @@ public class CraftTrigger : MonoBehaviour
     {
         craftSys = FindObjectOfType<CraftingSystem>();
     }
-    public void OpenCrafting()
+    public override void Interact()
     {
         if (craftSys && thisCrafting)
         {
-            craftSys.ToggleMenu(thisCrafting);
+            craftSys.OpenMenu(thisCrafting);
         }
     }
 }

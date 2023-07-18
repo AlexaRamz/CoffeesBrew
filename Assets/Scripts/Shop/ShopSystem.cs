@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShopSystem : MonoBehaviour
+public class ShopSystem : MonoBehaviour, IMenu
 {
     public Shop shopInfo;
-    public Canvas shopUI;
+    public Canvas canvas;
     Inventory plrInv;
     PlayerManager plr;
     public Transform container;
@@ -30,37 +30,33 @@ public class ShopSystem : MonoBehaviour
         UpdateColors();
         AnimateItemInto(item);
     }
-    public void ToggleMenu(Shop info)
-    {
-        if (shopUI.enabled)
-        {
-            CloseMenu();
-        }
-        else
-        {
-            OpenMenu(info);
-        }
-    }
+    bool open = false;
     public void OpenMenu(Shop info)
     {
-        if (plr.SetCurrentUI(shopUI))
+        if (!open && plr.SetCurrentUI(this))
         {
             shopInfo = info;
             UpdateMoneyDisplay();
-            shopUI.enabled = true;
+            canvas.enabled = true;
             plrInv.HideInterface();
             SetObjects();
+            open = true;
         }
     }
     public void CloseMenu()
     {
-        if (plr.SetCurrentUI(null))
+        if (open && plr.SetCurrentUI(null))
         {
             shopInfo = null;
-            shopUI.enabled = false;
+            canvas.enabled = false;
             plrInv.ShowInterface();
             ClearObjects();
+            open = false;
         }
+    }
+    public GraphicRaycaster GetGraphicRaycaster()
+    {
+        return canvas.GetComponent<GraphicRaycaster>();
     }
     void AnimateMoneyDisplay()
     {

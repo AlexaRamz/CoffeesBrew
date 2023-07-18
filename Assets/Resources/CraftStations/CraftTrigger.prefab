@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8426549062439436121}
   - component: {fileID: 8426549062439436118}
   - component: {fileID: 8426549062439436119}
-  - component: {fileID: -1561046401705051455}
   - component: {fileID: 1074741716}
   m_Layer: 0
   m_Name: CraftTrigger
@@ -96,10 +95,10 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.5, y: 0.34375}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.25, y: 0.2962963}
@@ -110,7 +109,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 2}
+  m_Size: {x: 2, y: 1.6875}
   m_EdgeRadius: 0
 --- !u!114 &8426549062439436119
 MonoBehaviour:
@@ -124,37 +123,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a8ff80938fd30f42b602f71a633300a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisCrafting: {fileID: 11400000, guid: 1a4afa0a3dea5904ab595e3bec241251, type: 2}
---- !u!114 &-1561046401705051455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8426549062439436116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 349d70c4a4c8bf34fb6e04ffc724061b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectSize: {x: 1, y: 1}
+  objectSize: {x: 2, y: 1}
   interactKey: 13
-  onClick: 1
-  interactAction:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8426549062439436119}
-        m_TargetAssemblyTypeName: CraftTrigger, Assembly-CSharp
-        m_MethodName: OpenCrafting
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  thisCrafting: {fileID: 11400000, guid: 1a4afa0a3dea5904ab595e3bec241251, type: 2}
 --- !u!60 &1074741716
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -180,7 +151,7 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -1, y: -0.5}
-      - {x: -1, y: 0.5}
-      - {x: 1, y: 0.5}
-      - {x: 1, y: -0.5}
+    - - {x: -0.5, y: -0.5}
+      - {x: -0.5, y: 0.5}
+      - {x: 1.5, y: 0.5}
+      - {x: 1.5, y: -0.5}

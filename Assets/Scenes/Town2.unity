@@ -11833,7 +11833,7 @@ Tilemap:
       - {fileID: 429231390683790162, guid: 06b1ce743c5ed7e459594f5d3f4ccba9, type: 3}
       - {fileID: -2361899785448363510, guid: 06b1ce743c5ed7e459594f5d3f4ccba9, type: 3}
       - {fileID: -5484289548048525504, guid: 06b1ce743c5ed7e459594f5d3f4ccba9, type: 3}
-      m_AnimationSpeed: 5
+      m_AnimationSpeed: 5.0000005
       m_AnimationTimeOffset: 0
       m_IsLooping: 1
   - first: {x: 4, y: -7, z: 0}
@@ -12559,7 +12559,7 @@ Tilemap:
       - {fileID: 429231390683790162, guid: 06b1ce743c5ed7e459594f5d3f4ccba9, type: 3}
       - {fileID: -2361899785448363510, guid: 06b1ce743c5ed7e459594f5d3f4ccba9, type: 3}
       - {fileID: -5484289548048525504, guid: 06b1ce743c5ed7e459594f5d3f4ccba9, type: 3}
-      m_AnimationSpeed: 5.0000005
+      m_AnimationSpeed: 5
       m_AnimationTimeOffset: 0
       m_IsLooping: 1
   - first: {x: 9, y: -1, z: 0}
@@ -14177,12 +14177,12 @@ PrefabInstance:
     - target: {fileID: 1701493531978380869, guid: d64421b1237603d41966b5983696ea4b,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.27294922
+      value: -0.2723999
       objectReference: {fileID: 0}
     - target: {fileID: 1701493531978380869, guid: d64421b1237603d41966b5983696ea4b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.00048828125
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1701493532052868093, guid: d64421b1237603d41966b5983696ea4b,
         type: 3}
@@ -14899,7 +14899,7 @@ PrefabInstance:
     - target: {fileID: 6160256861360528491, guid: cdf25815d07874c4fb3a2e666e7b850d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 16
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6160256861360528491, guid: cdf25815d07874c4fb3a2e666e7b850d,
         type: 3}
@@ -14951,7 +14951,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -5745800912242755600, guid: cdf25815d07874c4fb3a2e666e7b850d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: cdf25815d07874c4fb3a2e666e7b850d, type: 3}
 --- !u!4 &1011649982 stripped
 Transform:

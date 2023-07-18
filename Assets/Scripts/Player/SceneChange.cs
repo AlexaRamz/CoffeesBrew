@@ -4,31 +4,33 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class SceneChange : MonoBehaviour
+public class SceneChange : Interactable
 {
     public string changeTo;
     public Transform teleportTo;
     SceneChangeManager manager;
+    public bool onTrigger;
 
     void Start()
     {
         manager = FindObjectOfType<SceneChangeManager>();
     }
-    bool Debounce = false;
+    public override void Interact()
+    {
+        if (!onTrigger)
+        {
+            ChangeScene();
+        }
+    }
     public void ChangeScene()
     {
-        if (!Debounce)
+        if (teleportTo != null)
         {
-            Debounce = true;
-            if (teleportTo != null)
-            {
-                manager.StartCoroutine(manager.TeleportTo(teleportTo.position));
-            }
-            else
-            {
-                manager.StartCoroutine(manager.LoadScene(changeTo));
-            }
-            Debounce = false;
+            manager.StartCoroutine(manager.TeleportTo(teleportTo.position));
+        }
+        else
+        {
+            manager.StartCoroutine(manager.LoadScene(changeTo));
         }
     }
 }

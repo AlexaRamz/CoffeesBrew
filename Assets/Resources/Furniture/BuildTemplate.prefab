@@ -95,6 +95,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc374c4517080147b3f03ff182e1a63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectSize: {x: 1, y: 1}
+  interactKey: 13
+  onClick: 1
   info:
     build: {fileID: 0}
     rot: 0

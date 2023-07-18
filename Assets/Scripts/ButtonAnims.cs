@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class ButtonAnims : MonoBehaviour
 {
-    public bool isOn = true;
     public float expandScale = 1.05f;
     public float shrinkScale = 0.95f;
 
@@ -16,16 +15,17 @@ public class ButtonAnims : MonoBehaviour
     }
     public void ExpandOn()
     {
-        GetComponent<RectTransform>().localScale = new Vector3(expandScale, expandScale, 1.0f);
+        if (_enabled) GetComponent<RectTransform>().localScale = new Vector3(expandScale, expandScale, 1.0f);
     }
     public void ShrinkOn()
     {
-        GetComponent<RectTransform>().localScale = new Vector3(shrinkScale, shrinkScale, 1.0f);
+        if (_enabled) GetComponent<RectTransform>().localScale = new Vector3(shrinkScale, shrinkScale, 1.0f);
     }
     public void SizeOff()
     {
         GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
     }
+
     IEnumerator PopOff()
     {
         yield return new WaitForSeconds(0.1f);
@@ -36,6 +36,7 @@ public class ButtonAnims : MonoBehaviour
         ShrinkOn();
         StartCoroutine(PopOff());
     }
+
     public void RotateOn()
     {
         GetComponent<RectTransform>().rotation = Quaternion.Euler(new Vector3(0, 0, -7));
@@ -44,6 +45,7 @@ public class ButtonAnims : MonoBehaviour
     {
         GetComponent<RectTransform>().rotation = Quaternion.Euler(new Vector3(0, 0, 0));
     }
+
     public void PressedSprite(Sprite pressedSprite)
     {
         GetComponent<Image>().sprite = pressedSprite;
@@ -52,32 +54,35 @@ public class ButtonAnims : MonoBehaviour
     {
         GetComponent<Image>().sprite = buttonSprite;
     }
+    bool _enabled = true;
     //Basic Expanding Button
     bool inRange = false;
     bool pressing = false;
+    public void Enable()
+    {
+        _enabled = true;
+    }
+    public void Disable()
+    {
+        _enabled = false;
+    }
     public void PointerEnter()
     {
-        if (isOn)
-        {
-            inRange = true;
-            ExpandOn();
-        }
+        inRange = true;
+        ExpandOn();
     }
     public void PointerExit()
     {
         inRange = false;
-        if (pressing == false)
+        if (!pressing)
         {
             SizeOff();
         }
     }
     public void PointerDown()
     {
-        if (isOn)
-        {
-            pressing = true;
-            ShrinkOn();
-        }
+        pressing = true;
+        ShrinkOn();
     }
     public void PointerUp()
     {

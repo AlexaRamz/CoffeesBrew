@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StorageTrigger : MonoBehaviour
+public class StorageTrigger : Interactable
 {
     StorageManager manager;
     public List<ItemInfo> items;
@@ -12,8 +12,8 @@ public class StorageTrigger : MonoBehaviour
     {
         manager = FindObjectOfType<StorageManager>();
     }
-    public void OpenStorage()
+    public override void Interact()
     {
-        manager.ToggleMenu(this, items, maxInventory);
+        manager.OpenMenu(this, items, maxInventory);
     }
 }

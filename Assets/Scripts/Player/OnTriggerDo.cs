@@ -11,22 +11,27 @@ public class OnTriggerDo : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (tags.Count == 0)
+        if (!col.isTrigger)
         {
-            actionOnEnter.Invoke();
-        }
-        foreach (string thisTag in tags)
-        {
-            if (col.gameObject.tag == thisTag)
+            if (tags.Count == 0)
             {
                 actionOnEnter.Invoke();
-                Debug.Log("triggerEnter");
-                return;
+            }
+            foreach (string thisTag in tags)
+            {
+                if (col.gameObject.tag == thisTag)
+                {
+                    actionOnEnter.Invoke();
+                    return;
+                }
             }
         }
     }
     void OnTriggerExit2D(Collider2D col)
     {
-        actionOnExit.Invoke();
+        if (!col.isTrigger)
+        {
+            actionOnExit.Invoke();
+        }
     }
 }

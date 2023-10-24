@@ -3,30 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class OrderItem
-{
-    public Item item;
-    public int amount;
-    
-    public OrderItem(Item thisItem, int thisAmount)
-    {
-        item = thisItem;
-        amount = thisAmount;
-    }
-}
-
-[System.Serializable]
 public class Order
 {
-    public string customerName;
-    public List<OrderItem> items = new List<OrderItem>();
+    public NPC customer;
+    public List<ItemInfo> items = new List<ItemInfo>();
 
-    public Order(string thisCustomer)
+    public Order(NPC thisCustomer)
     {
-        customerName = thisCustomer;
+        customer = thisCustomer;
     }
     public void AddItem(Item item, int amount)
     {
-        items.Add(new OrderItem(item, amount));
+        items.Add(new ItemInfo(item, amount));
     }
 }

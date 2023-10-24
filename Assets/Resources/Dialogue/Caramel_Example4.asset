@@ -12,13 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24500d01ccfeaf5408a12099d3b75d6f, type: 3}
   m_Name: Caramel_Example4
   m_EditorClassIdentifier: 
-  icons:
-  - icons:
-    - {fileID: -6196445788699118843, guid: 5d9f7962ce78b0144a57228a862accf1, type: 3}
-    - {fileID: 2031253488642752932, guid: 5d9f7962ce78b0144a57228a862accf1, type: 3}
   sentences:
-  - 'Well, I think a big bouncy pile of leaves could really help this place attract
-    more customers.
-
-    If only leaves weren''t so messy.'
+  - text: That's too bad. Maybe you'd get more customers if you did.
+    emotion: 0
+  - text: If only leaves weren't so messy.
+    emotion: 8
   responses: []

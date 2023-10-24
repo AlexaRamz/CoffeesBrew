@@ -79,9 +79,9 @@ public class Inventory : MonoBehaviour, IMenu
             OpenMenu();
         }
     }
-    public GraphicRaycaster GetGraphicRaycaster()
+    public Canvas GetCanvas()
     {
-        return invCanvas.GetComponent<GraphicRaycaster>();
+        return invCanvas;
     }
     public void ShowInterface()
     {
@@ -310,6 +310,7 @@ public class Inventory : MonoBehaviour, IMenu
         if (CheckItem(item))
         {
             Give(item);
+            SetInventories();
             return true;
         }
         return false;
@@ -359,6 +360,7 @@ public class Inventory : MonoBehaviour, IMenu
             {
                 Give(it);
             }
+            SetInventories();
             return true;
         }
         return false;

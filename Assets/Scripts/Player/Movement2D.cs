@@ -5,22 +5,18 @@ using UnityEngine.Rendering;
 
 public class Movement2D : MonoBehaviour
 {
-    public float moveSpeed = 5f;
+    public float walkSpeed = 5f;
     Rigidbody2D rb;
-    Vector2 movement;
-    string lastDir = "none";
-
     Animator anim;
-    public float movementSpeed;
+    
     bool plrActive = true;
+    Vector2 movementDir;
+    [HideInInspector] public float currentSpeed = 0f;
 
     public enum Direction { Up, Down, Left, Right};
-    [HideInInspector] public Direction facing = Direction.Up;
-
-    public Collider2D upTrigger;
-    public Collider2D downTrigger;
-    public Collider2D leftTrigger;
-    public Collider2D rightTrigger;
+    [HideInInspector] public Direction facing = Direction.Down;
+    enum Axis { Horizontal, Vertical, None };
+    Axis lastAxis = Axis.None; // Helps to predict facing direction for diagonal movement
 
     public SortingGroup itemHolder;
 
@@ -28,23 +24,7 @@ public class Movement2D : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-    }
-    public Vector3 GetInteractArea()
-    {
-        Vector3 pos = transform.position;
-        switch (facing)
-        {
-            case Direction.Up:
-                return pos + new Vector3(0, 1, 0);
-            case Direction.Down:
-                return pos + new Vector3(0, -1, 0);
-            case Direction.Left:
-                return pos + new Vector3(-1, 0, 0);
-            case Direction.Right:
-                return pos + new Vector3(1, 0, 0);
-            default:
-                return Vector3.zero;
-        }
+        lastPosition = transform.position;
     }
     public void SetPlrActive(bool active)
     {
@@ -55,34 +35,26 @@ public class Movement2D : MonoBehaviour
             Animate();
         }
     }
-    // Determine whether there is a collision in direction currently facing
-    bool colliding = false;
-    public void SetCollidingBool(bool b)
+    public Vector2 GetFacingDirection()
     {
-        colliding = b;
-    }
-    void SetTriggerDirection()
-    {
-        upTrigger.enabled = false;
-        downTrigger.enabled = false;
-        leftTrigger.enabled = false;
-        rightTrigger.enabled = false;
-
         switch (facing)
         {
             case Direction.Up:
-                upTrigger.enabled = true;
-                return;
+                return new Vector2(0, 1);
             case Direction.Down:
-                downTrigger.enabled = true;
-                return;
+                return new Vector2(0, -1);
             case Direction.Left:
-                leftTrigger.enabled = true;
-                return;
+                return new Vector2(-1, 0);
             case Direction.Right:
-                rightTrigger.enabled = true;
-                return;
+                return new Vector2(1, 0);
+            default:
+                return Vector3.zero;
         }
+    }
+    public Vector3 GetInteractArea()
+    {
+        Vector3 pos = transform.position;
+        return pos + (Vector3)GetFacingDirection();
     }
     bool holding = false;
     public void SetHolding(bool hold)
@@ -105,69 +77,28 @@ public class Movement2D : MonoBehaviour
     {
         facing = dir;
         UpdateHoldingSortOrder();
-        SetTriggerDirection();
     }
-    void SetFacing()
+    public void SetFacing(Vector2Int dir)
     {
-        if (plrActive)
+        if (dir == new Vector2Int(0, 1))
         {
-            Vector2 inputs = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-            if (lastDir == "vertical")
-            {
-                if (inputs.x > 0f)
-                {
-                    facing = Direction.Right;
-                }
-                else if (inputs.x < 0f)
-                {
-                    facing = Direction.Left;
-                }
-            }
-            else if (lastDir == "horizontal")
-            {
-                if (inputs.y > 0f)
-                {
-                    facing = Direction.Up;
-                }
-                else if (inputs.y < 0f)
-                {
-                    facing = Direction.Down;
-                }
-            }
-            UpdateHoldingSortOrder();
-            SetTriggerDirection();
+            SetFacing(Direction.Up);
         }
-    }
-    void Update()
-    {
-        if (plrActive)
+        else if (dir == new Vector2Int(0, -1))
         {
-            if (Input.GetKeyDown("up"))
-            {
-                lastDir = "vertical";
-                SetFacing(Direction.Up);
-            }
-            else if (Input.GetKeyDown("down"))
-            {
-                lastDir = "vertical";
-                SetFacing(Direction.Down);
-            }
-            else if (Input.GetKeyDown("left"))
-            {
-                lastDir = "horizontal";
-                SetFacing(Direction.Left);
-            }
-            else if (Input.GetKeyDown("right"))
-            {
-                lastDir = "horizontal";
-                SetFacing(Direction.Right);
-            }
-            if (Input.GetKeyUp("up") || Input.GetKeyUp("down") || Input.GetKeyUp("right") || Input.GetKeyUp("left"))
-            {
-                SetFacing();
-            }
+            SetFacing(Direction.Down);
         }
+        else if (dir == new Vector2Int(-1, 0))
+        {
+            SetFacing(Direction.Left);
+        }
+        else if (dir == new Vector2Int(1, 0))
+        {
+            SetFacing(Direction.Right);
+        }
+        Animate();
     }
+
     void FixedUpdate()
     {
         if (plrActive)
@@ -176,48 +107,105 @@ public class Movement2D : MonoBehaviour
             Animate();
         }
     }
-
-    void ProcessInputs()
+    void UpdateFacingDirection()
     {
-        if (plrActive && !colliding)
+        if (movementDir.x == 0f)
         {
-            movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-            if (movement.x == 0f && movement.y != 0f)
+            if (movementDir.y > 0f)
             {
-                lastDir = "vertical";
+                facing = Direction.Up;
+                lastAxis = Axis.Vertical;
             }
-            else if (movement.x != 0f && movement.y == 0f)
+            else if (movementDir.y < 0f)
             {
-                lastDir = "horizontal";
+                facing = Direction.Down;
+                lastAxis = Axis.Vertical;
             }
-
-            // Pay attention to the direction of most recently pressed key
-            if (lastDir == "horizontal")
+        }
+        else if (movementDir.y == 0f)
+        {
+            if (movementDir.x > 0f)
             {
-                movement.y = 0f;
+                facing = Direction.Right;
+                lastAxis = Axis.Horizontal;
             }
-            else if (lastDir == "vertical")
+            else if (movementDir.x < 0f)
             {
-                movement.x = 0f;
+                facing = Direction.Left;
+                lastAxis = Axis.Horizontal;
             }
-
-            movementSpeed = Mathf.Clamp(movement.magnitude, 0.0f, 1.0f);
-            rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
-
+        }
+        else if (movementDir == Vector2.zero)
+        {
+            lastAxis = Axis.None;
         }
         else
         {
-            movement = Vector2.zero;
-            movementSpeed = 0f;
+            if (lastAxis == Axis.Horizontal)
+            {
+                if (movementDir.x > 0f)
+                {
+                    facing = Direction.Right;
+                }
+                else if (movementDir.x < 0f)
+                {
+                    facing = Direction.Left;
+                }
+            }
+            else if (lastAxis == Axis.Vertical)
+            {
+                if (movementDir.y > 0f)
+                {
+                    facing = Direction.Up;
+                }
+                else if (movementDir.y < 0f)
+                {
+                    facing = Direction.Down;
+                }
+            }
+        }
+        UpdateHoldingSortOrder();
+    }
+    float stoppingTolerance = 0.001f;
+    bool colliding = false;
+    Vector2 lastPosition;
+    void ProcessInputs()
+    {
+        if (plrActive)
+        {
+            colliding = Vector2.Distance(transform.position, lastPosition) < stoppingTolerance;
+            lastPosition = transform.position;
+
+            movementDir = (new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"))).normalized;
+            if (movementDir != Vector2.zero)
+            {
+                currentSpeed = walkSpeed;
+                UpdateFacingDirection();
+                rb.MovePosition(rb.position + movementDir * walkSpeed * Time.fixedDeltaTime);
+            }
+            else
+            {
+                currentSpeed = 0f;
+            }
+        }
+        else
+        {
+            movementDir = Vector2.zero;
+            currentSpeed = 0f;
         }
     }
     void Animate()
     {
-        if (movement != Vector2.zero)
+        Vector2 dir = GetFacingDirection();
+        anim.SetFloat("Horizontal", dir.x);
+        anim.SetFloat("Vertical", dir.y);
+        if (!colliding)
         {
-            anim.SetFloat("Horizontal", movement.x);
-            anim.SetFloat("Vertical", movement.y);
+            anim.SetFloat("Speed", currentSpeed);
         }
-        anim.SetFloat("Speed", movementSpeed);
+        else
+        {
+            anim.SetFloat("Speed", 0f);
+        }
     }
 }

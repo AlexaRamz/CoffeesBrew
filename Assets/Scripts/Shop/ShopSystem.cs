@@ -54,9 +54,9 @@ public class ShopSystem : MonoBehaviour, IMenu
             open = false;
         }
     }
-    public GraphicRaycaster GetGraphicRaycaster()
+    public Canvas GetCanvas()
     {
-        return canvas.GetComponent<GraphicRaycaster>();
+        return canvas;
     }
     void AnimateMoneyDisplay()
     {

@@ -9,6 +9,11 @@ public class OnTriggerDo : MonoBehaviour
     public UnityEvent actionOnExit;
     public List<string> tags;
 
+    List<GameObject> objectsInRange = new List<GameObject>();
+    public List<GameObject> GetObjectsInRange()
+    {
+        return objectsInRange;
+    }
     void OnTriggerEnter2D(Collider2D col)
     {
         if (!col.isTrigger)
@@ -16,12 +21,14 @@ public class OnTriggerDo : MonoBehaviour
             if (tags.Count == 0)
             {
                 actionOnEnter.Invoke();
+                objectsInRange.Add(col.gameObject);
             }
             foreach (string thisTag in tags)
             {
                 if (col.gameObject.tag == thisTag)
                 {
                     actionOnEnter.Invoke();
+                    objectsInRange.Add(col.gameObject);
                     return;
                 }
             }
@@ -31,7 +38,24 @@ public class OnTriggerDo : MonoBehaviour
     {
         if (!col.isTrigger)
         {
-            actionOnExit.Invoke();
+            if (tags.Count == 0)
+            {
+                actionOnExit.Invoke();
+                objectsInRange.Remove(col.gameObject);
+            }
+            foreach (string thisTag in tags)
+            {
+                if (col.gameObject.tag == thisTag)
+                {
+                    actionOnExit.Invoke();
+                    bool objectMatches(GameObject obj)
+                    {
+                        return obj == col.gameObject;
+                    }
+                    objectsInRange.RemoveAll(objectMatches);
+                    return;
+                }
+            }
         }
     }
 }

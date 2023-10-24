@@ -9,7 +9,7 @@ public class UI_Building : MonoBehaviour, IMenu
     PlayerManager plr;
     public GameObject slotTemplate;
     public Transform container;
-    public ArrowScrolling scroll;
+    //public ArrowScrolling scroll;
     [SerializeField] private Image doneButton;
     Canvas canvas;
     public GameObject OptionUI;
@@ -47,9 +47,9 @@ public class UI_Building : MonoBehaviour, IMenu
             open = false;
         }
     }
-    public GraphicRaycaster GetGraphicRaycaster()
+    public Canvas GetCanvas()
     {
-        return canvas.GetComponent<GraphicRaycaster>();
+        return canvas;
     }
     public void CancelPlace()
     {
@@ -86,7 +86,7 @@ public class UI_Building : MonoBehaviour, IMenu
     public void SetObjects(List<Build> objectList)
     {
         ClearObjects();
-        scroll.UpdateScroll();
+        //scroll.UpdateScroll();
         foreach (Build build in objectList)
         {
             Instantiate(slotTemplate, container).GetComponent<BuildObject>().SetObject(build);
@@ -95,7 +95,7 @@ public class UI_Building : MonoBehaviour, IMenu
     public void SetObjects(List<BuildAmount> objectList)
     {
         ClearObjects();
-        scroll.UpdateScroll();
+        //scroll.UpdateScroll();
         foreach (BuildAmount info in objectList)
         {
             Instantiate(slotTemplate, container).GetComponent<BuildObject>().SetObject(info.build);
@@ -104,7 +104,7 @@ public class UI_Building : MonoBehaviour, IMenu
     public void SetItems(List<Item> itemList)
     {
         ClearObjects();
-        scroll.UpdateScroll();
+        //scroll.UpdateScroll();
         foreach (Item item in itemList)
         {
             Instantiate(slotTemplate, container).GetComponent<BuildObject>().SetItem(item);

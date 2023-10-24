@@ -5,22 +5,20 @@ using UnityEngine;
 [System.Serializable]
 public class Response
 {
-    public string Name;
-
-    public Dialogue newDialogue;
+    public string text;
+    public Dialogue nextDialogue;
 }
 [System.Serializable]
-public class IconSet
+public class TextIconSet
 {
-    public Sprite[] icons;
+    [TextArea(3, 10)]
+    public string text;
+    public NPC.Emotion emotion;
 }
 [CreateAssetMenu(fileName = "New Dialogue", menuName = "Dialogue")]
 public class Dialogue : ScriptableObject
 {
-    public IconSet[] icons;
-
-    [TextArea(3, 10)]
-    public string[] sentences;
+    public List<TextIconSet> sentences;
     //responses, if any, appear after final sentence
-    public Response[] responses;
+    public List<Response> responses;
 }

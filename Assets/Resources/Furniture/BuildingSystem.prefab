@@ -696,7 +696,6 @@ GameObject:
   m_Component:
   - component: {fileID: 965972501}
   - component: {fileID: 965972503}
-  - component: {fileID: 965972502}
   - component: {fileID: 3939972764073988365}
   - component: {fileID: 4427739433224317098}
   - component: {fileID: 2295647033191405134}
@@ -757,22 +756,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &965972502
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 965972500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e1c11e1f13575b48bdd4d43d72a92f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  leftButton: {fileID: 0}
-  rightButton: {fileID: 0}
-  rect: {fileID: 965972503}
-  container: {fileID: 784452865}
 --- !u!114 &3939972764073988365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1141,7 +1124,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1165104342
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1500,7 +1483,7 @@ MonoBehaviour:
   slotTemplate: {fileID: 285130263891623955, guid: 99d5f466e2cd35b46bc011181c659c73,
     type: 3}
   container: {fileID: 784452865}
-  scroll: {fileID: 965972502}
+  scroll: {fileID: 0}
   doneButton: {fileID: 484291570}
   OptionUI: {fileID: 427574987}
 --- !u!1 &1759616943
@@ -1536,7 +1519,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}

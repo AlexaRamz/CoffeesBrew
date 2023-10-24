@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OrderUI : MonoBehaviour
+public class OrderUI : MonoBehaviour, IMenu
 {
     OrderSystem orderSys;
     Canvas canvas;
@@ -17,6 +17,7 @@ public class OrderUI : MonoBehaviour
     public Image customerNumIcon;
     public GameObject chatButton;
     SceneChangeManager effectManager;
+    PlayerManager plr;
 
     void Start()
     {
@@ -24,15 +25,47 @@ public class OrderUI : MonoBehaviour
         canvas = GetComponent<Canvas>();
         effectManager = FindObjectOfType<SceneChangeManager>();
         customerAnim = customerImage.GetComponent<Animator>();
+        plr = FindObjectOfType<PlayerManager>();
     }
 
+    public void OpenMenu()
+    {
+        if (!plr.SetCurrentUI(this)) return;
+        StartCoroutine(OpenMenuC());
+        IEnumerator OpenMenuC()
+        {
+            anim.SetBool("Hide", true);
+            yield return StartCoroutine(effectManager.FadeToBlack());
+            canvas.enabled = true;
+            anim.SetBool("Hide", false);
+            yield return StartCoroutine(effectManager.FadeToClear());
+        }
+    }
+    public void CloseMenu() // Called when click on close button
+    {
+        if (!plr.SetCurrentUI(null)) return;
+        mainButton.SetState(OrderButton.OrderState.Off);
+        StartCoroutine(CloseMenuC());
+        IEnumerator CloseMenuC()
+        {
+            yield return StartCoroutine(effectManager.FadeToBlack());
+            orderSys.CloseMenu();
+            canvas.enabled = false;
+            ClearPortrait();
+            yield return StartCoroutine(effectManager.FadeToClear());
+        }
+    }
+    public Canvas GetCanvas()
+    {
+        return canvas;
+    }
     public void MainAction() // Called when click on main button
     {
         if (orderSys.takingOrder)
         {
             orderSys.TakeOrder();
         }
-        else if (orderSys.customerCount > 0)
+        else if (orderSys.GetCustomerCount() > 0)
         {
             ClearItems();
             orderSys.NextOrder();
@@ -49,7 +82,7 @@ public class OrderUI : MonoBehaviour
         chatButton.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
         chatButton.transform.Find("Image").GetComponent<Image>().color = new Color32(255, 255, 255, 255);
 
-        if (orderSys.customerCount == 0)
+        if (orderSys.GetCustomerCount() == 0)
         {
             mainButton.SetState(OrderButton.OrderState.Done);
         }
@@ -81,7 +114,7 @@ public class OrderUI : MonoBehaviour
     }
     IEnumerator ListOrders(Order order)
     {
-        foreach (OrderItem item in order.items)
+        foreach (ItemInfo item in order.items)
         {
             yield return new WaitForSeconds(0.5f);
             Transform displayItem = Instantiate(itemTemplate, container).transform;
@@ -148,30 +181,5 @@ public class OrderUI : MonoBehaviour
     {
         anim.SetBool("Hide", false);
         customerAnim.SetBool("Center", false);
-    }
-    public void OpenMenu()
-    {
-        StartCoroutine(OpenMenuC());
-        IEnumerator OpenMenuC()
-        {
-            anim.SetBool("Hide", true);
-            yield return StartCoroutine(effectManager.FadeToBlack());
-            canvas.enabled = true;
-            anim.SetBool("Hide", false);
-            yield return StartCoroutine(effectManager.FadeToClear());
-        }
-    }
-    public void CloseMenu() // Called when click on close button
-    {
-        mainButton.SetState(OrderButton.OrderState.Off);
-        StartCoroutine(CloseMenuC());
-        IEnumerator CloseMenuC()
-        {
-            yield return StartCoroutine(effectManager.FadeToBlack());
-            orderSys.CloseMenu();
-            canvas.enabled = false;
-            ClearPortrait();
-            yield return StartCoroutine(effectManager.FadeToClear());
-        }
     }
 }

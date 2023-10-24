@@ -12,15 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24500d01ccfeaf5408a12099d3b75d6f, type: 3}
   m_Name: Sunny_1
   m_EditorClassIdentifier: 
-  icons:
-  - icons:
-    - {fileID: 8704577686259019366, guid: 9da9ad3752ad2364585c1936cc89153b, type: 3}
-  - icons:
-    - {fileID: 8704577686259019366, guid: 9da9ad3752ad2364585c1936cc89153b, type: 3}
-  - icons:
-    - {fileID: -4150089604302750404, guid: 9da9ad3752ad2364585c1936cc89153b, type: 3}
   sentences:
-  - Oh hi
-  - I'm Sunny
-  - ...
+  - text: Oh hi
+    emotion: 0
+  - text: I'm Sunny
+    emotion: 0
+  - text: ...
+    emotion: 7
   responses: []

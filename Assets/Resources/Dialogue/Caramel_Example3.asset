@@ -12,15 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24500d01ccfeaf5408a12099d3b75d6f, type: 3}
   m_Name: Caramel_Example3
   m_EditorClassIdentifier: 
-  icons:
-  - icons:
-    - {fileID: -5002853125219375647, guid: 5d9f7962ce78b0144a57228a862accf1, type: 3}
-    - {fileID: -6196445788699118843, guid: 5d9f7962ce78b0144a57228a862accf1, type: 3}
-  - icons:
-    - {fileID: -6196445788699118843, guid: 5d9f7962ce78b0144a57228a862accf1, type: 3}
   sentences:
-  - 'Really?
+  - text: 'Really?
 
-    You and I must think a lot alike then.'
-  - It actually wouldn't be a bad way to attract more customers don't you think?
+      You and I must think a lot alike then.'
+    emotion: 1
+  - text: I bet you'd get alot more customers that way don't you think?
+    emotion: 0
   responses: []

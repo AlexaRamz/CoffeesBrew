@@ -12,14 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24500d01ccfeaf5408a12099d3b75d6f, type: 3}
   m_Name: Opening_1
   m_EditorClassIdentifier: 
-  icons:
-  - icons:
-    - {fileID: 21300000, guid: 3a865db6dfdf6a449bbdb38d01f3b9e4, type: 3}
-  - icons:
-    - {fileID: 21300000, guid: 3a865db6dfdf6a449bbdb38d01f3b9e4, type: 3}
   sentences:
-  - 'Huh.
-
-    This place looks emptier than I remember.'
-  - I'm sure with a little bit of work I can get this place up and running again.
+  - text: "Huh.\r\nThis place looks emptier than I remember.\r"
+    emotion: 0
+  - text: I'm sure with a little bit of work I can get this place up and running
+      again.
+    emotion: 0
   responses: []

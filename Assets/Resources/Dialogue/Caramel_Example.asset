@@ -12,12 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24500d01ccfeaf5408a12099d3b75d6f, type: 3}
   m_Name: Caramel_Example
   m_EditorClassIdentifier: 
-  icons:
-  - icons:
-    - {fileID: -6196445788699118843, guid: 5d9f7962ce78b0144a57228a862accf1, type: 3}
-  - icons:
-    - {fileID: -5002853125219375647, guid: 5d9f7962ce78b0144a57228a862accf1, type: 3}
   sentences:
-  - You wouldn't believe all the leaves I found by the bridge today!
-  - If I wasn't so busy, I'd go jump in those leaves for hours!
+  - text: You wouldn't believe all the leaves I found by the bridge today!
+    emotion: 0
+  - text: If I wasn't so busy, I'd go jump in those leaves for hours!
+    emotion: 8
   responses: []

@@ -12,22 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24500d01ccfeaf5408a12099d3b75d6f, type: 3}
   m_Name: Shelly_Example
   m_EditorClassIdentifier: 
-  icons:
-  - icons:
-    - {fileID: 8660069427779853909, guid: 938fb24f56a34ef448bf4d30eb6fcfe3, type: 3}
-  - icons:
-    - {fileID: 8660069427779853909, guid: 938fb24f56a34ef448bf4d30eb6fcfe3, type: 3}
-    - {fileID: -1636263951254327417, guid: 938fb24f56a34ef448bf4d30eb6fcfe3, type: 3}
   sentences:
-  - 'Oh hey!
+  - text: 'Oh hey!
 
-    This place is starting to look great don''t you think?'
-  - 'I''d love to draw this place some day.
+      This place is starting to look great don''t you think?'
+    emotion: 0
+  - text: 'I''d love to draw this place some day.
 
-    If you''ve got 8 hours to spare,
-    that is.'
+      If you''ve got 8 hours to
+      spare, that is.'
+    emotion: 7
   responses:
-  - Name: Yes
-    newDialogue: {fileID: 11400000, guid: 0195cda370e590a4792957f92498ceee, type: 2}
-  - Name: No
-    newDialogue: {fileID: 11400000, guid: 0195cda370e590a4792957f92498ceee, type: 2}
+  - text: Yes
+    nextDialogue: {fileID: 11400000, guid: 0195cda370e590a4792957f92498ceee, type: 2}
+  - text: No
+    nextDialogue: {fileID: 11400000, guid: 0195cda370e590a4792957f92498ceee, type: 2}

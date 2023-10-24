@@ -20,7 +20,8 @@ public class PlayerManager : MonoBehaviour
     public Tilemap tilemap;
     public IMenu currentMenu;
     Inventory plrInv;
-    public int interactRange = 3;
+    public OnTriggerDo interactTrigger;
+    public OnTriggerDo pointerTrigger;
 
     private void Start()
     {
@@ -30,6 +31,7 @@ public class PlayerManager : MonoBehaviour
         timeLeft = cursorActiveTime;
         Cursor.visible = false;
     }
+
     public bool SetCurrentUI(IMenu thisMenu)
     {
         if (currentMenu == null && thisMenu != null)
@@ -40,7 +42,6 @@ public class PlayerManager : MonoBehaviour
             movement.SetPlrActive(false);
             cursor.sprite = normalCursor;
             cursor.color = new Color32(255, 255, 255, 255);
-
             return true;
         }
         else if (currentMenu != null && thisMenu == null)
@@ -55,40 +56,26 @@ public class PlayerManager : MonoBehaviour
         return false;
     }
 
-    public bool isInteractingWith(Vector3 pos)
+    Interactable GetInteractingWith()
     {
-        Vector3Int targetedPos = tilemap.WorldToCell(movement.GetInteractArea());
-        return targetedPos == tilemap.WorldToCell(pos);
-    }
-    public bool isInteractingWith(Vector3 pos, Vector2Int objectSize)
-    {
-        if (plrState == PlayerState.Normal)
+        List<GameObject> objectsInRange = interactTrigger.GetObjectsInRange();
+        Interactable closestObject = null;
+        float closestDistance = 100f;
+        foreach (GameObject obj in objectsInRange) // Priotize interactable closest to the facing direction and within 90 degrees
         {
-            Vector3Int targetedPos = tilemap.WorldToCell(movement.GetInteractArea());
-            Vector3Int originPos = tilemap.WorldToCell(pos);
-            for (int i = 0; i < objectSize.x; i++)
+            if (obj.GetComponent<Interactable>() != null)
             {
-                for (int j = 0; j < objectSize.y; j++)
+                float distance = Vector2.Distance((obj.transform.position - transform.position).normalized, movement.GetFacingDirection());
+                if (distance < closestDistance) // distance < Mathf.Sqrt(2)
                 {
-                    if (new Vector3Int(originPos.x + i, originPos.y + j, originPos.z) == targetedPos)
-                    {
-                        return true;
-                    }
+                    closestObject = obj.GetComponent<Interactable>();
+                    closestDistance = distance;
                 }
             }
         }
-        return false;
+        return closestObject;
     }
-    public bool isInteractingWithObject(GameObject obj)
-    {
-        if (buildSys)
-        {
-            Vector2Int arrayPos = GetInteractArrayPos();
-            GameObject targetedObj = buildSys.GetValue(arrayPos.x, arrayPos.y);
-            return targetedObj == obj;
-        }
-        return false;
-    }
+
     public Vector2Int GetInteractArrayPos()
     {
         return buildSys.WorldToArray(movement.GetInteractArea());
@@ -97,6 +84,7 @@ public class PlayerManager : MonoBehaviour
 
     // Input handler
     Interactable pointerOn;
+    Interactable previousPointerOn;
     public GameObject GetPointerOn()
     {
         Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -104,7 +92,7 @@ public class PlayerManager : MonoBehaviour
         List<GameObject> Objects = new List<GameObject>();
         for (int i = 0; i < hits.Length; i++)
         {
-            if (hits[i].collider != null && (hits[i].collider.gameObject.GetComponent<BuildTrigger>() || hits[i].collider.gameObject.GetComponent<Interactable>()))
+            if (hits[i].collider != null && hits[i].collider.gameObject.GetComponent<Interactable>())
             {
                 Objects.Add(hits[i].collider.gameObject);
             }
@@ -122,7 +110,7 @@ public class PlayerManager : MonoBehaviour
         // Check on UI
         if (currentMenu != null)
         {
-            GraphicRaycaster gr = currentMenu.GetGraphicRaycaster();
+            GraphicRaycaster gr = currentMenu.GetCanvas().GetComponent<GraphicRaycaster>();
             PointerEventData ped = new PointerEventData(null);
             ped.position = Input.mousePosition;
             List<RaycastResult> results = new List<RaycastResult>();
@@ -155,16 +143,12 @@ public class PlayerManager : MonoBehaviour
     {
         bool InRange()
         {
-            Vector2Int plrTile = (Vector2Int)tilemap.WorldToCell(transform.position);
-            Vector2Int interactTile = (Vector2Int)tilemap.WorldToCell(pointerOn.transform.position);
-            for (int x = 0; x < pointerOn.objectSize.x; x++)
+            List<GameObject> objectsInRange = pointerTrigger.GetObjectsInRange();
+            foreach (GameObject obj in objectsInRange)
             {
-                for (int y = 0; y < pointerOn.objectSize.y; y++)
+                if (obj == pointerOn.gameObject)
                 {
-                    if (Vector2Int.Distance(plrTile, new Vector2Int(interactTile.x + x, interactTile.y + y)) <= interactRange)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
             return false;
@@ -178,7 +162,7 @@ public class PlayerManager : MonoBehaviour
             GameObject hit = GetPointerOn();
             if (hit != null)
             {
-                pointerOn = hit.GetComponent<Interactable>();
+                pointerOn = previousPointerOn = hit.GetComponent<Interactable>();
             }
             else
             {
@@ -186,7 +170,6 @@ public class PlayerManager : MonoBehaviour
             }
             if (pointerOn != null)
             {
-                Debug.Log("yes");
                 cursor.sprite = interactCursor;
                 if (CanInteractWith())
                 {
@@ -199,7 +182,6 @@ public class PlayerManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("no");
                 cursor.sprite = normalCursor;
                 cursor.color = new Color32(255, 255, 255, 255);
             }
@@ -218,7 +200,7 @@ public class PlayerManager : MonoBehaviour
                     cursorOn = false;
                     CursorOff();
                 }
-                if (movement.movementSpeed != 0f)
+                if (movement.currentSpeed != 0f)
                 {
                     UpdateCursor();
                 }
@@ -241,9 +223,20 @@ public class PlayerManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && plrState == PlayerState.Normal && CanInteractWith() && !CheckOnUI())
         {
+            if (previousPointerOn)
+            {
+                previousPointerOn.InteractOff();
+            }
             pointerOn.Interact();
             pointerOn.Interact(Interactable.InputType.OnClick);
             UpdateCursor();
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (previousPointerOn)
+            {
+                previousPointerOn.InteractOff();
+            }
         }
         if (Input.GetKeyDown(KeyCode.RightShift))
         {
@@ -252,6 +245,28 @@ public class PlayerManager : MonoBehaviour
                 currentMenu.CloseMenu();
             }
             CursorOff();
+        }
+        if (Input.GetKeyDown(KeyCode.Return) && plrState == PlayerState.Normal)
+        {
+            Interactable interact = GetInteractingWith();
+            if (interact != null)
+            {
+                previousPointerOn = interact;
+                interact.Interact();
+                interact.Interact(Interactable.InputType.OnKey);
+                Vector2 dir = (Vector2)(interact.transform.position - transform.position).normalized;
+                if (movement.currentSpeed == 0f)
+                {
+                    movement.SetFacing(new Vector2Int(Mathf.RoundToInt(dir.x), Mathf.RoundToInt(dir.y)));
+                }
+            }
+        }
+        if (Input.GetKeyUp(KeyCode.Return))
+        {
+            if (previousPointerOn)
+            {
+                previousPointerOn.InteractOff();
+            }
         }
     }
 }

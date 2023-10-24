@@ -19,41 +19,35 @@ public class StorageManager : MonoBehaviour, IMenu
         plrInv = FindObjectOfType<Inventory>();
         plr = FindObjectOfType<PlayerManager>();
     }
-    bool open = false;
     public void OpenMenu(StorageTrigger storage, List<ItemInfo> items, int maxInv)
     {
-        if (!open && plr.SetCurrentUI(this))
+        if (!plr.SetCurrentUI(this)) return;
+        ClearItems();
+        CreateItemList(maxInv);
+        thisStorage = storage;
+        int i = 0;
+        foreach (ItemInfo it in items)
         {
-            ClearItems();
-            CreateItemList(maxInv);
-            thisStorage = storage;
-            int i = 0;
-            foreach (ItemInfo it in items)
-            {
-                itemInv[i] = it;
-                i++;
-            }
-            storageUI.SetInventory(items);
-            canvas.enabled = true;
-            plrInv.storing = true;
-            plrInv.SetInventories();
-            open = true;
+            itemInv[i] = it;
+            i++;
         }
+        storageUI.SetInventory(items);
+        canvas.enabled = true;
+        plrInv.storing = true;
+        plrInv.SetInventories();
     }
     public void CloseMenu()
     {
-        if (open && plr.SetCurrentUI(null))
-        {
-            plrInv.storing = false;
-            canvas.enabled = false;
-            storageUI.ClearInventory();
-            ClearItems();
-            open = false;
-        } 
+        if (!plr.SetCurrentUI(null)) return;
+        Debug.Log("close");
+        plrInv.storing = false;
+        canvas.enabled = false;
+        storageUI.ClearInventory();
+        ClearItems();
     }
-    public GraphicRaycaster GetGraphicRaycaster()
+    public Canvas GetCanvas()
     {
-        return canvas.GetComponent<GraphicRaycaster>();
+        return canvas;
     }
     public ItemInfo GetItem(int slot)
     {

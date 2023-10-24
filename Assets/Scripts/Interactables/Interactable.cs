@@ -5,17 +5,6 @@ using UnityEngine.Events;
 
 public class Interactable : MonoBehaviour
 {
-    public Vector2Int objectSize = new Vector2Int(1, 1);
-    public KeyCode interactKey = KeyCode.Return;
-
-    void Update()
-    {
-        if (Input.GetKeyDown(interactKey) && FindObjectOfType<PlayerManager>().isInteractingWith(transform.position, objectSize))
-        {
-            Interact();
-            Interact(InputType.OnKey);
-        }
-    }
     public virtual bool CanInteract()
     {
         return true;
@@ -28,6 +17,10 @@ public class Interactable : MonoBehaviour
     {
         
     }
+    public virtual void InteractOff() // Key up or mouse click up
+    {
+
+    }
     public enum InputType
     {
         OnKey,
@@ -35,6 +28,6 @@ public class Interactable : MonoBehaviour
     }
     public virtual void Interact(InputType input) // Cares about input type
     {
-
+        
     }
 }

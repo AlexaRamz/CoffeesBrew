@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 646a388c677d32d4e99799283026c180, type: 3}
+  m_Name: Sunny
+  m_EditorClassIdentifier: 
+  portraits:
+  - emotion: 0
+    sprite: {fileID: 8704577686259019366, guid: 9da9ad3752ad2364585c1936cc89153b,
+      type: 3}
+  - emotion: 7
+    sprite: {fileID: -4150089604302750404, guid: 9da9ad3752ad2364585c1936cc89153b,
+      type: 3}
+  dialogues:
+  - {fileID: 11400000, guid: d6f55d9f7797ff242984d130b70eff35, type: 2}
+  orderFulfillDialogues:
+  - {fileID: 11400000, guid: 2e13da37fb348da42ba0057dcb5afe5d, type: 2}
+  customerInfo:
+    portrait: {fileID: 0}
+    dialogue: {fileID: 0}
+    favorites: []
+    diet: 1

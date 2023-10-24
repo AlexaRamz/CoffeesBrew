@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 646a388c677d32d4e99799283026c180, type: 3}
+  m_Name: Gallabab
+  m_EditorClassIdentifier: 
+  portraits:
+  - emotion: 0
+    sprite: {fileID: -8999218297760069264, guid: 1cc4e8e66455ef541bd32c83512e60b3,
+      type: 3}
+  - emotion: 9
+    sprite: {fileID: 1443991765188586448, guid: 1cc4e8e66455ef541bd32c83512e60b3,
+      type: 3}
+  - emotion: 10
+    sprite: {fileID: 1730802148990744994, guid: 1cc4e8e66455ef541bd32c83512e60b3,
+      type: 3}
+  dialogues:
+  - {fileID: 11400000, guid: 99a6013be046d0b468432d956d913182, type: 2}
+  orderFulfillDialogues:
+  - {fileID: 11400000, guid: 2e13da37fb348da42ba0057dcb5afe5d, type: 2}
+  customerInfo:
+    portrait: {fileID: 21300000, guid: a31f104462a0d324483f3a43b5baa3ca, type: 3}
+    dialogue: {fileID: 0}
+    favorites:
+    - {fileID: 11400000, guid: 01019f422ca34cf4fb608dc2498fccdb, type: 2}
+    diet: 2

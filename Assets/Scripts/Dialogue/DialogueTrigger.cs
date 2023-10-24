@@ -4,44 +4,28 @@ using UnityEngine;
 
 public class DialogueTrigger : Interactable
 {
-    public Dialogue[] dialogues;
+    public NPC speaker;
     DialogueManager dialogueSys;
-    public bool isBubble = true;
-    public bool randomized;
+
     void Start()
     {
-        dialogueSys = FindObjectOfType<DialogueManager>();
-    }
-    void PauseAnim()
-    {
-        gameObject.transform.Find("Image").GetComponent<Animator>().SetBool("Pause", true);
-    }
-    public void Disappear()
-    {
-        if (isBubble)
-        {
-            Animator anim = transform.Find("Image").GetComponent<Animator>();
-            anim.SetTrigger("Poof");
-            anim.SetBool("Pause", false);
-            this.enabled = false;
-        }
+        dialogueSys = GameObject.Find("DialogueManager").GetComponent<DialogueManager>();
     }
     public override void Interact()
     {
-        if (dialogueSys.talking == false)
+        if (dialogueSys.talking == false && !CheckOrderFulfill())
         {
-            Dialogue dialogue = dialogues[0];
-            if (randomized && dialogues.Length > 1)
-            {
-                dialogue = dialogues[Random.Range(0, dialogues.Length)];
-                Debug.Log("ddd");
-            }
-            dialogueSys.StartDialogue(dialogue);
-            dialogueSys.currentTrigger = this;
-            if (isBubble)
-            {
-                PauseAnim();
-            }
+            dialogueSys.StartDialogue(speaker.GetDialogue(), speaker);
         }
+    }
+    bool CheckOrderFulfill()
+    {
+        Order foundOrder = GameObject.Find("OrderSystem").GetComponent<OrderSystem>().CheckOrderFulfill(speaker);
+        if (foundOrder != null)
+        {
+            dialogueSys.StartDialogue(speaker.GetDialogue(NPC.DialogueType.OrderFulfill), speaker);
+            return true;
+        }
+        return false;
     }
 }

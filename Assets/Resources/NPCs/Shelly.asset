@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 646a388c677d32d4e99799283026c180, type: 3}
+  m_Name: Shelly
+  m_EditorClassIdentifier: 
+  portraits:
+  - emotion: 0
+    sprite: {fileID: 8660069427779853909, guid: 938fb24f56a34ef448bf4d30eb6fcfe3,
+      type: 3}
+  - emotion: 7
+    sprite: {fileID: -1636263951254327417, guid: 938fb24f56a34ef448bf4d30eb6fcfe3,
+      type: 3}
+  - emotion: 9
+    sprite: {fileID: -1636263951254327417, guid: 938fb24f56a34ef448bf4d30eb6fcfe3,
+      type: 3}
+  dialogues:
+  - {fileID: 11400000, guid: 0bdb655c6d9c2ea43bf19a7990269266, type: 2}
+  orderFulfillDialogues:
+  - {fileID: 11400000, guid: 2e13da37fb348da42ba0057dcb5afe5d, type: 2}
+  customerInfo:
+    portrait: {fileID: 0}
+    dialogue: {fileID: 0}
+    favorites: []
+    diet: 1

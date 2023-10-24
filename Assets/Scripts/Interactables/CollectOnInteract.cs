@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CollectOnInteract : MonoBehaviour
+public class CollectOnInteract : Interactable
 {
     public ItemInfo item;
     public Sprite holdingSprite;
@@ -24,7 +24,7 @@ public class CollectOnInteract : MonoBehaviour
     {
         renderr.sprite = normalSprite;
     }
-    public void DropItems()
+    void DropItems()
     {
         if (holding)
         {
@@ -44,5 +44,9 @@ public class CollectOnInteract : MonoBehaviour
                 holding = false;
             }
         }
+    }
+    public override void Interact()
+    {
+        DropItems();
     }
 }

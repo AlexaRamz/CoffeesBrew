@@ -5,42 +5,35 @@ using UnityEngine;
 public class OrderSystem : MonoBehaviour
 {
     OrderUI orderUI;
-    public List<CustomerPref> customerList;
-    Queue<CustomerPref> customers = new Queue<CustomerPref>();
+    public List<NPC> customerList;
+    Queue<NPC> customers = new Queue<NPC>();
     public List<Order> orderList = new List<Order>();
     public List<Item> menu = new List<Item>();
 
     public bool takingOrder = true;
-    CustomerPref currentCustomer;
-    // Portrait, dialogue, preferences (add food types to items)
+    NPC currentCustomer;
     Order currentOrder;
-    public int customerCount = 0;
 
     OrderQueue orderQueue;
+    Inventory plr;
 
     void Start()
     {
         orderUI = transform.Find("OrderMenu").GetComponent<OrderUI>();
         orderQueue = FindObjectOfType<OrderQueue>();
 
-        customers.Enqueue(customerList[0]);
-        customers.Enqueue(customerList[1]);
-        customers.Enqueue(customerList[2]);
-        customerCount = 3;
-        
-        //IEnumerator OpenDelay()
-        //{
-        //    yield return new WaitForSeconds(1f);
-        //    OpenMenu();
-        //}
-        //StartCoroutine(OpenDelay());
+        foreach (NPC customer in customerList)
+        {
+            customers.Enqueue(customer);
+        }
+        plr = GameObject.Find("Player").GetComponent<Inventory>();
     }
 
-    Order GenerateOrder(CustomerPref customer)
+    Order GenerateOrder(NPC customer)
     {
         // Randomize order from customer prefs: items and amounts
         // currentCustomer.items
-        Order newOrder = new Order(customer.name);
+        Order newOrder = new Order(customer);
         if (menu.Count > 0)
         {
             Item item = menu[Random.Range(0, menu.Count)];
@@ -55,14 +48,14 @@ public class OrderSystem : MonoBehaviour
     }
     public void TakeOrder()
     {
-        if (customerCount > 0)
+        if (customers.Count > 0)
         {
             currentOrder = GenerateOrder(currentCustomer);
             orderList.Add(currentOrder);
             takingOrder = false;
-            customerCount -= 1;
+            customers.Dequeue();
             orderUI.DisplayOrder(currentOrder);
-            orderUI.UpdateNum(customerCount);
+            orderUI.UpdateNum(customers.Count);
         }
     }
     public void DeleteOrder(int index)
@@ -79,15 +72,31 @@ public class OrderSystem : MonoBehaviour
     {
         orderQueue.UpdateOrders(orderList);
     }
-
+    public int GetCustomerCount()
+    {
+        return customers.Count;
+    }
     public void NextOrder(bool slide = true)
     {
         if (customers.Count > 0)
         {
             takingOrder = true;
             currentCustomer = customers.Dequeue();
-            orderUI.LoadPortrait(currentCustomer.portrait);
-            orderUI.UpdateNum(customerCount);
+            orderUI.LoadPortrait(currentCustomer.customerInfo.portrait);
+            orderUI.UpdateNum(customers.Count);
         }
+    }
+    public Order CheckOrderFulfill(NPC thisCustomer)
+    {
+        for (int i = 0; i < orderList.Count; i++)
+        {
+            Order order = orderList[i];
+            if (order.customer == thisCustomer && plr.GiveItems(order.items))
+            {
+                orderList.RemoveAt(i);
+                return order;
+            }
+        }
+        return null;
     }
 }

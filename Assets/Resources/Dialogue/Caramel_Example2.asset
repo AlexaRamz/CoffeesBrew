@@ -12,13 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24500d01ccfeaf5408a12099d3b75d6f, type: 3}
   m_Name: Caramel_Example2
   m_EditorClassIdentifier: 
-  icons:
-  - icons:
-    - {fileID: -6196445788699118843, guid: 5d9f7962ce78b0144a57228a862accf1, type: 3}
   sentences:
-  - You ever think about putting a big pile of leaves in here?
+  - text: You ever think about just putting a big pile of leaves in here?
+    emotion: 0
   responses:
-  - Name: Yes
-    newDialogue: {fileID: 11400000, guid: eba37e147af80364e8d6a877176d45ca, type: 2}
-  - Name: No
-    newDialogue: {fileID: 11400000, guid: f3275b3ca1b964048a15e09bb5ecb106, type: 2}
+  - text: Yes
+    nextDialogue: {fileID: 11400000, guid: eba37e147af80364e8d6a877176d45ca, type: 2}
+  - text: No
+    nextDialogue: {fileID: 11400000, guid: f3275b3ca1b964048a15e09bb5ecb106, type: 2}

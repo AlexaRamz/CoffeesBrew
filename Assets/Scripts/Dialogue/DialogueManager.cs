@@ -5,118 +5,111 @@ using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour, IMenu
 {
+    Queue<TextIconSet> sentences;
     Dialogue currentDialogue;
-    Queue<string> sentences;
-    Queue<IconSet> icons;
-    Queue<Sprite> icons2;
-    Response[] responses;
+    NPC currentSpeaker;
+    string currentSentence;
+    PlayerManager plr;
 
-    public int maxLetters = 1;
-    public Canvas responseUI;
-    public Text choice1;
-    public Text choice2;
-    public Image star1;
-    public Image star2;
-    string choice = "choice1";
-
-    public Canvas textBox;
-    public Text textDisplay;
-    public Image iconDisplay;
+    [HideInInspector] public bool talking = false;
+    bool responding = false;
+    bool typing;
+    public float typeSpeed = 25f;
+    public float pauseTime = 0.3f;
+    public int maxLetters = 30;
     IEnumerator currentCoroutine;
 
-    public bool talking = false;
-    bool typing;
-    bool responding;
-    string currentSentence;
-    Sprite finalIcon;
-    public float typeSpeed = 0.04f;
-    public float pauseTime = 0.8f;
-
-    public DialogueTrigger currentTrigger;
-    PlayerManager plr;
+    public Canvas mainUI, responseUI;
+    public GameObject textBox, responseContainer;
+    public Text textDisplay;
+    public Image iconDisplay;
+    public GameObject responseTemplate;
 
     void Start()
     {
-        sentences = new Queue<string>();
-        icons = new Queue<IconSet>();
-        icons2 = new Queue<Sprite>();
-        plr = FindObjectOfType<PlayerManager>();
+        sentences = new Queue<TextIconSet>();
+        plr = GameObject.Find("Player").GetComponent<PlayerManager>();
     }
-    bool open = false;
+    public void StartDialogue(Dialogue dialogue, NPC speaker)
+    {
+        if (dialogue == null || speaker == null) return;
+        OpenMenu();
+        currentDialogue = dialogue;
+        currentSpeaker = speaker;
+        StartCoroutine(StartDelay());
+
+        foreach (TextIconSet sentence in dialogue.sentences)
+        {
+            sentences.Enqueue(sentence);
+        }
+        DisplayNextSentence();
+    }
+    void OpenMenu()
+    {
+        if (!talking && plr.SetCurrentUI(this))
+        {
+            talking = mainUI.enabled = true;
+        }
+        //LeanTween.scale(textBox, new Vector3(1f, 1f, 1f), 0.2f).setEase(LeanTweenType.easeInCubic);
+    }
     public void CloseMenu()
     {
-        if (open && plr.SetCurrentUI(null))
-        {
-            open = false;
-            EndDialogue();
-        }
+        EndDialogue();
+        mainUI.enabled = false;
+        StartCoroutine(EndDelay());
+        //textBox.transform.localScale = new Vector3(0, 0, 0);
     }
-    public GraphicRaycaster GetGraphicRaycaster()
+    void EndDialogue()
     {
-        return textBox.GetComponent<GraphicRaycaster>();
+        if (currentCoroutine != null) StopCoroutine(currentCoroutine);
+        talking = false;
+        currentDialogue = null;
+        sentences.Clear();
+        textDisplay.text = "";
+        iconDisplay.sprite = null;
+        ClearResponses();
     }
-
-    public void StartDialogue(Dialogue dialogue)
+    IEnumerator StartDelay() // Provides a delay before opened
     {
-        if (!open && plr.SetCurrentUI(this))
-        {
-            currentDialogue = dialogue;
-            StartCoroutine(StartDelay());
-            sentences.Clear();
-            icons.Clear();
-            icons2.Clear();
-            textDisplay.text = "";
-            iconDisplay.GetComponent<Image>().enabled = true;
-            textBox.enabled = true;
-
-            responses = dialogue.responses;
-
-            foreach (string sentence in dialogue.sentences)
-            {
-                sentences.Enqueue(sentence);
-            }
-            foreach (IconSet icon in dialogue.icons)
-            {
-                icons.Enqueue(icon);
-            }
-            DisplayNextSentence();
-        }
-    }
-    IEnumerator StartDelay()
-    {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.001f);
         talking = true;
     }
-    IEnumerator EndDelay()
+    IEnumerator EndDelay() // Provides a delay before player can open again
     {
-        yield return new WaitForSeconds(0.1f);
-        talking = false;
+        yield return new WaitForSeconds(0.001f);
+        plr.SetCurrentUI(null);
     }
+    public Canvas GetCanvas()
+    {
+        return textBox.GetComponent<Canvas>();
+    }
+
+
+    // ---------- TEXT ----------
+    List<char> pauseChars = new List<char> { '.', ',', '!', '?' };
     IEnumerator TypeText(string sentence)
     {
         typing = true;
-        int n = maxLetters;
         var lines = sentence.Split('\n');
         List<string> newLines = new List<string>();
+        //Add newline at the last space before max letters reached
         foreach (string line in lines)
         {
             string newLine = line;
-            if (n != 0 && line.Length > n)
+            if (maxLetters != 0 && line.Length > maxLetters)
             {
-                bool found = false;
-                for (int i = 0; i < n; i++)
+                for (int i = 0; i < maxLetters; i++)
                 {
-                    if (line.Substring(n - i, 1) == " " && found == false)
+                    if (line.Substring(maxLetters - i, 1) == " ")
                     {
-                        newLine = newLine.Insert(n - i + 1, "\n");
-                        found = true;
+                        newLine = newLine.Insert(maxLetters - i + 1, "\n");
+                        break;
                     }
                 }
             }
             newLines.Add(newLine);
         }
-        string newSentence = string.Join("\n", newLines);
-        currentSentence = newSentence;
+        currentSentence = string.Join("\n", newLines);
         int lineCount = 0;
         foreach (string line in newLines)
         {
@@ -124,150 +117,143 @@ public class DialogueManager : MonoBehaviour, IMenu
             string originalText = textDisplay.text;
             while (charIndex < line.Length)
             {
-                yield return new WaitForSeconds(typeSpeed);
-                //Add newline at the last space before max letters reached
+                if (line[charIndex] != ' ')
+                {
+                    yield return new WaitForSeconds(1 / typeSpeed);
+                }
 
-                charIndex += 1;
-                textDisplay.text = originalText + line.Substring(0, charIndex);
-                if (line[charIndex - 1].ToString() == ",")
+                textDisplay.text = originalText + line.Substring(0, charIndex + 1);
+                if (pauseChars.Contains(line[charIndex]) && (charIndex == line.Length - 1 || line[charIndex + 1] == ' ' || line[charIndex + 1] == '.'))
                 {
                     yield return new WaitForSeconds(pauseTime);
                 }
+                charIndex += 1;
             }
             lineCount += 1;
             if (lineCount != newLines.Count)
             {
                 textDisplay.text = originalText + line.Substring(0, charIndex) + "\n";
                 yield return new WaitForSeconds(pauseTime);
-                if (icons2.Count != 0)
-                {
-                    iconDisplay.GetComponent<Image>().sprite = icons2.Dequeue();
-                }
             }
         }
         typing = false;
-        Responses();
+        SetResponses();
     }
-    void Responses()
-    {
-        if (sentences.Count == 0 && responses.Length != 0)
-        {
-            responseUI.enabled = true;
-            choice1.text = responses[0].Name;
-            choice2.text = responses[1].Name;
-            responding = true;
-        }
-    }
-    void ResetResponses()
-    {
-        choice = "choice1";
-        star1.enabled = true;
-        star2.enabled = false;
-        responseUI.enabled = false;
-        responding = false;
-    }
-    public void DisplayNextSentence()
+    void DisplayNextSentence()
     {
         if (sentences.Count == 0)
         {
-            EndDialogue();
-            return;
-        }
-        if (currentCoroutine != null)
-        {
-            StopCoroutine(currentCoroutine);
-        }
-        textDisplay.text = "";
-        string sentence = sentences.Dequeue();
-        currentSentence = sentence;
-        currentCoroutine = TypeText(sentence);
-        StartCoroutine(currentCoroutine);
-        icons2.Clear();
-        if (icons.Count != 0)
-        {
-            IconSet icon = icons.Dequeue();
-            foreach (Sprite ic in icon.icons)
+            if (!responding)
             {
-                icons2.Enqueue(ic);
-                finalIcon = ic;
+                CloseMenu();
             }
-            iconDisplay.GetComponent<Image>().sprite = icons2.Dequeue();
+        }
+        else
+        {
+            if (currentCoroutine != null)
+            {
+                StopCoroutine(currentCoroutine);
+            }
+            textDisplay.text = "";
+            TextIconSet sentence = sentences.Dequeue();
+            currentSentence = sentence.text;
+            currentCoroutine = TypeText(currentSentence);
+            StartCoroutine(currentCoroutine);
+            Sprite icon = currentSpeaker.GetPortrait(sentence.emotion);
+            if (icon != null)
+            {
+                iconDisplay.sprite = icon;
+            }
         }
     }
-
-    void EndDialogue()
+    void SkipToEnd()
     {
-        if (currentCoroutine != null)
-        {
-            StopCoroutine(currentCoroutine);
-        }
-        textDisplay.text = "";
-        iconDisplay.GetComponent<Image>().sprite = null;
-        iconDisplay.GetComponent<Image>().enabled = false;
-        currentSentence = null;
-        textBox.enabled = false;
-        StartCoroutine(EndDelay());
-        if (currentTrigger != null)
-        {
-            currentTrigger.Disappear();
-            currentTrigger = null;
-        }
-
-        currentDialogue = null;
-        ResetResponses();
+        if (currentCoroutine != null) StopCoroutine(currentCoroutine);
+        typing = false;
+        textDisplay.text = currentSentence;
+        SetResponses();
     }
+
+    // ---------- RESPONSES ----------
+    void SetResponses()
+    {
+        if (sentences.Count == 0 && currentDialogue.responses.Count != 0)
+        {
+            responding = responseUI.enabled = true;
+            for (int i = 0; i < currentDialogue.responses.Count; i++)
+            {
+                int index = i;
+                GameObject obj = Instantiate(responseTemplate, responseContainer.transform);
+                obj.GetComponent<ResponseButton>().SetResponse(this, currentDialogue.responses[i].text, index);
+            }
+            UpdateResponseSelection(0);
+        }
+    }
+    int responseSelectionIndex = 0;
+    public void UpdateResponseSelection(int i)
+    {
+        ClearResponseSelection();
+        responseSelectionIndex = i;
+        responseContainer.transform.GetChild(i).GetComponent<ResponseButton>().Select();
+    }
+    void ClearResponseSelection()
+    {
+        foreach (Transform child in responseContainer.transform)
+        {
+            child.GetComponent<ResponseButton>().Deselect();
+        }
+    }
+    public void Respond(int i)
+    {
+        ClearResponses();
+        talking = false;
+        StartDialogue(currentDialogue.responses[i].nextDialogue, currentSpeaker);
+    }
+    void ClearResponses()
+    {
+        responseUI.enabled = false;
+        responding = false;
+        foreach (Transform child in responseContainer.transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
     void Update()
     {
-        if (talking && Input.GetKeyDown(KeyCode.Return))
+        if (talking)
         {
-            if (typing)
+            if (!responding)
             {
-                if (currentCoroutine != null)
+                if (Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
                 {
-                    StopCoroutine(currentCoroutine);
-                }
-                typing = false;
-                textDisplay.text = currentSentence;
-                iconDisplay.GetComponent<Image>().sprite = finalIcon;
-                Responses();
-            }
-            else if (responding)
-            {
-                if (choice == "choice1")
-                {
-                    Dialogue nextDialogue = currentDialogue.responses[0].newDialogue;
-                    ResetResponses();
-                    currentDialogue = null;
-                    StartDialogue(nextDialogue);
-                }
-                else if (choice == "choice2")
-                {
-                    Dialogue nextDialogue = currentDialogue.responses[1].newDialogue;
-                    ResetResponses();
-                    currentDialogue = null;
-                    StartDialogue(nextDialogue);
+                    if (typing)
+                    {
+                        SkipToEnd();
+                    }
+                    else
+                    {
+                        DisplayNextSentence();
+                    }
                 }
             }
             else
             {
-                DisplayNextSentence();
-            }
-        }
-        if (responding)
-        {
-            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                if (choice == "choice1")
+                if (Input.GetKeyDown(KeyCode.UpArrow))
                 {
-                    choice = "choice2";
-                    star1.enabled = false;
-                    star2.enabled = true;
+                    int newSelectionIndex = responseSelectionIndex - 1;
+                    if (newSelectionIndex < 0) newSelectionIndex = currentDialogue.responses.Count - 1;
+                    UpdateResponseSelection(newSelectionIndex);
                 }
-                else if (choice == "choice2")
+                else if (Input.GetKeyDown(KeyCode.DownArrow))
                 {
-                    choice = "choice1";
-                    star1.enabled = true;
-                    star2.enabled = false;
+                    int newSelectionIndex = responseSelectionIndex + 1;
+                    if (newSelectionIndex >= currentDialogue.responses.Count) newSelectionIndex = 0;
+                    UpdateResponseSelection(newSelectionIndex);
+                }
+                if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    Respond(responseSelectionIndex);
                 }
             }
         }

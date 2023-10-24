@@ -46,7 +46,6 @@ public class BuildTrigger : Interactable
             {
                 gameObject.AddComponent<SortingGroup>();
             }
-            objectSize = info.GetRotation().size;
             SetPlacements();
         }
     }

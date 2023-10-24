@@ -15,6 +15,7 @@ public class Food : Item
         Protein,
     }
     public FoodType[] foodType;
+    public bool hasMeat = false;
     public Food ovenCookTo;
 
     public override Food GetFood()

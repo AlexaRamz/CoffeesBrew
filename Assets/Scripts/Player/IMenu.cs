@@ -6,5 +6,5 @@ using UnityEngine.UI;
 public interface IMenu
 {
     void CloseMenu();
-    GraphicRaycaster GetGraphicRaycaster();
+    Canvas GetCanvas();
 }

@@ -12,18 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24500d01ccfeaf5408a12099d3b75d6f, type: 3}
   m_Name: Gallabab_Example
   m_EditorClassIdentifier: 
-  icons:
-  - icons:
-    - {fileID: -8999218297760069264, guid: 1cc4e8e66455ef541bd32c83512e60b3, type: 3}
-  - icons:
-    - {fileID: -8999218297760069264, guid: 1cc4e8e66455ef541bd32c83512e60b3, type: 3}
-    - {fileID: 1730802148990744994, guid: 1cc4e8e66455ef541bd32c83512e60b3, type: 3}
   sentences:
-  - 'If you ask me...
+  - text: 'If you ask me...
 
-    this place could use a jukebox.'
-  - 'It''s about time I show you my excellent singing skills!
-
-    Maybe I''ll even
-    sing you a love song or two.'
+      this place could use a jukebox.'
+    emotion: 9
+  - text: "\rIt's about time I show you my excellent singing skills!"
+    emotion: 0
+  - text: Maybe I'll even sing you a love song or two.
+    emotion: 10
   responses: []

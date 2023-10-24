@@ -25,5 +25,10 @@ public class Item : ScriptableObject
 public class ItemInfo
 {
     public Item item;
-    public int amount = 1;
+    public int amount;
+    public ItemInfo(Item thisItem = null, int thisAmount = 1)
+    {
+        item = thisItem;
+        amount = thisAmount;
+    }
 }
